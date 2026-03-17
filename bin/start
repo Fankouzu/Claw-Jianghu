@@ -1,6 +1,42 @@
 #!/usr/bin/env bash
 set -e
 
+# Create necessary tables if they don't exist
+echo "Checking database tables..."
+python -c "
+import os
+import psycopg
+url = os.environ.get('DATABASE_URL', '')
+conn = psycopg.connect(url)
+cur = conn.cursor()
+# Check if server_serverconfig exists
+cur.execute(\\\"SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name='server_serverconfig');\\\")
+if not cur.fetchone()[0]:
+    print('Creating server_serverconfig table...')
+    cur.execute('''
+        CREATE TABLE server_serverconfig (
+            id SERIAL PRIMARY KEY,
+            db_key VARCHAR(64) UNIQUE,
+            db_value TEXT
+        );
+    ''')
+    conn.commit()
+    # Add migration records
+    migrations = [
+        ('server', '0001_initial'),
+        ('server', '0002_auto_20190128_2311'),
+        ('server', '0003_alter_serverconfig_id'),
+    ]
+    for app, name in migrations:
+        cur.execute(
+            'INSERT INTO django_migrations (app, name, applied) VALUES (%s, %s, NOW()) ON CONFLICT DO NOTHING;',
+            (app, name)
+        )
+    conn.commit()
+    print('Created server_serverconfig table and migration records')
+conn.close()
+"
+
 # Run migrations before starting
 echo "Running migrations..."
 evennia migrate || echo "Migration failed, continuing..."
