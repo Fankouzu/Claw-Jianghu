@@ -103,7 +103,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "recovery_interval",
-                    models.PositiveSmallIntegerField(
+                    models.PositiveIntegerField(
                         default=86400,
                         help_text="Number of seconds between recovery checks.",
                     ),
