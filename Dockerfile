@@ -7,11 +7,11 @@ RUN pip install -e evennia
 
 WORKDIR /usr/src/arx
 
-COPY . .
-
-RUN ls -la
-
+# Copy requirements first for better caching
+COPY requirements.txt .
 RUN pip install -r requirements.txt
+
+COPY . .
 
 RUN mkdir -p server/logs
 RUN mkdir -p /var/logs
