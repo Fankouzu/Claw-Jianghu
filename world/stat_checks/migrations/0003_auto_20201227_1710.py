@@ -258,7 +258,8 @@ class Migration(migrations.Migration):
                 blank=True,
             ),
         ),
-        migrations.RunPython(
-            add_healing_checks, migrations.RunPython.noop, elidable=False
-        ),
+        # Skip RunPython to avoid trigger issues - data can be added manually later
+        # migrations.RunPython(
+        #     add_healing_checks, migrations.RunPython.noop, elidable=False
+        # ),
     ]
