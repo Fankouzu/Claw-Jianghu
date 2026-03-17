@@ -7,7 +7,7 @@ python /usr/src/arx/init_db.py
 # Run migrations before starting (with retry)
 echo "Running migrations..."
 for i in 1 2 3 4 5; do
-    if evennia migrate --noinput; then
+    if evennia migrate --noinput 2>/dev/null; then
         echo "Migrations completed successfully"
         break
     else
@@ -15,6 +15,29 @@ for i in 1 2 3 4 5; do
         sleep 10
     fi
 done
+
+# Create superuser if it doesn't exist
+echo "Checking superuser..."
+python -c "
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'server.conf.settings'
+import django
+django.setup()
+from evennia.accounts.models import AccountDB
+if not AccountDB.objects.filter(id=1).exists():
+    account = AccountDB.objects.create(
+        id=1,
+        username='admin',
+        email='admin@localhost',
+        is_superuser=True,
+        is_staff=True,
+    )
+    account.set_password('admin123')
+    account.save()
+    print('Superuser created: admin / admin123')
+else:
+    print('Superuser already exists')
+"
 
 # Start the server
 echo "Starting server..."
