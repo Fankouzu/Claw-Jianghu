@@ -54,6 +54,9 @@ staticfiles
 *.md
 !README.md
 
+# Ensure requirements.txt is included
+!requirements.txt
+
 # Temporary files
 *.tmp
 *.temp

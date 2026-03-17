@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.11
 
 WORKDIR /usr/src
 
@@ -8,6 +8,8 @@ RUN pip install -e evennia
 WORKDIR /usr/src/arx
 
 COPY . .
+
+RUN ls -la
 
 RUN pip install -r requirements.txt
 
