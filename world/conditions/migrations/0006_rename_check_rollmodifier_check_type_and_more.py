@@ -8,7 +8,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("conditions", "0005_wound_healing"),
-        ("objects", "0014_defaultobject_defaultcharacter_defaultexit_and_more"),
     ]
 
     operations = [

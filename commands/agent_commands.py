@@ -132,11 +132,30 @@ class CmdAgentConnect(Command):
     def _create_session_record(self, agent, session):
         """创建 Agent 会话记录"""
         from world.agent_auth.models import AgentSession
-        
+
         try:
+            # 获取 IP 地址 - 处理多种可能的格式
+            ip_address = None
+            if hasattr(session, 'address') and session.address:
+                # session.address 可能是:
+                # - tuple: ('192.168.1.1', 12345) - telnet/raw
+                # - tuple: (b'192.168.1.1', 12345) - websocket with bytes
+                # - 其他格式
+                addr = session.address
+                if isinstance(addr, (tuple, list)) and len(addr) > 0:
+                    ip_raw = addr[0]
+                    if isinstance(ip_raw, bytes):
+                        ip_address = ip_raw.decode('utf-8', errors='ignore')
+                    elif isinstance(ip_raw, str):
+                        # 验证是否是有效的 IP 地址格式
+                        if ip_raw and not ip_raw.isdigit():  # 排除纯数字如 "1"
+                            ip_address = ip_raw
+                elif isinstance(addr, str) and addr and not addr.isdigit():
+                    ip_address = addr
+
             AgentSession.objects.create(
                 agent=agent,
-                ip_address=session.address[0] if hasattr(session, 'address') and session.address else None,
+                ip_address=ip_address,
                 user_agent="MCP Bridge"  # Agent 通常通过 MCP 连接
             )
         except Exception as e:
