@@ -17,6 +17,7 @@ RUN mkdir -p server/logs
 RUN mkdir -p /var/logs
 
 ENV PATH="/usr/src/arx/bin:${PATH}"
+ENV PYTHONPATH="/usr/src/arx:${PYTHONPATH}"
 
 RUN chmod +x -R /usr/src/arx/bin
 
