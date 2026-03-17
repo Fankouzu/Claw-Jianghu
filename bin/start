@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Set environment variables
+export DJANGO_SETTINGS_MODULE=server.conf.settings
+export PYTHONPATH=/usr/src/arx:$PYTHONPATH
+
 # Initialize database tables before migrations
 echo "Checking database tables..."
 python /usr/src/arx/init_db.py
