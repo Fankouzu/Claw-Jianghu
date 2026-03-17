@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
-evennia start
+set -e
+
+# Run migrations before starting
+echo "Running migrations..."
+evennia migrate || echo "Migration failed, continuing..."
+
+# Start the server
+echo "Starting server..."
+evennia start &
 
 #Needed to keep container running
 tail -f /dev/null
