@@ -1,0 +1,354 @@
+"""
+Compatibility module for Evennia 5.0 channel commands.
+
+In Evennia 5.0, the old separate channel commands (CmdCdestroy, CmdChannelCreate, etc.)
+were consolidated into a single CmdChannel command with subcommands.
+
+This module provides compatibility wrappers for legacy code.
+"""
+from evennia.commands.default.comms import CmdChannel
+from evennia.utils.utils import class_from_module
+from django.conf import settings
+
+COMMAND_DEFAULT_CLASS = class_from_module(settings.COMMAND_DEFAULT_CLASS)
+
+
+class CmdCdestroy(COMMAND_DEFAULT_CLASS):
+    """
+    Destroy a channel. Compatibility wrapper for Evennia 5.0.
+    Uses the new CmdChannel /destroy subcommand internally.
+    """
+
+    key = "@cdestroy"
+    aliases = ["cdestroy"]
+    locks = "cmd:perm(Builder)"
+    help_category = "Comms"
+
+    def func(self):
+        """Destroy a channel."""
+        caller = self.caller
+        args = self.args.strip()
+
+        if not args:
+            caller.msg("Usage: @cdestroy <channelname>")
+            return
+
+        # Use the new channel command's destroy functionality
+        from evennia.comms.models import ChannelDB
+
+        channel = ChannelDB.objects.channel_search(args)
+        if not channel:
+            caller.msg(f"Channel '{args}' not found.")
+            return
+        channel = channel[0]
+
+        if not channel.access(caller, "control"):
+            caller.msg("You don't have permission to destroy this channel.")
+            return
+
+        channel.delete()
+        caller.msg(f"Channel '{args}' has been destroyed.")
+
+
+class CmdChannelCreate(COMMAND_DEFAULT_CLASS):
+    """
+    Create a new channel. Compatibility wrapper for Evennia 5.0.
+    """
+
+    key = "@ccreate"
+    aliases = ["ccreate", "channelcreate"]
+    locks = "cmd:perm(Builder)"
+    help_category = "Comms"
+
+    def func(self):
+        """Create a channel."""
+        caller = self.caller
+        args = self.args.strip()
+
+        if not args:
+            caller.msg("Usage: @ccreate <channelname>[;alias;alias...][ = description]")
+            return
+
+        # Parse arguments
+        if "=" in args:
+            name_part, desc = [part.strip() for part in args.split("=", 1)]
+        else:
+            name_part = args
+            desc = ""
+
+        from evennia.utils import create
+
+        # Create the channel
+        channel = create.create_channel(name_part, desc=desc)
+        if channel:
+            caller.msg(f"Created channel '{channel.key}'.")
+        else:
+            caller.msg(f"Failed to create channel '{name_part}'.")
+
+
+class CmdChannels(COMMAND_DEFAULT_CLASS):
+    """
+    List all channels. Compatibility wrapper for Evennia 5.0.
+    """
+
+    key = "@channels"
+    aliases = ["channels", "@clist", "clist", "comlist"]
+    locks = "cmd:all()"
+    help_category = "Comms"
+
+    def func(self):
+        """List channels."""
+        from evennia.comms.models import ChannelDB
+
+        caller = self.caller
+
+        # Get all channels
+        all_channels = ChannelDB.objects.get_all_channels()
+
+        # Get subscribed channels
+        subscribed = ChannelDB.objects.get_subscriptions(caller)
+
+        # Format output
+        if not all_channels:
+            caller.msg("No channels available.")
+            return
+
+        string = "Available Channels:\n"
+        for channel in all_channels:
+            if channel in subscribed:
+                string += f"  [X] {channel.key}"
+            else:
+                string += f"  [ ] {channel.key}"
+            if channel.desc:
+                string += f" - {channel.desc}"
+            string += "\n"
+
+        caller.msg(string)
+
+
+class CmdClock(COMMAND_DEFAULT_CLASS):
+    """
+    Lock a channel. Compatibility wrapper for Evennia 5.0.
+    """
+
+    key = "@clock"
+    aliases = ["clock", "channellock"]
+    locks = "cmd:perm(Builder)"
+    help_category = "Comms"
+
+    def func(self):
+        """Lock a channel."""
+        caller = self.caller
+        args = self.args.strip()
+
+        if not args or "=" not in args:
+            caller.msg("Usage: @clock <channel> = <lockstring>")
+            return
+
+        channel_name, lockstring = [part.strip() for part in args.split("=", 1)]
+
+        from evennia.comms.models import ChannelDB
+
+        channel = ChannelDB.objects.channel_search(channel_name)
+        if not channel:
+            caller.msg(f"Channel '{channel_name}' not found.")
+            return
+        channel = channel[0]
+
+        if not channel.access(caller, "control"):
+            caller.msg("You don't have permission to lock this channel.")
+            return
+
+        try:
+            channel.locks.add(lockstring)
+            caller.msg(f"Lock added to channel '{channel.key}'.")
+        except Exception as e:
+            caller.msg(f"Error setting lock: {e}")
+
+
+class CmdCBoot(COMMAND_DEFAULT_CLASS):
+    """
+    Boot a user from a channel. Compatibility wrapper for Evennia 5.0.
+    """
+
+    key = "@cboot"
+    aliases = ["cboot", "channelboot"]
+    locks = "cmd:perm(Builder)"
+    help_category = "Comms"
+
+    def func(self):
+        """Boot user from channel."""
+        caller = self.caller
+        args = self.args.strip()
+
+        if not args or "=" not in args:
+            caller.msg("Usage: @cboot <channel> = <user>")
+            return
+
+        channel_name, username = [part.strip() for part in args.split("=", 1)]
+
+        from evennia.comms.models import ChannelDB
+        from evennia.accounts.models import AccountDB
+
+        channel = ChannelDB.objects.channel_search(channel_name)
+        if not channel:
+            caller.msg(f"Channel '{channel_name}' not found.")
+            return
+        channel = channel[0]
+
+        if not channel.access(caller, "control"):
+            caller.msg("You don't have permission to boot from this channel.")
+            return
+
+        account = AccountDB.objects.filter(username__iexact=username).first()
+        if not account:
+            caller.msg(f"Account '{username}' not found.")
+            return
+
+        channel.disconnect(account)
+        caller.msg(f"Booted '{username}' from channel '{channel.key}'.")
+
+
+class CmdCdesc(COMMAND_DEFAULT_CLASS):
+    """
+    Set channel description. Compatibility wrapper for Evennia 5.0.
+    """
+
+    key = "@cdesc"
+    aliases = ["cdesc", "channeldesc"]
+    locks = "cmd:perm(Builder)"
+    help_category = "Comms"
+
+    def func(self):
+        """Set channel description."""
+        caller = self.caller
+        args = self.args.strip()
+
+        if not args or "=" not in args:
+            caller.msg("Usage: @cdesc <channel> = <description>")
+            return
+
+        channel_name, desc = [part.strip() for part in args.split("=", 1)]
+
+        from evennia.comms.models import ChannelDB
+
+        channel = ChannelDB.objects.channel_search(channel_name)
+        if not channel:
+            caller.msg(f"Channel '{channel_name}' not found.")
+            return
+        channel = channel[0]
+
+        if not channel.access(caller, "control"):
+            caller.msg("You don't have permission to describe this channel.")
+            return
+
+        channel.desc = desc
+        channel.save()
+        caller.msg(f"Description set for channel '{channel.key}'.")
+
+
+class CmdAllCom(COMMAND_DEFAULT_CLASS):
+    """
+    Turn all channels on or off. Compatibility wrapper for Evennia 5.0.
+    """
+
+    key = "allcom"
+    aliases = ["allchannels"]
+    locks = "cmd:all()"
+    help_category = "Comms"
+
+    def func(self):
+        """Turn all channels on/off."""
+        from evennia.comms.models import ChannelDB
+
+        caller = self.caller
+        args = self.args.strip().lower()
+
+        if args not in ("on", "off", ""):
+            caller.msg("Usage: allcom [on|off]")
+            return
+
+        channels = ChannelDB.objects.get_all_channels()
+
+        if args == "on":
+            for channel in channels:
+                if channel.access(caller, "listen"):
+                    channel.connect(caller)
+            caller.msg("All channels turned on.")
+        elif args == "off":
+            for channel in channels:
+                if channel.access(caller, "listen"):
+                    channel.disconnect(caller)
+            caller.msg("All channels turned off.")
+        else:
+            # Show status
+            subscribed = ChannelDB.objects.get_subscriptions(caller)
+            string = "Channel Status:\n"
+            for channel in channels:
+                if channel.access(caller, "listen"):
+                    if channel in subscribed:
+                        string += f"  [X] {channel.key}\n"
+                    else:
+                        string += f"  [ ] {channel.key}\n"
+            caller.msg(string)
+
+
+class CmdCWho(COMMAND_DEFAULT_CLASS):
+    """
+    Show who is on a channel. Compatibility wrapper for Evennia 5.0.
+    """
+
+    key = "@cwho"
+    aliases = ["cwho", "channelwho"]
+    locks = "cmd:all()"
+    help_category = "Comms"
+
+    def func(self):
+        """Show who is on a channel."""
+        caller = self.caller
+        args = self.args.strip()
+
+        if not args:
+            caller.msg("Usage: @cwho <channel>")
+            return
+
+        from evennia.comms.models import ChannelDB
+
+        channel = ChannelDB.objects.channel_search(args)
+        if not channel:
+            caller.msg(f"Channel '{args}' not found.")
+            return
+        channel = channel[0]
+
+        if not channel.access(caller, "listen"):
+            caller.msg("You don't have access to this channel.")
+            return
+
+        subscribers = channel.subscriptions.all()
+        if not subscribers:
+            caller.msg(f"No subscribers on channel '{channel.key}'.")
+            return
+
+        string = f"Subscribers on '{channel.key}':\n"
+        for subscriber in subscribers:
+            string += f"  {subscriber}\n"
+        caller.msg(string)
+
+
+def find_channel(caller, channelname):
+    """
+    Helper function to find a channel.
+    This replaces the old find_channel from evennia.commands.default.comms
+    """
+    from evennia.comms.models import ChannelDB
+
+    channel = ChannelDB.objects.channel_search(channelname)
+    if not channel:
+        return None
+    return channel[0]
+
+
+# Export old-style names for compatibility
+CmdAddCom = CmdChannel  # Use the new CmdChannel for addcom
+CmdDelCom = CmdChannel  # Use the new CmdChannel for delcom
+CmdCemit = CmdChannel   # Use the new CmdChannel for cemit

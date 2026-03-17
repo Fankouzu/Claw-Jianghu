@@ -8,7 +8,8 @@ from django.core.exceptions import ValidationError
 
 from evennia.server.sessionhandler import SESSIONS
 from evennia.commands.default.account import CmdOOC
-from evennia.commands.default.comms import (
+# Import channel commands from compatibility module for Evennia 5.0
+from commands.base_commands.channel_compat import (
     CmdCdestroy,
     CmdChannelCreate,
     CmdChannels,

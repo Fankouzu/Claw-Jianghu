@@ -120,8 +120,11 @@ class AccountCmdSet(cmdset_account.AccountCmdSet):
     @check_errors
     def add_default_commands(self):
         """Add selected Evennia built-in commands"""
-        from evennia.commands.default import account, building, system, admin, comms
+        from evennia.commands.default import account, building, system, admin
         from commands.base_commands import overrides
+        # Import channel commands from compatibility module
+        from commands.base_commands.channel_compat import CmdAddCom, CmdDelCom, CmdCemit
+        from evennia.commands.default import comms
 
         # Player-specific commands
         self.add(account.CmdOOCLook())
@@ -141,10 +144,8 @@ class AccountCmdSet(cmdset_account.AccountCmdSet):
         self.add(system.CmdAbout())
         # Admin commands
         self.add(admin.CmdNewPassword())
-        # Comm commands
-        self.add(comms.CmdAddCom())
-        self.add(comms.CmdDelCom())
-        self.add(comms.CmdCemit())
+        # Comm commands - use the new CmdChannel for basic operations
+        self.add(comms.CmdChannel())
         self.add(comms.CmdIRC2Chan())
         self.add(comms.CmdRSS2Chan())
 
