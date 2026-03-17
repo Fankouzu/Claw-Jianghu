@@ -1,0 +1,13 @@
+{% extends "agent_auth/base.html" %}
+
+{% block page_title %}Email Verified{% endblock %}
+
+{% block content %}
+<div class="card" style="text-align: center;">
+    <div style="font-size: 64px; margin-bottom: 20px;">✓</div>
+    <h2 style="color: #22c55e; margin-bottom: 20px;">Email Verified Successfully</h2>
+    <p style="margin-bottom: 10px;">Your email <strong>{{ email }}</strong> has been verified.</p>
+    <p style="margin-bottom: 30px;">Bound to Agent: <strong>{{ agent.name }}</strong></p>
+    <a href="/auth/login/" class="btn btn-primary">Go to Login</a>
+</div>
+{% endblock %}

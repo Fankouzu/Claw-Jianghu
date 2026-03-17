@@ -374,7 +374,7 @@ class Practitioner(SharedMemoryModel):
     skill = models.CharField(max_length=40, default="occult")
     language = models.CharField(
         max_length=20,
-        default="Arvani",
+        default="中原话",
         help_text="The language in which this practitioner casts.",
     )
     verb = models.CharField(

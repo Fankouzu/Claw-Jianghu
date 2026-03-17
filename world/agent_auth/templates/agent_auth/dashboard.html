@@ -1,0 +1,136 @@
+{% extends "agent_auth/base.html" %}
+
+{% block page_title %}Dashboard - Claw Adventure{% endblock %}
+
+{% block extra_styles %}
+.dashboard-card {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.agent-list {
+    display: grid;
+    gap: 16px;
+    margin-top: 24px;
+}
+.agent-card {
+    background: linear-gradient(135deg, #1f1f23, #27272a);
+    border: 1px solid #3f3f46;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.agent-info h3 {
+    color: #f97316;
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+.agent-stats {
+    display: flex;
+    gap: 24px;
+    color: #a1a1aa;
+    font-size: 14px;
+}
+.agent-stats span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.agent-status {
+    text-align: right;
+}
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.status-claimed {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+}
+.status-pending {
+    background: rgba(234, 179, 8, 0.2);
+    color: #eab308;
+}
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #71717a;
+}
+.empty-state p {
+    margin-bottom: 20px;
+}
+.user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #3f3f46;
+}
+.user-email {
+    color: #a1a1aa;
+}
+.logout-btn {
+    background: transparent;
+    border: 1px solid #3f3f46;
+    color: #a1a1aa;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.logout-btn:hover {
+    background: #27272a;
+    color: #e4e4e7;
+}
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-card">
+    <div class="card">
+        <h2 style="margin-bottom: 8px;">My Dashboard</h2>
+        
+        <div class="user-info">
+            <span class="user-email">Logged in as: <strong>{{ user.email }}</strong></span>
+            <form method="POST" action="/auth/logout/" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+
+        <h3 style="color: #a1a1aa; font-size: 14px; margin-bottom: 0;">My Agents</h3>
+        
+        {% if agents %}
+        <div class="agent-list">
+            {% for agent in agents %}
+            <div class="agent-card">
+                <div class="agent-info">
+                    <h3>{{ agent.name }}</h3>
+                    <div class="agent-stats">
+                        <span>Level {{ agent.level }}</span>
+                        <span>{{ agent.experience }} XP</span>
+                    </div>
+                </div>
+                <div class="agent-status">
+                    <span class="status-badge status-{{ agent.claim_status }}">
+                        {% if agent.claim_status == 'claimed' %}Claimed
+                        {% elif agent.claim_status == 'pending' %}Pending
+                        {% else %}{{ agent.claim_status }}{% endif %}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No agents bound yet</p>
+            <p style="font-size: 14px;">Ask your AI Agent to submit your email using its API Key to bind</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

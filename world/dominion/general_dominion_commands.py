@@ -68,7 +68,7 @@ class CmdAdmDomain(ArxPlayerCommand):
       @admin_domain/transferowner receiver=domain_id
       @admin_domain/transferrule char=domain_id
       @admin_domain/liege domain_id=family
-      @admin_domain/list <fealty, eg: 'Velenosa'>
+      @admin_domain/list <fealty, eg: '慕容'>
       @admin_domain/list_char player
       @admin_domain/list_land (x,y)
       @admin_domain/view domain_id
@@ -82,7 +82,7 @@ class CmdAdmDomain(ArxPlayerCommand):
       transferowner - make character and their family ruler of a domain
       transferrule - Just change who is castellan/acting ruler
       liege - sets the liege of a domain to be given family
-      list - all domains for a particular fealty, like Velenosa
+      list - all domains for a particular fealty, like 慕容
       list_land - lists all domains in a given x,y land square
       list_char - lists all domains for a given character name
       view - get stats on a domain
@@ -237,7 +237,7 @@ class CmdAdmDomain(ArxPlayerCommand):
                     return
                 if srank == 2:
                     try:
-                        house = Organization.objects.get(name__iexact="Grayson")
+                        house = Organization.objects.get(name__iexact="慕容")
                         if dom.ruler != house.assets.estate:
                             dom.ruler.liege = house.assets.estate
                             dom.ruler.save()
@@ -245,16 +245,16 @@ class CmdAdmDomain(ArxPlayerCommand):
                         caller.msg("Dominion could not find a suitable liege.")
                 if srank == 3:
                     try:
-                        if region.name == "Lyceum":
-                            house = Organization.objects.get(name__iexact="Velenosa")
-                        elif region.name == "Oathlands":
-                            house = Organization.objects.get(name__iexact="Valardin")
-                        elif region.name == "Mourning Isles":
-                            house = Organization.objects.get(name__iexact="Thrax")
-                        elif region.name == "Northlands":
-                            house = Organization.objects.get(name__iexact="Redrain")
-                        elif region.name == "Crownlands":
-                            house = Organization.objects.get(name__iexact="Grayson")
+                        if region.name == "江南":
+                            house = Organization.objects.get(name__iexact="慕容")
+                        elif region.name == "中原":
+                            house = Organization.objects.get(name__iexact="上官")
+                        elif region.name == "岭南":
+                            house = Organization.objects.get(name__iexact="少林")
+                        elif region.name == "塞北":
+                            house = Organization.objects.get(name__iexact="武当")
+                        elif region.name == "京师":
+                            house = Organization.objects.get(name__iexact="朝廷")
                         else:
                             self.msg("House for that region not found.")
                             return
@@ -407,7 +407,7 @@ class CmdAdmDomain(ArxPlayerCommand):
                 )
                 return
             if "list" in self.switches:
-                valid_fealty = ("Grayson", "Velenosa", "Redrain", "Valardin", "Thrax")
+                valid_fealty = ("慕容", "欧阳", "上官", "少林", "武当", "峨眉", "昆仑", "丐帮", "朝廷")
                 fealty = self.args.capitalize()
                 if fealty not in valid_fealty:
                     caller.msg(
@@ -2162,9 +2162,7 @@ class CmdOrganization(ArxPlayerCommand):
     @org/briefing and @org/theorybriefing work off of the list of clues
     and theories associated with the org, which you can see by viewing
     the org information itself with @org <name> -- if, for instance,
-    you checked @org Valardin and saw a clue there called 'Honor in
-    the Oathlands', you could do @org/briefing <yourname>/Honor in the
-    Oathlands=Valardin to learn that clue yourself, or the name of
+    you checked @org 上官 and saw a clue there called '中原武林秘闻', you could do @org/briefing <yourname>/中原武林秘闻=上官 to learn that clue yourself, or the name of
     another player to brief them on the clue.
     """
 

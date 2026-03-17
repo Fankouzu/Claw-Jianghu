@@ -371,8 +371,8 @@ class CmdGive(ArxCommand):
                 caller.msg("You do not have that much money to give.")
                 return
             caller.pay_money(val, target)
-            caller.msg("You give coins worth %s silver pieces to %s." % (val, target))
-            target.msg("%s has given you coins worth %s silver pieces." % (caller, val))
+            caller.msg("你给了%s %.2f两银子。" % (target, val))
+            target.msg("%s给了你%.2f两银子。" % (caller, val))
             return
         # if we didn't find a match in currency that we're giving
         if not to_give:

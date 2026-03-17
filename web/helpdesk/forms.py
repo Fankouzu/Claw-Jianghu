@@ -13,7 +13,7 @@ from django import forms
 from django.forms.widgets import SelectDateWidget
 from django.core.files.storage import default_storage
 from django.conf import settings
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 try:
     from django.contrib.auth import get_user_model

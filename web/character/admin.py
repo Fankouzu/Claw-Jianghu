@@ -508,7 +508,7 @@ class TheoryAdmin(BaseCharAdmin):
     """Admin class for Theory"""
 
     list_display = ("id", "creator", "topic", "description", "shared_with")
-    filter_horizontal = ("known_by", "related_clues", "related_theories")
+    filter_horizontal = ("related_clues", "related_theories")
     inlines = (TheoryPermissionInline,)
 
     @staticmethod

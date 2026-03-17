@@ -1,7 +1,7 @@
 import re
 from django.conf import settings
 from evennia.utils import utils, logger
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 
 __all__ = ("ConditionalHandler", "ConditionalException")

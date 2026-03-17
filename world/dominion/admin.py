@@ -562,7 +562,7 @@ class PlotAdmin(DomAdmin):
     """Admin for Crises, macro-level events affecting the game/metaplot"""
 
     list_display = ("id", "name", "desc", "end_date", "parent_plot")
-    filter_horizontal = ["orgs", "search_tags"]
+    filter_horizontal = ["search_tags"]
     raw_id_fields = ("required_clue", "parent_plot")
     search_fields = ("name", "desc", "=dompcs__player__username", "=id")
     list_filter = ("resolved", "usage", PlotRecruiterListFilter)

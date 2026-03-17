@@ -7,7 +7,7 @@ import re
 
 from mock import Mock, patch
 
-from evennia.commands.default.tests import CommandTest
+from evennia.utils.test_resources import BaseEvenniaCommandTest as CommandTest
 from evennia.server.sessionhandler import SESSIONS
 from evennia.utils import ansi, utils
 from evennia.utils.test_resources import EvenniaTest

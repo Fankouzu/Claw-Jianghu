@@ -1827,23 +1827,23 @@ class Land(SharedMemoryModel):
     OASIS = 17
 
     TERRAIN_CHOICES = (
-        (COAST, "Coast"),
-        (DESERT, "Desert"),
-        (GRASSLAND, "Grassland"),
-        (HILL, "Hill"),
-        (MOUNTAIN, "Mountain"),
-        (OCEAN, "Ocean"),
-        (PLAINS, "Plains"),
-        (SNOW, "Snow"),
-        (TUNDRA, "Tundra"),
-        (FOREST, "Forest"),
-        (JUNGLE, "Jungle"),
-        (MARSH, "Marsh"),
-        (ARCHIPELAGO, "Archipelago"),
-        (FLOOD_PLAINS, "Flood Plains"),
-        (ICE, "Ice"),
-        (LAKES, "Lakes"),
-        (OASIS, "Oasis"),
+        (COAST, "沿海"),
+        (DESERT, "大漠"),
+        (GRASSLAND, "草原"),
+        (HILL, "丘陵"),
+        (MOUNTAIN, "山岳"),
+        (OCEAN, "大海"),
+        (PLAINS, "平原"),
+        (SNOW, "雪原"),
+        (TUNDRA, "冻土"),
+        (FOREST, "森林"),
+        (JUNGLE, "密林"),
+        (MARSH, "沼泽"),
+        (ARCHIPELAGO, "群岛"),
+        (FLOOD_PLAINS, "河滩"),
+        (ICE, "冰原"),
+        (LAKES, "湖泊"),
+        (OASIS, "绿洲"),
     )
 
     name = models.CharField(max_length=80, blank=True, null=True)
@@ -2121,6 +2121,8 @@ class Organization(InformMixin, SharedMemoryModel):
     of the Dominion system. For purposes of the economy, an organization
     can substitute for an object as an asset holder. This allows them to
     have their own money, incomes, debts, etc.
+    
+    中国化改造：头衔默认值已改为武侠风格
     """
 
     CATEGORIES_WITH_FEALTY_PENALTIES = ("Law", "Discipleship")
@@ -2130,66 +2132,76 @@ class Organization(InformMixin, SharedMemoryModel):
     fealty = models.ForeignKey(
         "Fealty", blank=True, null=True, related_name="orgs", on_delete=models.SET_NULL
     )
-    # In a RP game, titles are IMPORTANT. And we need to divide them by gender.
+    # 武侠风格头衔 - 10级等级制度
+    # rank_1: 掌门/门主
     rank_1_male = models.CharField(
-        default="Prince", blank=True, null=True, max_length=255
+        default="掌门", blank=True, null=True, max_length=255
     )
     rank_1_female = models.CharField(
-        default="Princess", blank=True, null=True, max_length=255
+        default="掌门", blank=True, null=True, max_length=255
     )
+    # rank_2: 长老
     rank_2_male = models.CharField(
-        default="Voice", blank=True, null=True, max_length=255
+        default="长老", blank=True, null=True, max_length=255
     )
     rank_2_female = models.CharField(
-        default="Voice", blank=True, null=True, max_length=255
+        default="长老", blank=True, null=True, max_length=255
     )
+    # rank_3: 亲传弟子
     rank_3_male = models.CharField(
-        default="Noble Family", blank=True, null=True, max_length=255
+        default="亲传弟子", blank=True, null=True, max_length=255
     )
     rank_3_female = models.CharField(
-        default="Noble Family", blank=True, null=True, max_length=255
+        default="亲传弟子", blank=True, null=True, max_length=255
     )
+    # rank_4: 内门弟子
     rank_4_male = models.CharField(
-        default="Trusted House Servants", blank=True, null=True, max_length=255
+        default="内门弟子", blank=True, null=True, max_length=255
     )
     rank_4_female = models.CharField(
-        default="Trusted House Servants", blank=True, null=True, max_length=255
+        default="内门弟子", blank=True, null=True, max_length=255
     )
+    # rank_5: 外门弟子
     rank_5_male = models.CharField(
-        default="Noble Vassals", blank=True, null=True, max_length=255
+        default="外门弟子", blank=True, null=True, max_length=255
     )
     rank_5_female = models.CharField(
-        default="Noble Vassals", blank=True, null=True, max_length=255
+        default="外门弟子", blank=True, null=True, max_length=255
     )
+    # rank_6: 记名弟子
     rank_6_male = models.CharField(
-        default="Vassals of Esteem", blank=True, null=True, max_length=255
+        default="记名弟子", blank=True, null=True, max_length=255
     )
     rank_6_female = models.CharField(
-        default="Vassals of Esteem", blank=True, null=True, max_length=255
+        default="记名弟子", blank=True, null=True, max_length=255
     )
+    # rank_7: 江湖豪杰
     rank_7_male = models.CharField(
-        default="Known Commoners", blank=True, null=True, max_length=255
+        default="江湖豪杰", blank=True, null=True, max_length=255
     )
     rank_7_female = models.CharField(
-        default="Known Commoners", blank=True, null=True, max_length=255
+        default="江湖女侠", blank=True, null=True, max_length=255
     )
+    # rank_8: 乡绅
     rank_8_male = models.CharField(
-        default="Sworn Commoners", blank=True, null=True, max_length=255
+        default="乡绅", blank=True, null=True, max_length=255
     )
     rank_8_female = models.CharField(
-        default="Sworn Commoners", blank=True, null=True, max_length=255
+        default="乡绅夫人", blank=True, null=True, max_length=255
     )
+    # rank_9: 平民
     rank_9_male = models.CharField(
-        default="Forgotten Commoners", blank=True, null=True, max_length=255
+        default="平民", blank=True, null=True, max_length=255
     )
     rank_9_female = models.CharField(
-        default="Forgotten Commoners", blank=True, null=True, max_length=255
+        default="平民", blank=True, null=True, max_length=255
     )
+    # rank_10: 庶民
     rank_10_male = models.CharField(
-        default="Serf", blank=True, null=True, max_length=255
+        default="庶民", blank=True, null=True, max_length=255
     )
     rank_10_female = models.CharField(
-        default="Serf", blank=True, null=True, max_length=255
+        default="庶民", blank=True, null=True, max_length=255
     )
     npc_members = models.PositiveIntegerField(default=0, blank=True)
     income_per_npc = models.PositiveSmallIntegerField(default=0, blank=True)

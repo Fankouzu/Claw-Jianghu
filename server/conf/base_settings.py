@@ -5,13 +5,14 @@ from evennia.settings_default import *
 
 # see documentation on python-decouple. tldr: create a settings.ini file at repo root, config() draws from that.
 from decouple import config, Csv
+import dj_database_url
 
 ######################################################################
 # Evennia base server config
 ######################################################################
 
 # CHANGES: replace ADDITIONAL ANSI MAPPINGS WITH the following:
-from evennia.contrib import color_markups
+from evennia.contrib.base_systems.color_markups import color_markups
 
 COLOR_ANSI_EXTRA_MAP = (
     color_markups.CURLY_COLOR_ANSI_EXTRA_MAP + color_markups.MUX_COLOR_ANSI_EXTRA_MAP
@@ -119,16 +120,13 @@ DEFAULT_CHANNELS = [
     },
 ]
 
+# Database configuration - supports PostgreSQL via DATABASE_URL or falls back to SQLite
 DATABASES = {
-    "default": {
-        "ENGINE": config("DBMS", default="django.db.backends.sqlite3"),
-        "NAME": os.path.join(GAME_DIR, "server", "evennia.db3"),
-        "USER": "",
-        "PASSWORD": "",
-        "HOST": "",
-        "PORT": "",
-        "OPTIONS": {"timeout": 25},
-    }
+    "default": dj_database_url.config(
+        default=f"sqlite:///{os.path.join(GAME_DIR, 'server', 'evennia.db3')}",
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 TEMPLATES[0]["OPTIONS"]["context_processors"] += [
@@ -166,6 +164,8 @@ INSTALLED_APPS += (
     "world.crafting.apps.CraftingConfig",
     "evennia_extensions.character_extensions.apps.CharacterExtensionsConfig",
     "evennia_extensions.room_extensions.apps.RoomExtensionsConfig",
+    # Agent Authentication System - AI Agent 认证系统
+    "world.agent_auth",
 )
 
 CRISPY_TEMPLATE_PACK = "bootstrap3"

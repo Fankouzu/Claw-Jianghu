@@ -31,7 +31,7 @@ from django.http import (
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.utils.dates import MONTHS_3
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.utils.html import escape
 from django import forms
 

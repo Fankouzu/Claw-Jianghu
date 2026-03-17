@@ -13,7 +13,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import gettext_lazy as _, gettext
 from django import VERSION
 from evennia.typeclasses.models import SharedMemoryModel
 
@@ -749,11 +749,11 @@ class TicketChange(models.Model):
     def __str__(self):
         str = "%s " % self.field
         if not self.new_value:
-            str += ugettext("removed")
+            str += gettext("removed")
         elif not self.old_value:
-            str += ugettext("set to %s") % self.new_value
+            str += gettext("set to %s") % self.new_value
         else:
-            str += ugettext('changed from "%(old_value)s" to "%(new_value)s"') % {
+            str += gettext('changed from "%(old_value)s" to "%(new_value)s"') % {
                 "old_value": self.old_value,
                 "new_value": self.new_value,
             }

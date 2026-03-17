@@ -6,8 +6,8 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from evennia.comms.models import Msg
-from evennia.typeclasses.admin import TagInline
-from evennia.help.admin import HelpEntryAdmin
+from evennia.web.admin.tags import TagInline
+from evennia.web.admin.help import HelpEntryAdmin
 from evennia.help.models import HelpEntry
 
 from world.msgs.models import Inform, Messenger, Post, Journal, Rumor

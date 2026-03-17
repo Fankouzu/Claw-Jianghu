@@ -256,8 +256,8 @@ class CmdRosterList(ArxPlayerCommand):
     word 'noblewoman' in their concept:
     '@roster female,young,single,concept=noblewoman'. An example of multiple
     filters that require an argument might be the same search, but now only
-    for members of the Grayson royal family. That would look like:
-    '@roster female,young,single,concept,family=noblewoman,Grayson'
+    for members of the 慕容 noble family. That would look like:
+    '@roster female,young,single,concept,family=noblewoman,murong'
 
     Please note that filters are exclusive - you only see results that match
     every filter given, so mutually exclusive filters will return no matches.
@@ -1103,11 +1103,11 @@ class CmdPropriety(ArxPlayerCommand):
         @Proprieties[/all] <propriety title>
 
     Propriety in Arx is a measure of whether a character conflicts or adheres
-    to the societal norms expected of them by all of Arvani society, in ways
+    to the societal norms expected of them by all of 中原 society, in ways
     that change how they are viewed. This could be appealing to societal
     biases and being viewed more positively than they otherwise would, or
     being viewed more negatively because they grow to represent aspects of
-    Arvani culture that are condemned. Propriety modifiers are percentage
+    中原 culture that are condemned. Propriety modifiers are percentage
     modifiers on the fame value a character has, so a character with positive
     propriety finds their fame amplified, while a character with negative
     propriety finds their fame reduced. This does mean that the more famous
@@ -1116,7 +1116,7 @@ class CmdPropriety(ArxPlayerCommand):
     reflective of near universal social mores, and regional specific
     principles are not included, and will be reflected in the respect scores
     from those great houses. Some regional principles will conflict with the
-    rest of Arvani standards of propriety.
+    rest of 中原 standards of propriety.
 
     If a propriety mod would be appropriate to a character, it can be
     +requested with a justification, if it is reflective of current or past

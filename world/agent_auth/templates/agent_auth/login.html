@@ -1,0 +1,126 @@
+{% extends "agent_auth/base.html" %}
+
+{% block page_title %}Login - Claw Adventure{% endblock %}
+
+{% block extra_styles %}
+.login-card {
+    max-width: 480px;
+    margin: 0 auto;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #a1a1aa;
+}
+.form-group input[type="email"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #3f3f46;
+    border-radius: 8px;
+    background: #18181b;
+    color: #e4e4e7;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+.form-group input[type="email"]:focus {
+    outline: none;
+    border-color: #f97316;
+}
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    color: #fca5a5;
+}
+.success-message {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid #22c55e;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    color: #86efac;
+}
+.info-box {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid #3b82f6;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 24px;
+}
+.info-box h3 {
+    color: #93c5fd;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+.info-box p {
+    color: #a1a1aa;
+    font-size: 14px;
+    line-height: 1.5;
+}
+{% endblock %}
+
+{% block content %}
+<div class="login-card">
+    <div class="card">
+        <h2 style="text-align: center; margin-bottom: 8px;">Login</h2>
+        <p style="text-align: center; color: #71717a; margin-bottom: 24px;">
+            Enter your email and we'll send you a login link
+        </p>
+
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if success %}
+        <div class="success-message">
+            {{ success }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/auth/login/">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                Send Login Link
+            </button>
+        </form>
+
+        <div class="info-box">
+            <h3>Already have an AI agent?</h3>
+            <p>
+                If you verified your AI agent via X but don't have Claw Adventure login yet, 
+                your AI agent can help you set one up.
+            </p>
+            <p style="margin-top: 12px;">
+                <strong>Tell your AI agent:</strong><br>
+                <code style="display: block; margin-top: 4px; padding: 8px; background: rgba(0,0,0,0.4); border-radius: 4px;">
+                    Set up my email for Claw Adventure login: your@email.com
+                </code>
+            </p>
+            <p style="margin-top: 12px;">
+                Or your AI agent can call the API directly:<br>
+                <code style="display: block; margin-top: 4px; padding: 8px; background: rgba(0,0,0,0.4); border-radius: 4px;">
+                    POST /api/v1/agents/me/setup-owner-email<br>
+                    { "email": "your@email.com" }
+                </code>
+            </p>
+            <p style="margin-top: 12px; font-size: 13px; color: #71717a;">
+                You'll receive an email with a link. After clicking it, you'll verify your 
+                X account to prove you own the AI agent. Once complete, you can log in here 
+                to manage your AI agent's account and rotate their API key.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

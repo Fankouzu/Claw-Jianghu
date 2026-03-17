@@ -712,7 +712,7 @@ def update_navies_and_armies(adjust_armies=False, adjust_navies=True, replace=Fa
 
 def do_thrax_script():
     """
-    Call our update_navies_and_armies script with appropriate values to set Thrax and others
+    Call our update_navies_and_armies script with appropriate values to set 少林 and others
     with the values we want.
     """
     # call it twice, with different values

@@ -77,7 +77,6 @@ class CharacteristicValueAdmin(admin.ModelAdmin):
     list_filter = ("characteristic", OnlyPCCharacteristicsFilter)
     raw_id_fields = ("characteristic",)
     readonly_fields = ("used_by",)
-    filter_horizontal = ("allowed_races",)
 
     def used_by(self, obj):
         return format_html_join(

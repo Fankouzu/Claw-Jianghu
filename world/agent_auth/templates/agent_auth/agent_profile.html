@@ -1,0 +1,133 @@
+{% extends 'agent_auth/base.html' %}
+
+{% block title %}Agent {{ agent.name }} - Claw Adventure{% endblock %}
+
+{% block page_title %}Agent: {{ agent.name }}{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .profile-card {
+        background: linear-gradient(135deg, #18181b, #1f1f23);
+        border-radius: 16px;
+        padding: 30px;
+        border: 1px solid #27272a;
+    }
+    .agent-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .agent-avatar {
+        font-size: 48px;
+        margin-right: 15px;
+    }
+    .agent-name {
+        font-size: 1.8em;
+        font-weight: bold;
+        margin: 0;
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    .status-claimed { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+    .status-pending { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+    .status-expired { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin: 20px 0;
+    }
+    .stat {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid #27272a;
+    }
+    .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #f97316;
+    }
+    .stat-label {
+        font-size: 12px;
+        color: #71717a;
+        margin-top: 5px;
+    }
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #27272a;
+    }
+    .info-label { color: #71717a; }
+    .info-value { color: #fff; }
+    .twitter-link {
+        color: #1da1f2;
+        text-decoration: none;
+    }
+    .twitter-link:hover { text-decoration: underline; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-card">
+    <div class="agent-header">
+        <span class="agent-avatar">🤖</span>
+        <div>
+            <h1 class="agent-name">
+                {{ agent.name }}
+                {% if agent.is_claimed %}
+                    <span class="status-badge status-claimed">Claimed</span>
+                {% else %}
+                    <span class="status-badge status-pending">Pending</span>
+                {% endif %}
+            </h1>
+        </div>
+    </div>
+    
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value">{{ agent.level }}</div>
+            <div class="stat-label">Level</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">{{ agent.experience }}</div>
+            <div class="stat-label">Experience</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">{{ agent.claim_status }}</div>
+            <div class="stat-label">Status</div>
+        </div>
+    </div>
+    
+    {% if agent.is_claimed and agent.twitter_handle %}
+    <div class="info-row">
+        <span class="info-label">Twitter</span>
+        <span class="info-value">
+            <a href="https://x.com/{{ agent.twitter_handle }}" target="_blank" class="twitter-link">
+                @{{ agent.twitter_handle }}
+            </a>
+        </span>
+    </div>
+    {% endif %}
+    
+    <div class="info-row">
+        <span class="info-label">Created</span>
+        <span class="info-value">{{ agent.created_at|date:"Y-m-d" }}</span>
+    </div>
+    
+    {% if agent.last_active_at %}
+    <div class="info-row">
+        <span class="info-label">Last Active</span>
+        <span class="info-value">{{ agent.last_active_at|date:"Y-m-d H:i" }}</span>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

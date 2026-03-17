@@ -29,6 +29,18 @@ from world.stats_and_skills import (
 )
 from world.traits.models import Trait
 
+# 从世界设定配置导入
+from server.conf.world_settings import (
+    VALID_FEALTY as _valid_fealty_,
+    VALID_RELIGION as _valid_religion_,
+    VALID_HAIR_COLOR as _valid_hair_color_,
+    VALID_SKIN_TONE as _valid_skin_tone_,
+    VALID_EYE_COLOR as _valid_eye_color_,
+    VALID_VOCATIONS as _vocations_,
+    VOCATION_START_STATS as _voc_start_stats_,
+    VOCATION_START_SKILLS as _voc_start_skills_,
+)
+
 # limit symbol import for API
 __all__ = (
     "CmdGuestLook",
@@ -40,28 +52,12 @@ __all__ = (
 )
 CMD_NOINPUT = syscmdkeys.CMD_NOINPUT
 CMD_NOMATCH = syscmdkeys.CMD_NOMATCH
-_vocations_ = (
-    "noble",
-    "courtier",
-    "charlatan",
-    "soldier",
-    "knight",
-    "priest",
-    "merchant",
-    "criminal",
-    "artisan",
-    "scholar",
-    "lawyer",
-    "steward",
-    "commoner",
-    "jeweler",
-    "tailor",
-    "weaponsmith",
-    "armorsmith",
-    "leatherworker",
-    "apothecary",
-    "carpenter",
-)
+
+# 以下配置已迁移到 server/conf/world_settings.py
+# _vocations_, _valid_fealty_, _valid_religion_, _valid_hair_color_, 
+# _valid_skin_tone_, _valid_eye_color_, _voc_start_stats_, _voc_start_skills_
+# 均从 world_settings 导入
+
 _stage3_fields_ = (
     "concept",
     "gender",
@@ -81,188 +77,13 @@ _stage3_fields_ = (
     "hair_color",
     "height",
 )
-_valid_fealty_ = (
-    "Crownsworn",
-    "Grayson",
-    "Pravus",
-    "Redrain",
-    "Thrax",
-    "Valardin",
-    "Velenosa",
-)
-_valid_religion_ = (
-    "Pantheon",
-    "Shamanism",
-    "Pantheon/Shamanism",
-)
-_valid_hair_color_ = (
-    "Red",
-    "Brown",
-    "Black",
-    "Blonde",
-    "Gray",
-    "White",
-    "Bald",
-)
-_valid_skin_tone_ = (
-    "Very Fair",
-    "Fair",
-    "Light",
-    "Medium",
-    "Dark",
-    "Very Dark",
-)
-_valid_eye_color_ = (
-    "Brown",
-    "Blue",
-    "Green",
-    "Hazel",
-    "Gray",
-)
+
+# 以下配置已从 world_settings 导入，此处仅保留非配置化的常量
 
 _stage3_optional_ = ("real_concept", "real_age")
 # Minimum and maximum ages players can set for starting characters
 _min_age_ = 18
 _max_age_ = 65
-# We have 12 stats. no more than two at 5. tuple is in the following order:
-# (strength,dexterity,stamina,charm,command,composure,intellect,perception,wits,mana,luck,willpower)
-_voc_start_stats_ = {
-    "noble": (3, 3, 3, 4, 5, 4, 3, 3, 2, 2, 2, 2),
-    "courtier": (2, 2, 2, 5, 4, 5, 3, 3, 4, 2, 2, 2),
-    "charlatan": (2, 2, 2, 4, 3, 5, 3, 4, 4, 3, 3, 1),
-    "soldier": (5, 4, 5, 2, 3, 4, 2, 2, 3, 2, 2, 2),
-    "knight": (4, 4, 4, 3, 4, 4, 2, 2, 3, 2, 2, 2),
-    "priest": (2, 2, 2, 4, 5, 4, 3, 3, 2, 3, 3, 3),
-    "merchant": (2, 2, 2, 4, 3, 4, 3, 4, 3, 2, 3, 4),
-    "criminal": (4, 4, 4, 3, 3, 3, 3, 3, 3, 2, 2, 2),
-    "tailor": (2, 2, 2, 3, 3, 3, 4, 4, 4, 3, 3, 3),
-    "artisan": (2, 2, 2, 3, 3, 3, 4, 4, 4, 3, 3, 3),
-    "weaponsmith": (4, 4, 4, 3, 3, 3, 2, 2, 2, 3, 3, 3),
-    "armorsmith": (4, 4, 4, 3, 3, 3, 2, 2, 2, 3, 3, 3),
-    "leatherworker": (4, 4, 4, 3, 3, 3, 2, 2, 2, 3, 3, 3),
-    "apothecary": (2, 2, 2, 3, 3, 3, 4, 4, 4, 3, 3, 3),
-    "carpenter": (4, 4, 4, 3, 3, 3, 2, 2, 2, 3, 3, 3),
-    "jeweler": (2, 2, 2, 3, 3, 3, 4, 4, 4, 3, 3, 3),
-    "scholar": (2, 2, 2, 3, 3, 3, 5, 5, 4, 2, 2, 3),
-    "lawyer": (2, 2, 2, 3, 3, 3, 5, 5, 4, 2, 2, 3),
-    "steward": (3, 3, 3, 3, 3, 3, 4, 4, 4, 2, 2, 2),
-    "commoner": (4, 3, 4, 3, 2, 3, 2, 3, 4, 2, 4, 2),
-}
-# 20 points for skills
-_voc_start_skills_ = {
-    "noble": {
-        "diplomacy": 3,
-        "leadership": 3,
-        "etiquette": 2,
-        "law": 1,
-        "ride": 1,
-        "manipulation": 1,
-        "empathy": 1,
-        "war": 1,
-    },
-    "courtier": {
-        "diplomacy": 1,
-        "etiquette": 3,
-        "manipulation": 2,
-        "empathy": 2,
-        "seduction": 3,
-        "propaganda": 1,
-    },
-    "charlatan": {
-        "legerdemain": 3,
-        "manipulation": 3,
-        "empathy": 1,
-        "streetwise": 3,
-        "occult": 1,
-    },
-    "soldier": {"medium wpn": 3, "brawl": 1, "dodge": 1, "archery": 1, "survival": 1},
-    "knight": {
-        "medium wpn": 3,
-        "dodge": 1,
-        "war": 1,
-        "etiquette": 1,
-        "ride": 2,
-        "leadership": 1,
-    },
-    "lawyer": {
-        "law": 4,
-        "etiquette": 1,
-        "empathy": 2,
-        "manipulation": 2,
-        "teaching": 1,
-        "investigation": 1,
-        "linguistics": 1,
-    },
-    "priest": {
-        "theology": 3,
-        "occult": 2,
-        "medicine": 3,
-        "empathy": 1,
-        "leadership": 1,
-        "propaganda": 2,
-    },
-    "merchant": {
-        "economics": 3,
-        "streetwise": 2,
-        "manipulation": 1,
-        "haggling": 4,
-    },
-    "criminal": {
-        "stealth": 1,
-        "streetwise": 2,
-        "small wpn": 2,
-        "brawl": 2,
-        "dodge": 1,
-        "legerdemain": 1,
-    },
-    "artisan": {
-        "smithing": 2,
-        "alchemy": 2,
-        "sewing": 2,
-        "tanning": 2,
-        "haggling": 1,
-        "propaganda": 1,
-        "streetwise": 1,
-        "teaching": 1,
-        "woodworking": 2,
-        "etiquette": 1,
-    },
-    "tailor": {"sewing": 4, "teaching": 2, "haggling": 1},
-    "weaponsmith": {"smithing": 4, "brawl": 1, "haggling": 1},
-    "armorsmith": {"smithing": 4, "brawl": 1, "haggling": 1},
-    "leatherworker": {"tanning": 4, "brawl": 1, "haggling": 1},
-    "apothecary": {"alchemy": 4, "teaching": 2, "haggling": 1},
-    "carpenter": {"woodworking": 4, "brawl": 1, "haggling": 1},
-    "jeweler": {"smithing": 4, "teaching": 2, "haggling": 1},
-    "scholar": {
-        "medicine": 3,
-        "occult": 2,
-        "agriculture": 1,
-        "economics": 1,
-        "teaching": 3,
-        "theology": 1,
-        "law": 1,
-        "etiquette": 1,
-    },
-    "steward": {
-        "stewardship": 4,
-        "economics": 1,
-        "etiquette": 2,
-        "law": 2,
-        "agriculture": 2,
-    },
-    "commoner": {
-        "streetwise": 2,
-        "stealth": 1,
-        "brawl": 1,
-        "athletics": 1,
-        "survival": 2,
-        "investigation": 1,
-        "dodge": 1,
-        "occult": 1,
-        "haggling": 1,
-    },
-}
 
 
 def setup_voc(char, args):
@@ -359,86 +180,69 @@ def award_bonus_by_age(age):
 
 
 STAGE0 = """
-Welcome to {cArx{n, a text based fantasy roleplaying game, similar in design
-to many other MUSH based games. Arx is a game of intrigue and adventure,
-politics and deeply woven stories, allowing players to enter the ongoing
-stories with either a character from a roster of pre-generated characters
-that have been a part of the story so far, or to create your own with help
-and guidance to best fit into the stories we are creating here.
+欢迎来到{c江湖传说{n，一个基于文字的武侠角色扮演游戏，设计与许多其他
+MUSH游戏相似。《江湖传说》是一个关于权谋与冒险、政治与深沉故事的游戏，
+玩家可以扮演名册中已有的预设角色，这些角色已经融入了当前的故事，
+或者在引导和帮助下创建自己的角色，更好地融入我们正在创造的江湖。
 
-If you'd like to read about the current stories, or background lore and
-completed roleplay, please access our help files with '{whelp{n' to browse
-the different subjects. To see a list of commands available to you, use the
-'{whelp{n' command. To look at the roster of available characters, use
-'{w@roster{n' and '{w@sheet{n'.
+如果您想了解当前的故事、背景传说和已完成的剧情，请使用 '{whelp{n' 
+浏览不同的主题。要查看可用的命令列表，使用 '{whelp{n' 命令。
+要查看可扮演角色的名册，使用 '{w@roster{n' 和 '{w@sheet{n'。
 
-To submit an application for a character on the roster that you would like
-to play, you will need to supply an email address with {w@add/email <email>{n.
-Then enter '{w@roster/apply{n {c<character name>{n {w={n {c<application>{n'.
-Your application should contain the reason you'd like to play the character
-and what you perceive as their goals and motivations and what direction you
-will take their roleplay. Tell us your take on the character. How would you RP
-them in a way that contributes to a positive environment and creates
-collaborative, fun RP for other people?
+要申请扮演名册中的角色，您需要提供电子邮件地址：{w@add/email <邮箱>{n。
+然后输入 '{w@roster/apply{n {c<角色名>{n {w={n {c<申请说明>{n'。
+您的申请应包含您想扮演该角色的原因、您对其目标和动机的理解，
+以及您将如何演绎这个角色。告诉我们您对这个角色的理解。
+您将如何以积极的方式演绎这个角色，为其他玩家创造有趣、
+协作的武侠体验？
 
-To create a new, original character, or to resume a previous session you
-were disconnected from, use '{w@charcreate {c<email>{n'. To view a board
-of wanted character concepts, use '{w@bb wanted concepts{n'.
+要创建新的原创角色，或恢复之前中断的会话，使用 '{w@charcreate {c<邮箱>{n'。
+要查看急需的角色概念公告，使用 '{w@bb wanted concepts{n'。
 
-The guest channel exists to help new players with
-the process of requesting or generating their characters - to speak in it,
-please type '{wguest {c<message>{n'.
+访客频道旨在帮助新玩家完成申请或创建角色的过程 - 
+要在频道中发言，请输入 '{wguest {c<消息>{n'。
        """
 STAGE1 = """
-To start with, choose a unique name for your character that consists of a
-single word of only letters - no spaces, numbers, or special characters.
+首先，为您的角色选择一个唯一的姓名，由单个单词组成——
+只能使用字母，不能有空格、数字或特殊字符。
 
-Although characters will typically have both family names, and some may have
-titles, every character has a unique first name as an identifier for game
-commands. For example, Prince Donrai Thrax would be known by his full name,
-but commands such as 'look' would be executed by 'look donrai'.
+虽然角色通常会有姓和名，有些还会有称号，但每个角色都有一个
+唯一的名作为游戏命令中的标识符。例如，少侠 慕容复 会以全名
+被人知晓，但 'look' 命令会执行为 'look murongfu'。
 
-To choose a name, please use {w'@add/name {c<name>'{n. Names may only consist
-of letters, and should generally be between 4-12 characters in length.
+要选择姓名，请使用 {w'@add/name {c<姓名>'{n。姓名只能由字母组成，
+通常长度为4-12个字符。
        """
 STAGE2 = """
-A vocation describes your character's occupation. A number of sample
-vocations have been prepared, but you are not limited to them. You may
-choose either one of the sample vocations, or create your own with
-{w'@add/newvocation {c<name>'{n. To select any of the given vocations, use
-{w'@add/vocation {c<name>'{n
+职业描述了您的角色所从事的工作。我们准备了一些示例职业，
+但您不限于这些。您可以选择示例职业之一，或使用
+{w'@add/newvocation {c<名称>'{n 创建自己的职业。
+要选择给定的职业，使用 {w'@add/vocation {c<名称>'{n
 
-To get more information about the listed vocations, type {w'help {c<name>'{n for
-any. Each sample vocation has a pre-generated list of stats and skills,
-which can be modified in a following step. Creating a new vocation will
-require you to set them manually.
+要获取列出的职业的更多信息，输入 {w'help {c<名称>'{n。
+每个示例职业都有预设的属性和技能列表，可以在后续步骤中修改。
+创建新职业则需要您手动设置它们。
        """
 STAGE3 = """
-In this step, you'll create all the details of your character's starting
-story. This will let you define who they are now, what their previous
-history was, and the overall character concept by defining fields on your
-character {w+sheet{n. If any of the fields at all confuse you, please use
-the '{whelp{n' command for greater detail.
+在这一步，您将创建角色起始故事的详细信息。这将让您定义他们现在是谁、
+过往经历如何，以及整体的角色概念，通过在角色 {w+sheet{n 上定义字段
+来完成。如果任何字段让您困惑，请使用 '{whelp{n' 命令获取详细说明。
 
-In order to give detail about your character, you use the '{w@add{n' command
-to define a field. For example, the concept field. Your character concept is
-an extremely brief two or three word character concept, the most basic
-pitch possible for your character. So someone wishing to play a knight
-struggling with cynicism and his own past might use the '{w@add{n' command to
-'{w@add/concept{n Embittered Knight'. Then they can use the '{w@add{n'
-command to define why that concept is accurate for him and just what makes
-the character tick by completing the other fields below.
+要描述您的角色，您使用 '{w@add{n' 命令来定义字段。例如，概念字段。
+您的角色概念是一个极简的两三个词的角色概括，是对您角色最基本的描述。
+例如，一个想要扮演一个与愤世嫉俗和过去斗争的剑客的玩家可能会使用
+'{w@add{n' 命令：'{w@add/concept{n 愤世嫉俗的剑客'。然后他们可以使用
+'{w@add{n' 命令来完成其他字段，解释为什么这个概念适合他，以及角色的
+性格和动机。
 
-Characters who start at a lower social rank will receive bonus xp after
-character creation which they can use in any manner they choose.
+以较低社会等级开始的角色将在角色创建后获得奖励经验值，
+可以任意使用。
 
-To add a field '{w@add/{c<field> <value>{n' For example, '{w@add/age{n 21'
-would set the character's age to 21.
+要添加字段：'{w@add/{c<字段> <值>{n'。例如，'{w@add/age{n 21'
+将把角色的年龄设为21岁。
 
-If you would prefer to fill in character stats first, you may temporarily
-skip this stage with '{w@add/skip{n', though the mandatory fields must be
-filled in with the appropriate '{w@add{n' commands before you are able to
-submit your character.
+如果您想先填写角色属性，可以暂时使用 '{w@add/skip{n' 跳过此阶段，
+但在提交角色之前，必须使用适当的 '{w@add{n' 命令填写必填字段。
        """
 STAGE4 = """
 You may now adjust the starting skills and stats of your character if you
@@ -960,12 +764,12 @@ class CmdGuestAddInput(ArxPlayerCommand):
                 "{w@add/<field>{n must have a value after a space. Examples:\n"
                 + "{w@add/gender{n, ex: {w@add/gender female{n\n"
                 + "{w@add/age{n, ex: {w@add/age 25{n\n"
-                + "{w@add/fealty{n, ex: {w@add/fealty Velenosa{n\n"
-                + "{w@add/family{n, ex: {w@add/family Whisper{n\n"
-                + "{w@add/religion{n, ex: {w@add/religion Pantheon{n\n"
-                + "{w@add/desc{n, ex: {w@add/desc A severe girl with blue eyes...{n\n"
-                + "{w@add/concept{n, ex: {w@add/concept Humorless Handmaiden{n\n"
-                + "{w@add/background{n, ex: {w@add/background She was of humble birth..."
+                + "{w@add/fealty{n, ex: {w@add/fealty 慕容{n\n"
+                + "{w@add/family{n, ex: {w@add/family 欧阳{n\n"
+                + "{w@add/religion{n, ex: {w@add/religion 道教{n\n"
+                + "{w@add/desc{n, ex: {w@add/desc 一位面容冷峻的少女...{n\n"
+                + "{w@add/concept{n, ex: {w@add/concept 冷面女侠{n\n"
+                + "{w@add/background{n, ex: {w@add/background 出身寒门..."
                 + "{w@add/social_rank{n, ex: {w@add/social_rank 8"
             )
             return

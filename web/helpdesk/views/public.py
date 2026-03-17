@@ -10,7 +10,7 @@ views/public.py - All public facing views, eg non-staff (no authentication
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from web.helpdesk import settings as helpdesk_settings
 from web.helpdesk.forms import PublicTicketForm

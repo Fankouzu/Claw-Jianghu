@@ -39,13 +39,13 @@ class CmdAgents(ArxPlayerCommand):
     guard: The 'guard' switch assigns agents of the type and the
     amount to a given player, who can then use them via the +guard command.
     'name' should be what the type of guard is named - for example, name
-    might be 'Thrax elite guards'.
+    might be '少林武僧'.
 
     recall: Recalls guards of the given type listed by 'name' and the value
     given by the deployment number, and the amount listed. For example, you
-    might have 10 Grayson House Guards deployed to player name A, and 15 to
+    might have 10 慕容家卫 deployed to player name A, and 15 to
     player B. To recall 10 of the guards assigned to player B, you would do
-    @agents/recall grayson house guards,B,10=grayson.
+    @agents/recall murong guards,B,10=murong.
 
     hire: enter the type, level, and quantity of the agents and the org you
     wish to buy them for. The type will generally be 'guard' for nobles,

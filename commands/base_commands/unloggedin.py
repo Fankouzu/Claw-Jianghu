@@ -23,8 +23,8 @@ except (AttributeError, TypeError, ValueError):
     pass
 if not CONNECTION_SCREEN:
     CONNECTION_SCREEN = (
-        "\nEvennia: Error in CONNECTION_SCREEN MODULE (randomly picked connection screen "
-        "variable is not a string). \nEnter 'help' for aid."
+        "\n江湖：连接屏幕模块错误（随机选取的连接屏幕"
+        "变量不是字符串）。\n输入 'help' 获取帮助。"
     )
 
 GUEST = "typeclasses.guest.Guest"
@@ -45,7 +45,7 @@ class CmdGuestConnect(ArxCommand):
     def dc_session(self, msg):
         session = self.caller
         session.msg(msg)
-        session.sessionhandler.disconnect(session, "Good bye! Disconnecting.")
+        session.sessionhandler.disconnect(session, "再见！正在断开连接。")
 
     def func(self):
         """
@@ -60,8 +60,8 @@ class CmdGuestConnect(ArxCommand):
         if bans and (any(tup[2].match(session.address) for tup in bans if tup[2])):
             # this is a banned IP or name!
             string = (
-                "{rYou have been banned and cannot continue from here."
-                "\nIf you feel this ban is in error, please email an admin.{x"
+                "{r您已被封禁，无法从此处继续。"
+                "\n如您认为此封禁有误，请邮件联系管理员。{x"
             )
             self.dc_session(string)
             return
@@ -82,7 +82,7 @@ class CmdGuestConnect(ArxCommand):
                 )
                 try:
                     query(qname)
-                    msg = "Guest connections from TOR are not permitted, sorry."
+                    msg = "抱歉，不允许来自 TOR 的访客连接。"
                     self.dc_session(msg)
                     return
                 except NXDOMAIN:
@@ -99,7 +99,7 @@ class CmdGuestConnect(ArxCommand):
                     print("Returned from xiaox: %s" % str(data))
                     if data["host-ip"]:
                         self.dc_session(
-                            "Guest connections from VPNs are not permitted, sorry."
+                            "抱歉，不允许来自 VPN 的访客连接。"
                         )
                         return
                     # the address was safe, add it to our white_list
@@ -120,7 +120,7 @@ class CmdGuestConnect(ArxCommand):
                     break
         # create a new guest account
         if not guest:
-            session.msg("All guests in use, creating a new one.")
+            session.msg("所有访客都在使用中，正在创建新访客。")
             key = "Guest" + str(num_guests)
             playerlist = [ob.key for ob in playerlist]
             while key in playerlist:
@@ -140,7 +140,7 @@ class CmdGuestConnect(ArxCommand):
                 report_to=session,
             )
         # now connect the player to the guest account
-        session.msg("Logging in as %s" % guest.key)
+        session.msg("正在以 %s 身份登录" % guest.key)
         session.sessionhandler.login(session, guest)
 
 
@@ -158,32 +158,28 @@ class CmdUnconnectedHelp(ArxCommand):
         """Shows help"""
 
         string = """
-You are not yet logged into the game. Commands available at this point:
+您尚未登录游戏。此时可用的命令：
   {wconnect, guest, look, help, quit{n
 
-To login to the system, you need to do one of the following:
+要登录系统，您需要执行以下操作之一：
 
-{w1){n If you have no previous account, you must log in as a guest.
+{w1){n 如果您没有账户，必须以访客身份登录。
 
      {wguest{n
 
-     Guests automatically are placed in a guest channel where you can
-     ask for help by typing {wguest <message>{n. You can then apply
-     to play an existing character on the {w@roster{n, or create a
-     new character with the {w@charcreate{n command. If your application
-     is approved, an email will be sent to you with your password.
+     访客会自动进入访客频道，您可以输入 {wguest <消息>{n 寻求帮助。
+     然后可以申请扮演 {w@roster{n 上的已有角色，或使用 {w@charcreate{n 命令
+     创建新角色。如果您的申请获批，系统将发送邮件告知您密码。
 
-{w2){n If you have an account already, use the 'connect' command:
+{w2){n 如果您已有账户，请使用 'connect' 命令：
 
-     {wconnect Anna c67jHL8p{n
+     {wconnect 小龙女 wugong32{n
 
-     if your password was c67jHL8p. If you just created or applied
-     for a character, your password is sent to the email you used
-     to apply.
+     如果您的密码是 wugong32。如果您刚创建或申请了角色，
+     密码会发送到您申请时使用的邮箱。
 
-   This should log you in. Run {whelp{n again once you're logged in
-   to get more aid. Hope you enjoy your stay!
+   登录后再次运行 {whelp{n 可获取更多帮助。祝您游戏愉快！
 
-You can use the {wlook{n command if you want to see the connect screen again.
+您可以使用 {wlook{n 命令再次查看连接屏幕。
 """
         self.msg(string)

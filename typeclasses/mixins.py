@@ -484,7 +484,7 @@ class AppearanceMixins(BaseObjectMixins, TemplateMixins):
         currency = self.currency
         if not currency:
             return None
-        string = "coins worth a total of {:,.2f} silver pieces".format(currency)
+        string = "{:,.2f}两银子".format(currency)
         return string
 
     @property

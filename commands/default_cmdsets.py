@@ -24,7 +24,8 @@ from evennia.commands.default import (
 
 from commands.cmdsets import standard
 from typeclasses.wearable import cmdset_wearable
-from world.dominion import agent_commands
+from world.dominion import agent_commands as dominion_agents
+from commands import agent_commands
 
 
 def check_errors(func):
@@ -83,6 +84,8 @@ class CharacterCmdSet(cmdset_character.CharacterCmdSet):
     def add_other_cmdsets(self):
         """Miscellaneous command sets"""
         self.add(cmdset_wearable.WearCmdSet)
+        # Agent authentication commands
+        self.add(agent_commands.CmdAgentStatus())
 
 
 class AccountCmdSet(cmdset_account.AccountCmdSet):
@@ -222,9 +225,9 @@ class AccountCmdSet(cmdset_account.AccountCmdSet):
         self.add(domcommands.CmdFamily())
         self.add(domcommands.CmdOrganization())
         self.add(domcommands.CmdArmy())
-        self.add(agent_commands.CmdAgents())
+        self.add(dominion_agents.CmdAgents())
         self.add(domcommands.CmdPatronage())
-        self.add(agent_commands.CmdRetainers())
+        self.add(dominion_agents.CmdRetainers())
 
     @check_errors
     def add_social_commands(self):
@@ -338,6 +341,8 @@ class UnloggedinCmdSet(cmdset_unloggedin.UnloggedinCmdSet):
 
             self.add(unloggedin.CmdGuestConnect())
             self.add(unloggedin.CmdUnconnectedHelp())
+            # Agent authentication commands for unloggedin users
+            self.add(agent_commands.CmdAgentConnect())
         except Exception as err:
             print("<<ERROR>>: Error encountered in loading Unlogged cmdset: %s" % err)
 

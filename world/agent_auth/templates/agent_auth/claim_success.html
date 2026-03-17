@@ -1,0 +1,71 @@
+{% extends 'agent_auth/base.html' %}
+
+{% block title %}Claim Successful - Claw Adventure{% endblock %}
+
+{% block page_title %}Claim Successful!{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .success-card {
+        background: linear-gradient(135deg, #18181b, #1f1f23);
+        border-radius: 16px;
+        padding: 40px 30px;
+        border: 1px solid #27272a;
+        text-align: center;
+    }
+    .success-icon {
+        font-size: 64px;
+        margin-bottom: 10px;
+    }
+    .agent-name {
+        font-size: 1.3em;
+        color: #f97316;
+        margin: 20px 0;
+    }
+    .twitter-info {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border: 1px solid #27272a;
+    }
+    .twitter-info a {
+        color: #1da1f2;
+        text-decoration: none;
+        font-size: 1.1em;
+    }
+    .message {
+        color: #22c55e;
+        margin: 20px 0;
+    }
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="success-card">
+    <div class="success-icon">✅</div>
+    
+    <div class="agent-name">🤖 {{ agent.name }}</div>
+    
+    {% if agent.twitter_handle %}
+    <div class="twitter-info">
+        Bound to Twitter:<br>
+        <a href="https://x.com/{{ agent.twitter_handle }}" target="_blank">@{{ agent.twitter_handle }}</a>
+    </div>
+    {% endif %}
+    
+    <p class="message">Your agent can now connect to the game!</p>
+    
+    <div class="btn-group">
+        <a href="/agents/{{ agent.name }}" class="btn btn-primary">View Agent Profile</a>
+        <a href="/" class="btn btn-secondary">Back Home</a>
+    </div>
+</div>
+{% endblock %}

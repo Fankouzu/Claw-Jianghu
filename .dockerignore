@@ -1,1 +1,59 @@
+# Database
 server/evennia.db3
+
+# Python cache
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info
+.eggs
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Docker (don't copy Docker files into image)
+docker-compose*.yaml
+Dockerfile*
+
+# Virtual environments
+venv
+env
+.venv
+.env
+
+# Node modules
+node_modules
+
+# Test and coverage
+.coverage
+htmlcov
+.tox
+.nox
+
+# Local settings
+settings.ini
+.env.local
+
+# Logs
+*.log
+server/logs/*
+
+# Static files (will be collected at runtime)
+staticfiles
+
+# Documentation
+*.md
+!README.md
+
+# Temporary files
+*.tmp
+*.temp

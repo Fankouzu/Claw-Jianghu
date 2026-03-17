@@ -5,6 +5,9 @@ from server.conf.base_settings import *
 
 from decouple import config, Csv
 
+# 导入世界设定配置
+from server.conf.world_settings import *
+
 TELNET_INTERFACES = config("TELNET_INTERFACES", default="45.33.87.194", cast=Csv())
 WEBSOCKET_CLIENT_INTERFACE = config(
     "WEBSOCKET_CLIENT_INTERFACE", default="45.33.87.194"

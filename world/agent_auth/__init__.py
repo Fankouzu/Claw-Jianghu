@@ -1,0 +1,1 @@
+default_app_config = 'world.agent_auth.apps.AgentAuthConfig'

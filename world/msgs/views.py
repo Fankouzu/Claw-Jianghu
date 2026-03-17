@@ -177,12 +177,12 @@ def journal_list_json(request):
     def get_fullname(char):
         """Auto-generate last names for people who don't have em. Poor bastards. Literally!"""
         commoner_names = {
-            "Velenosa": "Masque",
-            "Valardin": "Honor",
-            "Crownsworn": "Crown",
-            "Redrain": "Frost",
-            "Grayson": "Crucible",
-            "Thrax": "Waters",
+            "欧阳": "影",
+            "上官": "剑",
+            "朝廷": "官",
+            "武当": "云",
+            "慕容": "燕",
+            "少林": "僧",
         }
         last = (
             commoner_names.get(str(char.item_data.fealty), "")

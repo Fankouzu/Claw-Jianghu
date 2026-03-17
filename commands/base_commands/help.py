@@ -30,11 +30,11 @@ def format_help_entry(
     """
     string = SEP + "\n"
     if title:
-        string += "{CHelp topic for {w%s{n" % title
+        string += "{C帮助主题：{w%s{n" % title
     if aliases:
-        string += " {C(aliases: {w%s{n{C){n" % (", ".join(aliases))
+        string += " {C（别名：{w%s{n{C）{n" % (", ".join(aliases))
     if unavailable:
-        string += "\n{rThis command is not presently available to you.{n"
+        string += "\n{r此命令当前对您不可用。{n"
     if help_text:
         string += "\n%s" % dedent(help_text.rstrip())
     if related_tags:
@@ -44,9 +44,9 @@ def format_help_entry(
             .distinct()
             .values_list("db_key", flat=True)
         )
-        string += "\n\n{CRelated help entries: {w%s" % ", ".join(entries)
+        string += "\n\n{C相关帮助条目：{w%s" % ", ".join(entries)
     if suggested:
-        string += "\n\n{CSuggested:{n "
+        string += "\n\n{C建议：{n "
         string += "{w%s{n" % fill(", ".join(suggested))
     string.strip()
     string += "\n" + SEP
@@ -62,12 +62,12 @@ def format_help_list(hdict_cmds, hdict_db, brief=False):
     """
     string = ""
     if hdict_cmds and any(hdict_cmds.values()):
-        string += "\n" + SEP + "\n   {CCommand help entries{n\n" + SEP
+        string += "\n" + SEP + "\n   {C命令帮助条目{n\n" + SEP
         for category in sorted(hdict_cmds.keys()):
             string += "\n  {w%s{n:\n" % (str(category).title())
             string += "{G" + ", ".join(sorted(hdict_cmds[category])) + "\n"
     if hdict_db and any(hdict_db.values()):
-        string += "\n\n" + SEP + "\n\r  {COther help categories{n\n" + SEP
+        string += "\n\n" + SEP + "\n\r  {C其他帮助分类{n\n" + SEP
         if brief:
             cat_list = sorted(hdict_db.keys())
             cat_list = [x.capitalize() for x in cat_list]
@@ -283,7 +283,7 @@ class CmdHelp(Command):
         # no exact matches found. Just give suggestions.
         self.msg(
             format_help_entry(
-                "", "No help entry found for '%s'" % query, None, suggested=suggestions
+                "", "未找到 '%s' 的帮助条目" % query, None, suggested=suggestions
             )
         )
 
@@ -330,7 +330,7 @@ class CmdSetHelp(ArxCommand):
 
         if not self.args:
             self.msg(
-                "Usage: @sethelp/[add|del|append|merge] <topic>[,category[,locks,..] = <text>"
+                "用法：@sethelp/[add|del|append|merge] <主题>[,分类[,锁,...]] = <文本>"
             )
             return
 
@@ -345,7 +345,7 @@ class CmdSetHelp(ArxCommand):
             pass
 
         if not topicstr:
-            self.msg("You have to define a topic!")
+            self.msg("您必须定义一个主题！")
             return
         # check if we have an old entry with the same name
         try:
@@ -357,30 +357,30 @@ class CmdSetHelp(ArxCommand):
             # merge/append operations
             if not old_entry:
                 self.msg(
-                    "Could not find topic '%s'. You must give an exact name." % topicstr
+                    "找不到主题 '%s'。您必须提供精确名称。" % topicstr
                 )
                 return
             if not self.rhs:
-                self.msg("You must supply text to append/merge.")
+                self.msg("您必须提供要追加/合并的文本。")
                 return
             if "merge" in switches:
                 old_entry.entrytext += " " + self.rhs
             else:
                 old_entry.entrytext += "\n\n%s" % self.rhs
-            self.msg("Entry updated:\n%s" % old_entry.entrytext)
+            self.msg("条目已更新：\n%s" % old_entry.entrytext)
             return
         if "delete" in switches or "del" in switches:
             # delete the help entry
             if not old_entry:
-                self.msg("Could not find topic '%s'" % topicstr)
+                self.msg("找不到主题 '%s'" % topicstr)
                 return
             old_entry.delete()
-            self.msg("Deleted help entry '%s'." % topicstr)
+            self.msg("已删除帮助条目 '%s'。" % topicstr)
             return
 
         # at this point it means we want to add a new help entry.
         if not self.rhs:
-            self.msg("You must supply a help text to add.")
+            self.msg("您必须提供帮助文本。")
             return
         if old_entry:
             if "for" in switches or "force" in switches:
@@ -391,11 +391,11 @@ class CmdSetHelp(ArxCommand):
                 old_entry.locks.clear()
                 old_entry.locks.add(lockstring)
                 old_entry.save()
-                self.msg("Overwrote the old topic '%s' with a new one." % topicstr)
+                self.msg("已用新内容覆盖旧主题 '%s'。" % topicstr)
             else:
-                msg = "Topic '%s' already exists." % topicstr
+                msg = "主题 '%s' 已存在。" % topicstr
                 msg += (
-                    " Use /force to overwrite or /append or /merge to add text to it."
+                    " 使用 /force 覆盖，或使用 /append 或 /merge 添加文本。"
                 )
                 self.msg(msg)
         else:
@@ -404,9 +404,9 @@ class CmdSetHelp(ArxCommand):
                 topicstr, self.rhs, category.lower(), lockstring
             )
             if new_entry:
-                self.msg("Topic '%s' was successfully created." % topicstr)
+                self.msg("主题 '%s' 创建成功。" % topicstr)
             else:
                 self.msg(
-                    "Error when creating topic '%s'! Maybe it already exists?"
+                    "创建主题 '%s' 时出错！可能已存在？"
                     % topicstr
                 )

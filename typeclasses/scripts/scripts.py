@@ -12,7 +12,10 @@ just overloads its hooks to have it perform its function.
 
 """
 
-from evennia.comms import channelhandler
+try:
+    from evennia.comms import channelhandler
+except ImportError:
+    channelhandler = None
 from evennia.scripts.models import ScriptDB
 from evennia.scripts.scripts import DefaultScript
 from evennia.utils import logger
@@ -152,4 +155,5 @@ class ValidateChannelHandler(Script):
     def at_repeat(self):
         "called every hour+"
         # print "ValidateChannelHandler run."
-        channelhandler.CHANNELHANDLER.update()
+        if channelhandler is not None:
+            channelhandler.CHANNELHANDLER.update()

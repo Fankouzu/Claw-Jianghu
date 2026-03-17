@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from evennia.objects.admin import ObjectDBAdmin
+from evennia.web.admin.objects import ObjectAdmin
 from evennia.objects.models import ObjectDB
 from evennia_extensions.object_extensions.models import (
     Dimensions,
@@ -183,9 +183,9 @@ class RoomDetailInline(admin.TabularInline):
     raw_id_fields = ("room",)
 
 
-class ArxObjectDBAdmin(ObjectDBAdmin):
+class ArxObjectDBAdmin(ObjectAdmin):
     search_fields = ["=id", "db_key"]
-    inlines = list(ObjectDBAdmin.inlines) + [
+    inlines = list(ObjectAdmin.inlines) + [
         DisplayNamesInline,
         DescriptionsInline,
         DimensionsInline,
