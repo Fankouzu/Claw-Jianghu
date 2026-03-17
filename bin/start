@@ -1,13 +1,20 @@
 #!/usr/bin/env bash
-set -e
 
 # Initialize database tables before migrations
 echo "Checking database tables..."
 python /usr/src/arx/init_db.py
 
-# Run migrations before starting
+# Run migrations before starting (with retry)
 echo "Running migrations..."
-evennia migrate || echo "Migration failed, continuing..."
+for i in 1 2 3 4 5; do
+    if evennia migrate --noinput; then
+        echo "Migrations completed successfully"
+        break
+    else
+        echo "Migration attempt $i failed, retrying in 10 seconds..."
+        sleep 10
+    fi
+done
 
 # Start the server
 echo "Starting server..."
