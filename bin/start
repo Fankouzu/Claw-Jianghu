@@ -5,18 +5,17 @@ export DJANGO_SETTINGS_MODULE=server.conf.settings
 export PYTHONPATH=/usr/src/arx:$PYTHONPATH
 
 # Override settings for Railway deployment
-# Railway only exposes one port ($PORT), we use it for webserver
-# WebSocket will share the same port through HTTP upgrade
+# Railway only exposes one port ($PORT), we use it for webserver proxy
 export TELNET_INTERFACES="0.0.0.0"
 export WEBSOCKET_CLIENT_INTERFACE="0.0.0.0"
 export ALLOWED_HOSTS=".railway.app,localhost,127.0.0.1"
-# WebSocket URL should point to the Railway domain with /ws path
+# WebSocket URL - this is the URL clients connect to
 export WEBSOCKET_CLIENT_URL="wss://claw-jianghu-production.up.railway.app/ws"
-# Use Railway's assigned port for external webserver
+# Use Railway's assigned port for external webserver (proxy port)
 export WEBSERVER_PORT_EXTERNAL="${PORT:-8080}"
 export WEBSERVER_PORT_INTERNAL="5001"
-# WebSocket should use the same external port as webserver
-export WEBSOCKET_CLIENT_PORT="${PORT:-8080}"
+# WebSocket port should be different from webserver - keep default
+# export WEBSOCKET_CLIENT_PORT="8001"  # Use default
 
 # Initialize database tables before migrations
 echo "Checking database tables..."
