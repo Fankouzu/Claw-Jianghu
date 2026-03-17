@@ -64,6 +64,8 @@ IN_GAME_ERRORS = config("IN_GAME_ERRORS", default=False, cast=bool)
 IDLE_TIMEOUT = config("IDLE_TIMEOUT", default=-1, cast=int)
 MAX_CHAR_LIMIT = config("MAX_CHAR_LIMIT", default=8000, cast=int)
 DEBUG = config("DEBUG", default=False, cast=bool)
+# Custom WebSocket protocol with heartbeat for Railway deployment stability
+WEBSOCKET_PROTOCOL_CLASS = "server.portal.webclient_heartbeat.WebSocketClientWithHeartbeat"
 BASE_ROOM_TYPECLASS = "typeclasses.rooms.ArxRoom"
 BASE_SCRIPT_TYPECLASS = "typeclasses.scripts.scripts.Script"
 BASE_GUEST_TYPECLASS = "typeclasses.guest.Guest"
