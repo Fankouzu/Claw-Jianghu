@@ -23,7 +23,8 @@ from commands.base_commands.channel_compat import (
 )
 from evennia.commands.default.general import CmdSay
 from evennia.comms.models import ChannelDB
-from evennia.commands.default.system import CmdReload, CmdScripts, CmdTime
+from evennia.commands.default.system import CmdReload, CmdTime
+from evennia.commands.default.building import CmdScripts
 from evennia.commands.cmdhandler import get_and_merge_cmdsets
 
 # noinspection PyProtectedMember
