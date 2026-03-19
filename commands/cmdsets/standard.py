@@ -110,8 +110,9 @@ class MobileCmdSet(CmdSet):
     def at_cmdset_creation(self):
         # Lazy imports to avoid Evennia initialization order issues
         from commands.base_commands import overrides, general, exchanges, xp, crafting, social
-        from commands.base_commands import gambling, petitions_commands, condition_commands
+        from commands.base_commands import petitions_commands, condition_commands
         from typeclasses.places import cmdset_places
+        from typeclasses.gambling import cmdset_gambling as gambling
         from commands.cmdsets import combat
         from world.dominion import agent_commands, general_dominion_commands as domcommands
         from typeclasses.consumable.use_commands import CmdApplyConsumable
