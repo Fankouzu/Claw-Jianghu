@@ -6,163 +6,8 @@ on characters can extend/modify/remove functionality
 from them without explicitly calling individual commands.
 
 """
-import traceback
-
-from commands.base_commands import exchanges
-from typeclasses.readable.readable_commands import WriteCmdSet
-from world.stat_checks import check_commands
-from world.prayer import prayer_commands
-
+# Only import CmdSet at module level - it's safe
 from evennia.commands.cmdset import CmdSet
-
-try:
-    from evennia.commands.default import help, admin, system, building, batchprocess
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading default commands: %s" % err)
-try:
-    from evennia.commands.default import general as default_general
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading default.general commands: %s" % err)
-try:
-    from commands.base_commands import staff_commands
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading staff_commands: %s" % err)
-try:
-    from commands.base_commands import roster
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading roster commands: %s" % err)
-try:
-    from commands.base_commands import general
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading general commands: %s" % err)
-try:
-    from typeclasses import rooms as extended_room
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading extended_room: %s" % err)
-try:
-    from commands.base_commands import social
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading social commands: %s" % err)
-try:
-    from commands.base_commands import xp
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading xp commands: %s" % err)
-try:
-    from commands.base_commands import maps
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading maps commands: %s" % err)
-try:
-    from typeclasses.places import cmdset_places
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading places commands: %s" % err)
-try:
-    from commands.cmdsets import combat
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading combat commands: %s" % err)
-try:
-    from world.dominion import general_dominion_commands as domcommands
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading dominion commands: %s" % err)
-try:
-    from world.dominion import agent_commands
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading agent commands: %s" % err)
-try:
-    from commands.base_commands import crafting
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading crafting commands: %s" % err)
-try:
-    from commands.cmdsets import home
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading home commands: %s" % err)
-try:
-    from web.character import investigation
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in loading investigation commands: %s" % err)
-try:
-    from commands.base_commands import overrides
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in override commands: %s" % err)
-try:
-    from typeclasses.consumable.use_commands import CmdApplyConsumable
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in consumable commands: %s" % err)
-try:
-    from typeclasses.gambling import cmdset_gambling as gambling
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in gambling commands: %s" % err)
-try:
-    from commands.base_commands import rolling
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in roll commands: %s" % err)
-try:
-    from commands.base_commands import story_actions
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in storyaction commands: %s" % err)
-try:
-    from world.conditions import condition_commands
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in condition commands: %s" % err)
-try:
-    from world.fashion import fashion_commands
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in fashion commands: %s" % err)
-try:
-    from world.petitions import petitions_commands
-except Exception as err:
-    traceback.print_exc()
-    print("<<ERROR>>: Error encountered in petition commands: %s" % err)
-try:
-    from typeclasses.containers.container import CmdRoot
-except Exception as err:
-    print("<<ERROR>>: Error encountered in container commands: %s" % err)
-try:
-    from world.weather import weather_commands
-except Exception as err:
-    print("<<ERROR>>: Error encountered in weather commands: %s" % err)
-try:
-    from world.templates.template_commands import CmdTemplateForm
-except Exception as err:
-    print("<<ERROR>>: Error encountered in container commands: %s" % err)
-try:
-    from world.exploration import exploration_commands
-except Exception as err:
-    print("<<ERROR>>: Error encountered in exploration commands: %s" % err)
-try:
-    from world.dominion.plots import plot_commands
-except Exception as err:
-    print("<<ERROR>>: Error encountered in plot commands: %s" % err)
-try:
-    from web.character import goal_commands
-except Exception as err:
-    print("<<ERROR>>: Error encountered in goal commands: %s" % err)
-try:
-    from world.magic import magic_commands
-except Exception as err:
-    print("<<ERROR>>: Error encountered in magic commands: %s" % err)
 
 
 class OOCCmdSet(CmdSet):
@@ -174,12 +19,15 @@ class OOCCmdSet(CmdSet):
         """
         This is the only method defined in a cmdset, called during
         its creation. It should populate the set with command instances.
-
-        Note that it can also take other cmdsets as arguments, which will
-        be used by the character default cmdset to add all of these onto
-        the internal cmdset stack. They will then be able to removed or
-        replaced as needed.
         """
+        # Lazy imports to avoid Evennia initialization order issues
+        from commands.base_commands import overrides, rolling, general, social, xp, roster
+        from world.stat_checks import check_commands
+        from world.exploration import exploration_commands
+        from world.weather import weather_commands
+        from typeclasses import rooms as extended_room
+        from evennia.commands.default import general as default_general
+
         self.add(overrides.CmdInventory())
         self.add(default_general.CmdNick())
         self.add(default_general.CmdAccess())
@@ -199,12 +47,9 @@ class OOCCmdSet(CmdSet):
         self.add(social.CmdSocialNotable())
         self.add(social.CmdSocialNominate())
         self.add(social.CmdSocialReview())
-        # self.add(social.CmdFavor())  #when enabled, please re-add "favor" to random_rp_command_keys in CmdRandomScene
         self.add(overrides.SystemNoMatch())
         self.add(weather_commands.CmdAdminWeather())
         self.add(roster.CmdPropriety())
-
-        # Exploration!
         self.add(exploration_commands.CmdExplorationCmdSet())
 
 
@@ -218,16 +63,22 @@ class StateIndependentCmdSet(CmdSet):
     key = "StateIndependentCmdSet"
 
     def at_cmdset_creation(self):
+        # Lazy imports to avoid Evennia initialization order issues
+        from commands.base_commands import overrides, general, social, maps, story_actions, roster
+        from typeclasses import rooms as extended_room
+        from typeclasses.readable.readable_commands import WriteCmdSet
+        from world.magic import magic_commands
+        from world.dominion.plots import plot_commands
+        from web.character import goal_commands
+        from commands.cmdsets import combat
+
         self.add(overrides.CmdPose())
-        # emit was originally an admin command. Replaced those with gemit
         self.add(overrides.CmdEmit())
         self.add(overrides.CmdArxTime())
         self.add(general.CmdOOCSay())
         self.add(general.CmdDirections())
         self.add(general.CmdKeyring())
         self.add(general.CmdGlance())
-        # sorta IC commands, since information is interpretted by the
-        # character and may not be strictly accurate.
         self.add(extended_room.CmdExtendedLook())
         self.add(roster.CmdHere())
         self.add(social.CmdHangouts())
@@ -246,22 +97,28 @@ class StateIndependentCmdSet(CmdSet):
         self.add(goal_commands.CmdGoals())
         self.add(combat.CmdHeal())
         self.add(WriteCmdSet())
-
-        # Magic!
         self.add(magic_commands.MagicCmdSet())
 
 
 class MobileCmdSet(CmdSet):
     """
     Commands that should only be allowed if the character is able to move.
-    Thought about making a 'living' cmdset, but there honestly aren't any
-    current commands that could be executed while a player is alive but
-    unable to move. The sets are just equal.
     """
 
     key = "MobileCmdSet"
 
     def at_cmdset_creation(self):
+        # Lazy imports to avoid Evennia initialization order issues
+        from commands.base_commands import overrides, general, exchanges, xp, crafting, social
+        from commands.base_commands import investigation, gambling, petitions_commands, condition_commands
+        from typeclasses.places import cmdset_places
+        from commands.cmdsets import combat
+        from world.dominion import agent_commands, general_dominion_commands as domcommands
+        from typeclasses.consumable.use_commands import CmdApplyConsumable
+        from world.fashion import fashion_commands
+        from world.prayer import prayer_commands
+        from world.dominion.plots import plot_commands
+
         self.add(overrides.CmdGet())
         self.add(overrides.CmdDrop())
         self.add(exchanges.CmdGive())
@@ -284,15 +141,12 @@ class MobileCmdSet(CmdSet):
         self.add(combat.CmdFightStatus())
         self.add(agent_commands.CmdGuards())
         self.add(domcommands.CmdPlotRoom())
-        # self.add(domcommands.CmdTask())
-        # self.add(domcommands.CmdSupport())
         self.add(domcommands.CmdWork())
         self.add(domcommands.CmdCleanupDomain())
         self.add(crafting.CmdCraft())
         self.add(crafting.CmdRecipes())
         self.add(crafting.CmdJunk())
         self.add(social.CmdPraise())
-        # self.add(social.CmdCondemn())
         self.add(social.CmdThink())
         self.add(social.CmdFeel())
         self.add(social.CmdDonate())
@@ -318,6 +172,16 @@ class StaffCmdSet(CmdSet):
     key = "StaffCmdSet"
 
     def at_cmdset_creation(self):
+        # Lazy imports to avoid Evennia initialization order issues
+        from evennia.commands.default import help, admin, system, building, batchprocess
+        from commands.base_commands import overrides, staff_commands, xp, maps, combat, home, condition_commands
+        from typeclasses import rooms as extended_room
+        from world.dominion import general_dominion_commands as domcommands
+        from world.dominion.plots import plot_commands
+        from web.character import goal_commands
+        from typeclasses.containers.container import CmdRoot
+        from world.templates.template_commands import CmdTemplateForm
+
         # The help system
         self.add(help.CmdSetHelp())
         # System commands
@@ -394,6 +258,4 @@ class StaffCmdSet(CmdSet):
         self.add(home.CmdBuildRoom())
         self.add(home.CmdManageRoom())
         self.add(CmdRoot())
-
-        # still pending implementation of additional details
         self.add(CmdTemplateForm())
