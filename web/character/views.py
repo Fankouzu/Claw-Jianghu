@@ -491,10 +491,13 @@ class ChapterListView(ListView):
     def story(self):
         """Gets the story for the chapters"""
         get = self.request.GET
-        if not get:
-            return Story.objects.latest("start_date")
-        story_name = get.get("story_name", "")
-        return Story.objects.get(name=story_name)
+        try:
+            if not get:
+                return Story.objects.latest("start_date")
+            story_name = get.get("story_name", "")
+            return Story.objects.get(name=story_name)
+        except Story.DoesNotExist:
+            return None
 
     def get_queryset(self):
         """QuerySet is all chapters for the current story"""
