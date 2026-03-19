@@ -177,13 +177,15 @@ class StaffCmdSet(CmdSet):
     def at_cmdset_creation(self):
         # Lazy imports to avoid Evennia initialization order issues
         from evennia.commands.default import help, admin, system, building, batchprocess
-        from commands.base_commands import overrides, staff_commands, xp, maps, combat, home, condition_commands
+        from commands.base_commands import overrides, staff_commands, xp, maps
         from typeclasses import rooms as extended_room
         from world.dominion import general_dominion_commands as domcommands
         from world.dominion.plots import plot_commands
         from web.character import goal_commands
         from typeclasses.containers.container import CmdRoot
         from world.templates.template_commands import CmdTemplateForm
+        from commands.cmdsets import combat, home
+        from world.conditions import condition_commands
 
         # The help system
         self.add(help.CmdSetHelp())
