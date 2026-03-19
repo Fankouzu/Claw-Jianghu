@@ -5,6 +5,7 @@ import time
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 from evennia.server.sessionhandler import SESSIONS
 from evennia.commands.default.account import CmdOOC
@@ -115,7 +116,7 @@ def check_volume(obj, char, quiet=False):
     v_max = char.item_data.capacity
     if char.used_capacity + vol > v_max:
         if not quiet:
-            char.msg("You can't carry %s." % obj)
+            char.msg(_("You can't carry %s.") % obj)
         return False
     return True
 
@@ -160,7 +161,7 @@ class CmdInventory(ArxCommand):
             and "view" in self.switches
         )
         if not show_other:
-            basemsg = "You are"
+            basemsg = _("You are")
             char = self.caller
             player = char.player
         else:
@@ -169,15 +170,15 @@ class CmdInventory(ArxCommand):
                 return
             char = player.char_ob
             if not char:
-                self.msg("No character found.")
+                self.msg(_("No character found."))
                 return
             basemsg = "%s is" % char.key
         items = char.return_contents(self.caller, detailed=True, show_ids=show_other)
         if not items:
-            string = "%s not carrying anything." % basemsg
+            string = _("%s not carrying anything.") % basemsg
         else:
-            volume = "Volume:{n %s/%s" % (char.used_capacity, char.item_data.capacity)
-            string = "{w%s carrying (%s{w):%s" % (basemsg, volume, items)
+            volume = _("Volume:{n %s/%s") % (char.used_capacity, char.item_data.capacity)
+            string = "{w%s carrying (%s{w):%s" % (_(basemsg.replace(" is", "").replace(" are", "") + " carrying"), volume, items)
         xp = char.item_data.xp or 0
         ap = 0
         max_ap = 0
@@ -197,12 +198,12 @@ class CmdInventory(ArxCommand):
         except AttributeError:
             pass
         msg = "\n{w%s currently %s {c%s {wxp and {c%s{w ap.\n" % (
-            "You" if not show_other else char.key,
-            "have" if not show_other else "has",
+            _("You") if not show_other else char.key,
+            _("have") if not show_other else _("has"),
             xp,
             ap,
         )
-        msg += "{wMaximum AP:{n %s  {wWeekly AP Gain:{n %s\n" % (max_ap, ap_regen)
+        msg += _("{wMaximum AP:{n %s  {wWeekly AP Gain:{n %s\n") % (max_ap, ap_regen)
         msg += string
         if hasattr(player, "Dominion") and hasattr(player.Dominion, "assets"):
             vault = player.Dominion.assets.vault
@@ -258,7 +259,7 @@ class CmdGet(ArxCommand):
                 if self.caller == obj:
                     continue
                 if self.caller == obj.location:
-                    self.msg("You already hold {}.".format(obj))
+                    self.msg(_("You already hold {}.").format(obj))
                     continue
                 if not obj.at_before_move(destination=self.caller, caller=self.caller):
                     continue
@@ -267,7 +268,7 @@ class CmdGet(ArxCommand):
                 # calling hook method
                 obj.at_get(self.caller)
             if not moved:
-                raise CommandError("You didn't get anything.")
+                raise CommandError(_("You didn't get anything."))
             self.print_success_message(fromobj, moved)
         except CommandError as err:
             self.msg(err)
@@ -280,21 +281,21 @@ class CmdGet(ArxCommand):
                 loc: a container object, or caller's location
         """
         if not self.args:
-            raise CommandError("What will you {}?".format(self.cmdstring))
+            raise CommandError(_("What will you {}?").format(self.cmdstring))
         container_obj = None
         argslist = self.args.split(" from ", 1)
         if len(argslist) == 2:
             container_obj = self.caller.search(argslist[1])
             # noinspection PyAttributeOutsideInit
             if not container_obj:
-                raise CommandError("Could not get anything.")
+                raise CommandError(_("Could not get anything."))
             elif not container_obj.is_container:
-                raise CommandError("That is not a container.")
+                raise CommandError(_("That is not a container."))
             elif container_obj.item_data.is_locked and not self.caller.check_permstring(
                 "builders"
             ):
                 raise CommandError(
-                    "You'll have to unlock {} first.".format(container_obj)
+                    _("You'll have to unlock {} first.").format(container_obj)
                 )
             self.args = argslist[0]
         loc = container_obj or self.caller.location

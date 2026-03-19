@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block sidebar %}
 {% endblock %}
@@ -11,7 +12,7 @@
 <div class="rowOfBoxes">
    <!--div class="twoThirds noBorderOnLeft"-->
    <div class="noBorderOnLeft">
-      <center><h1>Welcome!</h1></center>
+      <center><h1>{% trans "Welcome!" %}</h1></center>
       <!--p>Welcome to your new installation of <a href="http://evennia.com">Evennia</a>, your friendly
       neighborhood next-generation MUD development system and server. You are looking at Evennia's web
       presence, which can be expanded to a full-fledged site as
@@ -28,77 +29,74 @@
       if you want to help out, don't hesitate to join the Evennia community to make your voice heard! Drop a mail to the
       <a href="http://evennia.com/discussions">mailing list</a> or to come say hi in the <a href="http://webchat.freenode.net/?channels=evennia">developer chatroom</a>. If you find bugs, please report them to our <a href="http://code.google.com/p/evennia/issues/list">Issue tracker</a>.
       </p-->
-      <p>The common people of Arvum wouldn't really call the last thousand years a 'golden age'. Since the founding of the Compact of Arvum,
-      the five great noble houses of the realm have schemed and warred against one another, locked in a millennium-old struggle for dominance
-      kept only in check by the occasional powerful monarch. But even as the fragile peace frays with the latest dynastic crisis, creating
-      courtly intrigues in the capital city of Arx, ancient foes that took mankind to the brink of extinction a thousand years ago stir once more.</div>
+      <p>中原大地，风云变幻。立国千年以来，五大门派、三大世家、朝廷官府各怀心思，明争暗斗不休。如今朝堂动荡，皇权更迭在即，沉寂已久的古老势力正在苏醒，江湖即将再起波澜。</div>
 
    <!-- news app commented out since there are no news in the database originally -->
 
    <div class="oneThird">
-      <h1>Latest News</h1>
+      <h1>{% trans "Latest News" %}</h1>
       {% for entry in news_entries %}
          <a href="/news/show/{{entry.id}}" class="newsHeading">{{entry.topic.name}}: {{entry.title}}</a>
-         <p class="newsDate">By {{entry.author.username}} on {{entry.date_posted|time}}</p>
+         <p class="newsDate">{% blocktrans with author=entry.author.username %}By {{ author }} on{% endblocktrans %} {{entry.date_posted|time}}</p>
          <p class="newsSummary">{{entry.body|truncatewords:20}}</p>
       {% endfor %}
 
-      <div class="more"><a href="/news/archive">More News &raquo;</a></div>
+      <div class="more"><a href="/news/archive">{% trans "More News" %} &raquo;</a></div>
 
       <p class="filler"><!-- Filler para to extend left vertical line--></p>
    </div>
    <div class="oneThird">
-	  <h1>Current Story</h1>
+	  <h1>{% trans "Current Story" %}</h1>
 	  <a href="/character/story/" class="newsHeading">{{ chapter.story.name}}: {{chapter.name}}</a>
 	  <p class="newsSummary">{{chapter.synopsis|mush_to_html|truncatewords:80}}</p>
 	  <p class="filler"></p>
    </div>
    <div class="oneThird">
-	  <h1>Upcoming Events</h1>
+	  <h1>{% trans "Upcoming Events" %}</h1>
 	  {% for event in events %}
 	  <a href="{% url 'dominion:display_event' event.id %}" class="newsHeading">{{event.name|mush_to_html}}</a>
 	  <p class="newsDate">{{event.date}}</p>
 	  <p class="newsSummary">{{event.desc|mush_to_html|truncatewords:20}}</p>
 	  {% endfor %}
-	  <div class="more"><a href="{% url 'dominion:list_events' %}">More Events &raquo;</a></div>
+	  <div class="more"><a href="{% url 'dominion:list_events' %}">{% trans "More Events" %} &raquo;</a></div>
    </div>
 </div>
 
 <div class="rowOfBoxes dividingBorderAbove">
 
    <div class="quarter noBorderOnLeft">
-      <h1>Players</h1>
+      <h1>{% trans "Players" %}</h1>
       <p>
-      There's currently <strong>{{num_players_connected}}</strong> connected out of a total of <strong>{{num_players_registered}}</strong> players registered. <!--Of these, <strong>{{num_players_registered_recent}}</strong> were created this week, and <strong>{{num_players_connected_recent}}</strong> have connected within the last seven days.-->
+      {% blocktrans with connected=num_players_connected registered=num_players_registered %}There's currently <strong>{{ connected }}</strong> connected out of a total of <strong>{{ registered }}</strong> players registered.{% endblocktrans %}
       </p>
    </div>
 
    <div class="quarter">
-      <h1>Recently Connected</h1>
+      <h1>{% trans "Recently Connected" %}</h1>
       <ul>
       {% for player in players_connected_recent %}
-      <li>{{player.username}} -- <em>{{player.last_login|timesince}} ago</em></li>
+      <li>{{player.username}} -- <em>{% blocktrans with time=player.last_login|timesince %}{{ time }} ago{% endblocktrans %}</em></li>
       {% endfor %}
       </ul>
       <p class="filler"><!-- Filler para to extend left vertical line --></p>
    </div>
 
    <div class="quarter">
-      <h1>Database Stats</h1>
+      <h1>{% trans "Database Stats" %}</h1>
       <ul>
-      <li>{{num_players_registered}} players (+ {{num_characters}} characters)</li>
-      <li>{{num_rooms}} rooms (+ {{num_exits}} exits)</li>
-      <li>{{num_others}} other objects</li>
+      <li>{% blocktrans with players=num_players_registered characters=num_characters %}{{ players }} players (+ {{ characters }} characters){% endblocktrans %}</li>
+      <li>{% blocktrans with rooms=num_rooms exits=num_exits %}{{ rooms }} rooms (+ {{ exits }} exits){% endblocktrans %}</li>
+      <li>{% blocktrans with others=num_others %}{{ others }} other objects{% endblocktrans %}</li>
 
       </ul>
    </div>
 
    <div class="quarter">
-      <h1>Telnet Address</h1>
+      <h1>{% trans "Telnet Address" %}</h1>
       <p>play.arxmush.org:3000</p>
-       <h1>Other Stuff</h1>
-       <p><a href="http://arx.mythicus.net">Unofficial Arx Wiki</a></p>
-       <p><a href="http://tehomcd.github.io">Tehom's Dev Blog/Donation Links</a></p>
+       <h1>{% trans "Other Stuff" %}</h1>
+       <p><a href="http://arx.mythicus.net">{% trans "江湖百科" %}</a></p>
+       <p><a href="http://tehomcd.github.io">{% trans "开发日志" %}</a></p>
    </div>
 
 </div>

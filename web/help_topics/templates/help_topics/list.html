@@ -1,21 +1,22 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block content %}
 	<div class="container">
-	
+
 	<div class="row">
 	<figure class="text-center">
-	<figcaption><h1>Map of Arvum</h1></figcaption>
+	<figcaption><h1>{% trans "Map of Central Plains" %}</h1></figcaption>
 	<a href="/dom/map/">
 	<img src="/dom/map/map.png" height='618' width='846' />
 	</a>
 	<hr />
 	</figure>
 	</div>
-	
+
 	<div class="row">
 	<div class="col-sm-6">
 	<figure class="text-center">
-	<figcaption><h1>Map of Central Arx</h1></figcaption>
+	<figcaption><h1>{% trans "Map of Capital City" %}</h1></figcaption>
 	<a href="/static/website/images/ailith_map_inner.jpg">
 	<img src="/static/website/images/ailith_map_inner.jpg" height='200' width='200' />
 	</a>
@@ -23,18 +24,18 @@
 	</div>
 	<div class="col-sm-6">
 	<figure class="text-center">
-	<figcaption><h1>Map of Outer Districts</h1></figcaption>
+	<figcaption><h1>{% trans "Map of Outer Districts" %}</h1></figcaption>
 	<a href="/static/website/images/ailith_map_outer.jpg">
 	<img src="/static/website/images/ailith_map_outer.jpg" height='200' width='200' />
 	</a>
 	</figure>
-	</div>	
+	</div>
 	</div>
 	<hr />
 
 		<div class="row">
 			<figure class="text-center">
-				<figcaption><h1>Graph of Fealties</h1></figcaption>
+				<figcaption><h1>{% trans "Graph of Factions" %}</h1></figcaption>
 				<a href="/dom/fealties/chart.png">
 					<img src="/dom/fealties/chart.png" width="1000"/>
 				</a>
@@ -44,7 +45,7 @@
 	<hr/>
 
 	<div class="row {% cycle 'bg-success' 'bg-info' as rowcolors %} text-center">
-	<button data-toggle="collapse" data-target="#Lore"><h1 class="bg-primary">Lore Topics</h1></button>
+	<button data-toggle="collapse" data-target="#Lore"><h1 class="bg-primary">{% trans "Lore Topics" %}</h1></button>
 	</div> <!--button-->
 	<div id="Lore" class="collapse in">
 		<div class="row {% cycle 'bg-success' 'bg-info' as rowcolors %}">
@@ -52,7 +53,7 @@
 		{% for lore_cat in lore_categories %}
 			<li class="list-inline-item"><a href="{% url 'help_topics:lore' lore_cat.id %}">{{ lore_cat }}</a></li>
 			{% empty %}
-			<li>No lore found.</li>
+			<li>{% trans "No lore found." %}</li>
 		{% endfor %}
 		</ul>
 		</div>
@@ -61,7 +62,7 @@
 	<hr/>
 
 	<div class="row {% cycle 'bg-success' 'bg-info' as rowcolors %} text-center">
-	<button data-toggle="collapse" data-target="#Orgs"><h1 class="bg-primary">Organizations</h1></button>
+	<button data-toggle="collapse" data-target="#Orgs"><h1 class="bg-primary">{% trans "Organizations" %}</h1></button>
 	</div> <!--button-->
 	<div id="Orgs" class="collapse in">
 		<div class="row {% cycle 'bg-success' 'bg-info' as rowcolors %}">
@@ -69,13 +70,13 @@
 		{% for org in all_orgs %}
 			<li class="list-inline-item"><a href="..{% url 'help_topics:display_org' org.id %}">{{ org.name }}</a></li>
 		  {% empty %}
-			<li>No organizations found.</li>
+			<li>{% trans "No organizations found." %}</li>
 		{% endfor %}
 		</ul>
 		</div>
 	{% if secret_orgs %}
 		<div class="row {% cycle 'bg-info' 'bg-success' as rowcolors %}">
-		<h2 class="text-center">Secret Organizations</h2>
+		<h2 class="text-center">{% trans "Secret Organizations" %}</h2>
 		<ul class="list-inline text-center">
 		{% for org in secret_orgs %}
 			<li class="list-inline-item"><a href="..{% url 'help_topics:display_org' org.id %}">{{ org.name }}</a></li>
@@ -88,7 +89,7 @@
 	<hr/>
 
 	<div class="row {% cycle 'bg-success' 'bg-info' as rowcolors %} text-center">
-	<button data-toggle="collapse" data-target="#Topics"><h1 class="bg-primary">Gameplay Topics</h1></button>
+	<button data-toggle="collapse" data-target="#Topics"><h1 class="bg-primary">{% trans "Gameplay Topics" %}</h1></button>
 	</div> <!--button-->
 	<div id="Topics" class="collapse in">
     {% for category in all_categories %}
@@ -100,29 +101,29 @@
           <li class="text-center"><a href="{% url 'help_topics:topic' topic.key %}">{{ topic.key }}</a></li>
         {% endif %}
       {% empty %}
-        <li>No topics found for this category.</li>
+        <li>{% trans "No topics found for this category." %}</li>
       {% endfor %}
 	  </ul>
 	</div><!-- div in for loop -->
     {% empty %}
-      <div class="row {% cycle 'bg-success' 'bg-info' as rowcolors %}">No categories found.</div>
+      <div class="row {% cycle 'bg-success' 'bg-info' as rowcolors %}">{% trans "No categories found." %}</div>
     {% endfor %}
 	</div><!-- collapse-in -->
 
 	<hr/>
 
-	<h1 class="text-center">Cheat Sheets/Resources</h1>
+	<h1 class="text-center">{% trans "Cheat Sheets/Resources" %}</h1>
 	<div class="row">
-	<a href="recipes"><h2 class="text-center"><span class="label label-primary">Recipes and Materials</span></h2></a>
+	<a href="recipes"><h2 class="text-center"><span class="label label-primary">{% trans "Recipes and Materials" %}</span></h2></a>
 	</div>
 	<div class="row">
-	<a href="{% url 'help_topics:list_commands' %}"><h2 class="text-center"><span class="label label-primary">Commands</span></h2></a>
-	</div>	
-	
+	<a href="{% url 'help_topics:list_commands' %}"><h2 class="text-center"><span class="label label-primary">{% trans "Commands" %}</span></h2></a>
+	</div>
+
 	<div class="row">
 	<div class="col-sm-6">
 	<figure class="text-center">
-	<figcaption><h2>Color Codes</h2></figcaption>
+	<figcaption><h2>{% trans "Color Codes" %}</h2></figcaption>
 	<a href="/static/website/images/xterm_chart.jpg">
 	<img src="/static/website/images/xterm_chart.jpg" height='200' width='200' />
 	</a>
@@ -130,7 +131,7 @@
 	</div>
 	<div class="col-sm-6">
 	<figure class="text-center">
-	<figcaption><h2>Modes of Address</h1></figcaption>
+	<figcaption><h2>{% trans "Modes of Address" %}</h2></figcaption>
 	<a href="/static/website/images/modes_of_address.jpg">
 	<img src="/static/website/images/modes_of_address.jpg" height='200' width='200' />
 	</a>
@@ -140,13 +141,13 @@
 
 	<hr/>
 
-	<h1 class="text-center">External Resources/Links</h1>
+	<h1 class="text-center">{% trans "External Resources/Links" %}</h1>
 	<div class="row">
 	<ul class="list-inline text-center">
-	<li><a href="https://1drv.ms/f/s!AkPSk6gZp9dYajlqeS76Y8epPX4">Hellfrog's Picture References</a></li>
-	<li><a href="https://www.pinterest.com/cyanista/arx-fashions/">Fashion Picture References</a></li>
-    <li><a href="http://arx.mythicus.net">Totally Unofficial Arx Wiki</a></li>
-    <li><a href="http://tehomcd.github.io">Tehom's Self-Indulgent Dev Blog and Shameless Donation Links</a></li>
+	<li><a href="https://1drv.ms/f/s!AkPSk6gZp9dYajlqeS76Y8epPX4">{% trans "Picture References" %}</a></li>
+	<li><a href="https://www.pinterest.com/cyanista/arx-fashions/">{% trans "Fashion Picture References" %}</a></li>
+    <li><a href="http://arx.mythicus.net">{% trans "Jianghu Wiki" %}</a></li>
+    <li><a href="http://tehomcd.github.io">{% trans "Developer Blog" %}</a></li>
 	</ul>
 	</div>
 	</div>

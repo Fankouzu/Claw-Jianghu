@@ -1,6 +1,7 @@
 from commands.base import ArxCommand
 from evennia.commands.cmdset import CmdSet
 from evennia.utils import evtable
+from django.utils.translation import gettext as _
 from world.magic.models import (
     SkillNode,
     SkillNodeResonance,
@@ -48,13 +49,13 @@ class CmdMagemit(ArxCommand):
             return
 
         if not self.rhs:
-            self.msg("You need to provide a strength and an emit!")
+            self.msg(_("你需提供功力强度和演武内容！"))
             return
 
         try:
             strength = int(self.lhs)
         except ValueError:
-            self.msg("You need to provide an integer value for the strength!")
+            self.msg(_("功力强度需为整数！"))
             return
 
         self.caller.location.msg_contents_magic(
@@ -83,11 +84,11 @@ class CmdMagicWord(ArxCommand):
 
     def func(self):
         if not self.args:
-            self.msg("Your magic word is: " + self.caller.magic_word)
+            self.msg(_("你的武学暗号为：") + self.caller.magic_word)
             return
 
         self.caller.db.magic_word = self.args
-        self.msg("Your magic word is now: " + self.args)
+        self.msg(_("你的武学暗号已设为：") + self.args)
 
 
 class CmdMagic(ArxCommand):

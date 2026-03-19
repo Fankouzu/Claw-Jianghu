@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block header_ext %}
   <!-- check for preferred style defined in the character -->
@@ -35,41 +36,41 @@
 	</div>
     {% endif %}
     <div class="col-md-5 text-left">
-    <p><b>Social Rank:</b> {{ character.item_data.social_rank }}<br><b>Concept:</b> {{ character.item_data.concept }}<br>
-	{% if character.item_data.real_concept and show_hidden %}<b>Real Concept:</b> {{ character.item_data.real_concept}}<br>{% endif %}
-    <b>Fealty:</b>
+    <p><b>{% trans "Social Rank:" %}</b> {{ character.item_data.social_rank }}<br><b>{% trans "Concept:" %}</b> {{ character.item_data.concept }}<br>
+	{% if character.item_data.real_concept and show_hidden %}<b>{% trans "Real Concept:" %}</b> {{ character.item_data.real_concept}}<br>{% endif %}
+    <b>{% trans "Fealty:" %}</b>
 	{% if fealty_org_id %}
 	<a href="{% url 'help_topics:display_org' fealty_org_id.id %}">{{ character.item_data.fealty }}</a>
 	{% else %}{{ character.item_data.fealty}}
 	{% endif %}
-	<br><b>Family:</b>
+	<br><b>{% trans "Family:" %}</b>
 	{% if family_org_id %}
 	<a href="{% url 'help_topics:display_org' family_org_id.id %}">{{ character.item_data.family }}</a>
 	{% else %}{{ character.item_data.family}}
 	{% endif %}
 	<br>
-    <b>Gender:</b> {{ character.item_data.gender }}<br><b>Marital Status:</b> {{ character.item_data.marital_status }}<br>
-    <b>Age:</b> {{ character.item_data.age }}<br>
+    <b>{% trans "Gender:" %}</b> {{ character.item_data.gender }}<br><b>{% trans "Marital Status:" %}</b> {{ character.item_data.marital_status }}<br>
+    <b>{% trans "Age:" %}</b> {{ character.item_data.age }}<br>
     {% if character.item_data.birthday %}
-      <b>Birthday:</b> {{ character.item_data.birthday }}<br>
+      <b>{% trans "Birthday:" %}</b> {{ character.item_data.birthday }}<br>
     {% endif %}
-    <b>Religion:</b> {{ character.db.religion }}<br><b>Vocation:</b> {{character.item_data.vocation|capfirst }}<br>
-	<b>Height:</b> {{ character.item_data.height}}<br><b>Hair Color:</b> {{character.item_data.hair_color}}<br>
-	<b>Eye Color:</b> {{ character.item_data.eye_color}}<br><b>Skintone:</b> {{character.item_data.skin_tone}}</p>
+    <b>{% trans "Religion:" %}</b> {{ character.db.religion }}<br><b>{% trans "Vocation:" %}</b> {{character.item_data.vocation|capfirst }}<br>
+	<b>{% trans "Height:" %}</b> {{ character.item_data.height}}<br><b>{% trans "Hair Color:" %}</b> {{character.item_data.hair_color}}<br>
+	<b>{% trans "Eye Color:" %}</b> {{ character.item_data.eye_color}}<br><b>{% trans "Skintone:" %}</b> {{character.item_data.skin_tone}}</p>
     {% if character.titles %}
-    <b>Titles:</b> {{ character.titles }} {% endif %}
+    <b>{% trans "Titles:" %}</b> {{ character.titles }} {% endif %}
 	</div>
 	</div>
     {% if character.item_data.obituary %}
-    <p><b>Obituary:</b> {{ character.item_data.obituary|mush_to_html }}</p>
+    <p><b>{% trans "Obituary:" %}</b> {{ character.item_data.obituary|mush_to_html }}</p>
     {% endif %}
-    <p><b>Description:</b> {{ character.perm_desc|mush_to_html }}</p>
+    <p><b>{% trans "Description:" %}</b> {{ character.perm_desc|mush_to_html }}</p>
 
-    <p><b>Personality:</b> {{ character.item_data.personality|mush_to_html }}</p>
+    <p><b>{% trans "Personality:" %}</b> {{ character.item_data.personality|mush_to_html }}</p>
 
-    <p><b>Background:</b> {{ character.item_data.background|mush_to_html }}</p>
+    <p><b>{% trans "Background:" %}</b> {{ character.item_data.background|mush_to_html }}</p>
     {% if character.db.relationship_short %}
-      <h2>Relationship Summary</h2>
+      <h2>{% trans "Relationship Summary" %}</h2>
       {% for type,value in character.db.relationship_short.items %}
         {% if type != 'secret' or show_hidden %}
           <br /><b>{{ type|capfirst }}:</b>
@@ -78,22 +79,22 @@
           {% endfor %}
         {% endif %}
       {% empty %}
-        <li>This character has no relationships yet.</li>
+        <li>{% trans "This character has no relationships yet." %}</li>
       {% endfor %}
     {% endif %}
     {% if show_hidden %}
       {% if secrets %}
-      <h2 class="text-center">Secrets</h2>
+      <h2 class="text-center">{% trans "Secrets" %}</h2>
       {% for secret in secrets %}
         <p>{{ forloop.counter}} : {{ secret.desc|mush_to_html }}</p>
         {% if request.user.is_staff %}
-          <h2 class="text-center">GM Notes</h2>
+          <h2 class="text-center">{% trans "GM Notes" %}</h2>
           {{  secret.gm_notes }}
         {% endif %}
       {% endfor %}
       {% endif %}
       {% if additional_notes and request.user.is_staff %}
-        <h2 class="text-center">More GM Notes</h2>
+        <h2 class="text-center">{% trans "More GM Notes" %}</h2>
           {% for note in additional_notes %}
             {{ note.gm_notes }}
           {% endfor %}
@@ -104,88 +105,88 @@
       </style>
 
       <table class="table table-bordered">
-        <caption><h2 class="text-center">Stats</h2></caption>
+        <caption><h2 class="text-center">{% trans "Stats" %}</h2></caption>
         <thead>
           <tr>
-            <th width="20%" class="success">Physical</th>
-            <th width="10%" class="success">Value</th>
-            <th width="20%" class="success">Social</th>
-            <th width="10%" class="success">Value</th>
-            <th width="20%" class="success">Mental</th>
-            <th width="10%" class="success">Value</th>
-            <th width="20%" class="success">Special</th>
-            <th width="10%" class="success">Value</th>
+            <th width="20%" class="success">{% trans "Physical" %}</th>
+            <th width="10%" class="success">{% trans "Value" %}</th>
+            <th width="20%" class="success">{% trans "Social" %}</th>
+            <th width="10%" class="success">{% trans "Value" %}</th>
+            <th width="20%" class="success">{% trans "Mental" %}</th>
+            <th width="10%" class="success">{% trans "Value" %}</th>
+            <th width="20%" class="success">{% trans "Special" %}</th>
+            <th width="10%" class="success">{% trans "Value" %}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td class="info">Strength</td>
+            <td class="info">{% trans "Strength" %}</td>
             <td class="info">{{ character.traits.strength }}</td>
-            <td class="info">Charm</td>
+            <td class="info">{% trans "Charm" %}</td>
             <td class="info">{{ character.traits.charm }}</td>
-            <td class="info">Intellect</td>
+            <td class="info">{% trans "Intellect" %}</td>
             <td class="info">{{ character.traits.intellect }}</td>
-            <td class="info">Mana</td>
+            <td class="info">{% trans "Mana" %}</td>
             <td class="info">{{ character.traits.mana }}</td>
           </tr>
           <tr>
-            <td class="info">Dexterity</td>
+            <td class="info">{% trans "Dexterity" %}</td>
             <td class="info">{{ character.traits.dexterity }}</td>
-            <td class="info">Command</td>
+            <td class="info">{% trans "Command" %}</td>
             <td class="info">{{ character.traits.command }}</td>
-            <td class="info">Perception</td>
+            <td class="info">{% trans "Perception" %}</td>
             <td class="info">{{ character.traits.perception }}</td>
-            <td class="info">Luck</td>
+            <td class="info">{% trans "Luck" %}</td>
             <td class="info">{{ character.traits.luck }}</td>
           </tr>
           <tr>
-            <td class="info">Stamina</td>
+            <td class="info">{% trans "Stamina" %}</td>
             <td class="info">{{ character.traits.stamina }}</td>
-            <td class="info">Composure</td>
+            <td class="info">{% trans "Composure" %}</td>
             <td class="info">{{ character.traits.composure }}</td>
-            <td class="info">Wits</td>
+            <td class="info">{% trans "Wits" %}</td>
             <td class="info">{{ character.traits.wits }}</td>
-            <td class="info">Willpower</td>
+            <td class="info">{% trans "Willpower" %}</td>
             <td class="info">{{ character.traits.willpower }}</td>
           </tr>
         </tbody>
       </table>
 
-      <h2 class="text-center">Skills</h2>
+      <h2 class="text-center">{% trans "Skills" %}</h2>
       <ul class="list-inline text-center">
         {% for skill,value in character.traits.skills.items %}
           <li class="text-center"><b>{{ skill }}:</b> {{ value }}</li>
         {% empty %}
-          <li>This character has no skills yet.</li>
+          <li>{% trans "This character has no skills yet." %}</li>
         {% endfor %}
       </ul>
     {% endif %}
 
     <div class="row">
         <div class="col-md-4 text-center">
-            <h1 class="text-center"><a href="{% url 'character:gallery' character.id %}"><span class="label label-primary">Gallery</span></a></h1>
+            <h1 class="text-center"><a href="{% url 'character:gallery' character.id %}"><span class="label label-primary">{% trans "Gallery" %}</span></a></h1>
             </div>
         <div class="col-md-4 text-center">
-            <h1 class="text-center"><a href="{% url 'character:list_actions' character.id %}"><span class="label label-primary">Story Actions</span></a></h1>
+            <h1 class="text-center"><a href="{% url 'character:list_actions' character.id %}"><span class="label label-primary">{% trans "Story Actions" %}</span></a></h1>
             </div>
         {% if show_hidden %}
             <div class="col-md-4 text-center">
                 <h1 class="text-center"><a href="{% url 'character:list_flashbacks' character.id %}">
-                    <span class="label label-primary">Flashbacks</span></a></h1></div>
+                    <span class="label label-primary">{% trans "Flashbacks" %}</span></a></h1></div>
             <div class="col-md-4 text-center">
                 <h1 class="text-center"><a href="{% url 'character:list_clues' character.id %}">
-                    <span class="label label-primary">Clues</span></a></h1></div>
+                    <span class="label label-primary">{% trans "Clues" %}</span></a></h1></div>
         {% endif %}
     </div>
     <div class="row">
         <div class="col-md-12 text-center">
             <button data-toggle="collapse" data-target="#Impressions">
-            <h2>First Impressions</h2></button>
+            <h2>{% trans "First Impressions" %}</h2></button>
             <div id="Impressions" class="collapse">
                 <table class="table table-hover">
                 <tr class="danger">
-                    <td>Name</td>
-                    <td>Summary</td>
+                    <td>{% trans "Name" %}</td>
+                    <td>{% trans "Summary" %}</td>
                 </tr>
                 {% if show_hidden %}
                     {% for impression in character.roster.public_impressions_of_me %}

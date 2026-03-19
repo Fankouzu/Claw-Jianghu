@@ -51,9 +51,9 @@ PERMISSION_HIERARCHY = [
     "Developer",
     "Owner",
 ]
-SERVERNAME = config("SERVERNAME", default="Arx")
+SERVERNAME = config("SERVERNAME", default="江湖传说")
 VERBOSE_GAME_NAME = config("VERBOSE_GAME_NAME", default="") or SERVERNAME
-GAME_SLOGAN = config("GAME_SLOGAN", default="Season Two: Heroes and Other Fables")
+GAME_SLOGAN = config("GAME_SLOGAN", default="江湖风云，侠客传奇")
 TIME_ZONE = config("TIME_ZONE", default="America/New_York")
 USE_TZ = config("USE_TZ", default=False, cast=bool)
 TELNET_PORTS = config("TELNET_PORTS", default="3000", cast=Csv(cast=int))
@@ -238,6 +238,7 @@ ISSUES_URL = config("ISSUES_URL", default="")
 # Evennia's base settings screw up current account creation
 AUTH_PASSWORD_VALIDATORS = []
 MIDDLEWARE = [
+    "django.middleware.locale.LocaleMiddleware",  # i18n - must be before CommonMiddleware
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",  # 1.4?
@@ -247,4 +248,17 @@ MIDDLEWARE = [
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
     "web.middleware.auth.SharedLoginMiddleware",
 ]
+
+######################################################################
+# Internationalization (i18n) Settings - 国际化设置
+######################################################################
+LANGUAGE_CODE = 'zh-hans'
+LANGUAGES = [
+    ('zh-hans', '简体中文'),
+    ('en', 'English'),
+]
+LOCALE_PATHS = [os.path.join(GAME_DIR, 'locale')]
+USE_I18N = True
+USE_L10N = True
+
 SHELL_PLUS_PRINT_SQL = config("SHELL_PLUS_PRINT_SQL", cast=bool, default=False)

@@ -13,6 +13,7 @@ situations that are damaging to immersion and the
 creative process.
 """
 from django.db.models import Q
+from django.utils.translation import gettext as _
 from evennia import CmdSet
 from server.utils.arx_utils import list_to_string
 from commands.base import ArxCommand
@@ -49,10 +50,10 @@ def start_fight_at_room(room, caller=None, exclude_list=None):
         caller_string = "A non-player"
         announce_exclude = exclude_list
     inform_staff(
-        "{wCombat:{n {c%s{n started a fight in room {w%s{n." % (caller_string, room.id)
+        "{w比武:{n {c%s{n 在所在 {w%s{n 拔剑开战。" % (caller_string, room.id)
     )
     room.msg_contents(
-        "{rA fight has broken out here. Use @spectate_combat to watch, or +fight to join.",
+        "{r此处有人比武切磋。用 @spectate_combat 观战，或 +fight 加入。",
         exclude=announce_exclude,
     )
     return cscript
@@ -81,14 +82,14 @@ class CombatCommand(ArxCommand):
                 raise AttributeError
             if self.combat.ndb.shutting_down:
                 raise combat_settings.CombatError(
-                    "Combat is shutting down so this command will not work."
+                    _("比武正在结束，此命令无法执行。")
                 )
             if self.exclusive_phase and self.exclusive_phase != self.combat.ndb.phase:
                 raise combat_settings.CombatError(
-                    "Wrong combat phase for this command."
+                    _("此阶段无法使用此命令。")
                 )
         except AttributeError:
-            self.msg("Not participating in a fight at your location.")
+            self.msg(_("你未参与此处比武。"))
             stupid_prize = True
         except combat_settings.CombatError as err:
             self.msg(err)
@@ -187,16 +188,16 @@ class CmdStartCombat(ArxCommand):
         # search for each name listed in arguments, match them to objects
         oblist = [caller.search(name) for name in lhslist if caller.search(name)]
         if not oblist:
-            caller.msg("No one found by the names you provided.")
+            caller.msg(_("寻不得此名号之人。"))
             return
         oblist = [ob for ob in oblist if hasattr(ob, "attackable") and ob.attackable]
         if not oblist:
-            self.msg("No one attackable by the names you provided.")
+            self.msg(_("寻不得此名号的可攻之人。"))
             return
         if not cscript:
             cscript = start_fight_at_room(room, caller, oblist)
         cscript.add_combatant(caller, caller)
-        caller.msg("You have started a fight.")
+        caller.msg(_("你已拔剑开战。"))
         for ob in oblist:
             # Try to add them, cscript returns a string of success or error
             retmsg = cscript.add_combatant(ob, caller)
@@ -233,10 +234,10 @@ class CmdAutoattack(ArxCommand):
         caller = self.caller
         if "stop" in self.switches or caller.combat.autoattack:
             caller.combat.autoattack = False
-            caller.msg("Autoattack is now set to be off.")
+            caller.msg(_("自动出招已关闭。"))
         else:
             caller.combat.autoattack = True
-            caller.msg("Autoattack is now set to be on.")
+            caller.msg(_("自动出招已开启。"))
 
 
 class CmdProtect(ArxCommand):

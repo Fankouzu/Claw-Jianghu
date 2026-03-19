@@ -9,6 +9,7 @@ from functools import reduce
 
 from django.conf import settings
 from django.db.models import Q
+from django.utils.translation import gettext as _
 
 from server.utils.arx_utils import list_to_string
 from commands.base import ArxCommand, ArxPlayerCommand
@@ -132,10 +133,10 @@ class CmdHangouts(ArxCommand):
                 locations_set__db_typeclass_path=settings.BASE_CHARACTER_TYPECLASS
             )
         oblist = oblist.distinct()
-        caller.msg(format_header("Hangouts"))
-        self.msg("Players who are currently LRP have a |R+|n by their name.")
+        caller.msg(format_header(_("聚所")))
+        self.msg(_("正在寻伴的侠客名旁有|R+|n标记。"))
         if not oblist:
-            caller.msg("No hangouts are currently occupied.")
+            caller.msg(_("当前聚所空无一人。"))
             return
         for room in oblist:
             char_names = get_char_names(room.get_visible_characters(caller), caller)
@@ -555,10 +556,10 @@ class CmdJournal(ArxCommand):
     Allows a character to read the White Journals of characters,
     or add to their own White Journal or Black Reflections. White
     Journals are public notes that are recorded by the scribes of
-    Vellichor for all to see, while Black Reflections are sealed notes
+    藏经阁 for all to see, while Black Reflections are sealed notes
     that are kept private until after the character is deceased and then
     only released if explicitly stated to do so in their will, along with
-    the concurrence of their family and the Scholars of Vellichor.
+    the concurrence of their family and the 藏经阁.
 
     The edit function is only to fix typographical errors. ICly, the content
     of journals can never be altered once written. Only use it to fix

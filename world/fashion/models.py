@@ -33,18 +33,13 @@ class FashionCommonMixins(SharedMemoryModel):
     COLOR_TYPES = ("{n", "{355", "{453", "{542", "{530", "{520", "{510")
     # Emits use this %s order: fashion model, item/outfit, org, buzz_type
     EMIT_TYPES = (
-        "Despite efforts made by %s, modeling %s on behalf of %s attracts %s notice.",
-        "When %s models %s on behalf of %s, it gains %s attention from admiring onlookers.",
-        "%s models %s on behalf of %s, gaining a %s number of admirers and significant compliments.",
-        "With talented modeling, %s displays %s around Arx, garnering flattering conversation and "
-        + "murmurs throughout the city about the fine choices made by %s for sponsoring someone with such %s taste.",
-        "As %s models %s around Arx, word spreads like wildfire over the city about their incredible fashion "
-        + "choices, attracting attention even beyond the city and gaining %s %s acclaim as well.",
-        "It's more than just fashion when %s shows off %s around Arx. Resonating with the people of Arvum, it "
-        + "becomes a statement on contemporary culture and the profound effect that %s has upon it - a %s event "
-        + "they'll be discussing for years to come.",
-        "Across Arvum and beyond, all the world hears about %s modeling %s. History will remember the abstruse "
-        + "impact that %s had upon fashion itself, on this %s occasion.",
+        "尽管%s尽力展示，%s为%s赢得了些许关注。",
+        "当%s为%s展示时，引来了不少艳羡的目光，为%s赢得了可观的声望。",
+        "%s为%s展示风采，为%s赢得了众多赞誉与钦佩。",
+        "凭借出众的展示，%s在天阙城中展示%s，引得满城议论纷纷，众人皆称赞%s的眼光独到，品味%s。",
+        "当%s在天阙城展示%s时，消息如野火般传遍全城，甚至传到了中原各地，为%s赢得了%s的盛誉。",
+        "这不仅仅是展示——当%s在中原展示%s时，它已成为一种文化风潮，%s对当代风尚产生了深远影响，这是一个%s时刻，将被人们谈论多年。",
+        "整个中原，乃至四海八荒，都在传颂%s展示%s的消息。历史将铭记%s对风尚之道的深远影响，这是一个%s的传奇时刻。",
     )
     BUZZIES = list(zip(BUZZ_TYPES, COLOR_TYPES, EMIT_TYPES))
 

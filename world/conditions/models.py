@@ -9,6 +9,7 @@ from datetime import datetime
 import random
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from evennia.utils.idmapper.models import SharedMemoryModel
 
@@ -66,27 +67,27 @@ class RollModifier(SharedMemoryModel):
     ANY_MYSTICAL = 17
 
     CHECK_CHOICES = (
-        (ANY, "Any"),
-        (ATTACK, "Attack"),
-        (DAMAGE, "Damage"),
-        (DEFENSE, "Defense"),
-        (HEAL, "Heal"),
-        (STEALTH, "Stealth"),
-        (ANY_COMBAT, "Any Combat"),
-        (PERCEPTION, "Perception"),
-        (CRAFTING, "Crafting"),
-        (INVESTIGATION, "Investigation"),
-        (CASTING, "Casting"),
-        (CHANNELING, "Channeling"),
-        (WEAVING, "Weaving"),
-        (BESEECHING, "Beseeching"),
-        (ANY_PHYSICAL, "Any Physical"),
-        (ANY_MENTAL, "Any Mental"),
-        (ANY_SOCIAL, "Any Social"),
-        (ANY_MYSTICAL, "Any Mystical"),
+        (ANY, _("任意")),
+        (ATTACK, _("出招")),
+        (DAMAGE, _("伤害")),
+        (DEFENSE, _("防守")),
+        (HEAL, _("疗伤")),
+        (STEALTH, _("潜行")),
+        (ANY_COMBAT, _("任意比武")),
+        (PERCEPTION, _("洞察")),
+        (CRAFTING, _("锻造")),
+        (INVESTIGATION, _("侦查")),
+        (CASTING, _("施法")),
+        (CHANNELING, _("引导")),
+        (WEAVING, _("编织")),
+        (BESEECHING, _("祈求")),
+        (ANY_PHYSICAL, _("任意体魄")),
+        (ANY_MENTAL, _("任意心性")),
+        (ANY_SOCIAL, _("任意人脉")),
+        (ANY_MYSTICAL, _("任意玄术")),
     )
     MODIFIER, KNACK = range(2)
-    MOD_CHOICES = ((MODIFIER, "Modifier"), (KNACK, "Knack"))
+    MOD_CHOICES = ((MODIFIER, _("修正")), (KNACK, _("天赋")))
     object = models.ForeignKey(
         "objects.ObjectDB",
         db_index=True,

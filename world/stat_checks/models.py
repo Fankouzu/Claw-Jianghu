@@ -1,6 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.forms import ValidationError
+from django.utils.translation import gettext_lazy as _
 from server.utils.arx_utils import CachedProperty
 from evennia.utils.idmapper.models import SharedMemoryModel
 from jinja2 import Environment, BaseLoader
@@ -58,17 +59,17 @@ class StatWeight(SharedMemoryModel):
         ONLY_TRAIT,
     ) = range(10)
     STAT_CHOICES = (
-        (SKILL, "skill"),
-        (STAT, "stat"),
-        (ABILITY, "ability"),
-        (KNACK, "knack"),
-        (ONLY_STAT, "stat with no skill"),
+        (SKILL, _("武功")),
+        (STAT, _("属性")),
+        (ABILITY, _("能力")),
+        (KNACK, _("天赋")),
+        (ONLY_STAT, _("仅属性")),
         # if more things start to play into health probably change to FK to traits
-        (HEALTH_STA, "health for stamina"),
-        (HEALTH_BOSS, "health for boss rating"),
-        (MISC, "miscellaneous values (armor class, etc)"),
-        (TRAIT, "trait in new check system"),
-        (ONLY_TRAIT, "trait as a lone value in new check system"),
+        (HEALTH_STA, _("根骨气血")),
+        (HEALTH_BOSS, _("首领气血")),
+        (MISC, _("杂项（护甲等级等）")),
+        (TRAIT, _("特质")),
+        (ONLY_TRAIT, _("单独特质")),
     )
     stat_type = models.PositiveSmallIntegerField(choices=STAT_CHOICES, default=SKILL)
     level = models.PositiveSmallIntegerField(

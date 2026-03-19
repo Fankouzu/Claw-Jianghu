@@ -1,6 +1,7 @@
 """
 Commands for dice checks.
 """
+from django.utils.translation import gettext as _
 from commands.base import ArxCommand
 from world import stats_and_skills
 from world.roll import Roll
@@ -27,13 +28,13 @@ class CmdDiceString(ArxCommand):
         args = self.args
         dicest = caller.item_data.dice_string
         if not dicest:
-            dicest = "None."
+            dicest = _("无。")
         if not args:
-            caller.msg("Your current dicestring is: {w%s" % dicest)
-            caller.msg("To change your dicestring: {w@dicestring <word or phrase>")
+            caller.msg(_("你当前的骰子暗号为：{w%s") % dicest)
+            caller.msg(_("更改骰子暗号：{w@dicestring <词或短语>"))
             return
         caller.item_data.dice_string = args
-        caller.msg("Your dice string is now: %s" % args)
+        caller.msg(_("你的骰子暗号已设为：%s") % args)
         return
 
 
@@ -79,12 +80,12 @@ class CmdDiceCheckVersionOne(ArxCommand):
         if not self.args:
             if is_retainer:
                 caller.msg(
-                    "Usage: @check/retainer <id>|<stat>[+<skill>][ at <difficulty number>][=receiver1,receiver2,etc]"
+                    _("用法：@check/retainer <编号>|<属性>[+<武功>][ at <难度数值>][=接收者1,接收者2,等]")
                 )
                 return
             else:
                 caller.msg(
-                    "Usage: @check <stat>[+<skill>][ at <difficulty number>][=receiver1,receiver2,etc]"
+                    _("用法：@check <属性>[+<武功>][ at <难度数值>][=接收者1,接收者2,等]")
                 )
                 return
 

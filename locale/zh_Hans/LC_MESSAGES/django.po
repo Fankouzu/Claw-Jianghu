@@ -1,0 +1,3594 @@
+# 江湖侠客传 中文本地化翻译
+# Copyright (C) 2024
+# 本文件采用与 Arx 游戏相同的许可证分发
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 江湖侠客传\\n"
+"Report-Msgid-Bugs-To: \\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\\n"
+"Last-Translator: 江湖翻译阁\\n"
+"Language-Team: 中文武侠组\\n"
+"Language: zh_Hans\\n"
+"MIME-Version: 1.0\\n"
+"Content-Type: text/plain; charset=UTF-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Plural-Forms: nplurals=1; plural=0;\\n"
+
+# ============================================
+# 核心术语 - 江湖基石
+# ============================================
+
+msgid "Character"
+msgstr "侠客"
+
+msgid "Player"
+msgstr "玩家"
+
+msgid "Account"
+msgstr "账户"
+
+msgid "Session"
+msgstr "会话"
+
+msgid "Password"
+msgstr "口令"
+
+msgid "Username"
+msgstr "名号"
+
+msgid "Name"
+msgstr "名号"
+
+msgid "Description"
+msgstr "相貌"
+
+msgid "Help"
+msgstr "求助"
+
+msgid "Error"
+msgstr "有误"
+
+msgid "Success"
+msgstr "成了"
+
+msgid "Warning"
+msgstr "警示"
+
+msgid "Info"
+msgstr "消息"
+
+msgid "Cancel"
+msgstr "作罢"
+
+msgid "Confirm"
+msgstr "确认"
+
+msgid "Submit"
+msgstr "呈上"
+
+msgid "Delete"
+msgstr "销毁"
+
+msgid "Edit"
+msgstr "修改"
+
+msgid "Create"
+msgstr "创立"
+
+msgid "Search"
+msgstr "寻觅"
+
+msgid "Back"
+msgstr "返回"
+
+msgid "Next"
+msgstr "下一步"
+
+msgid "Previous"
+msgstr "上一步"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Load"
+msgstr "载入"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Open"
+msgstr "开启"
+
+msgid "Start"
+msgstr "开始"
+
+msgid "Stop"
+msgstr "停止"
+
+msgid "Exit"
+msgstr "退出"
+
+msgid "Login"
+msgstr "入江湖"
+
+msgid "Logout"
+msgstr "离江湖"
+
+msgid "Register"
+msgstr "拜山门"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "Profile"
+msgstr "人物档"
+
+msgid "Admin"
+msgstr "掌门"
+
+# ============================================
+# 属性与能力 - 武学根基
+# ============================================
+
+msgid "Stat"
+msgstr "属性"
+
+msgid "Stats"
+msgstr "属性"
+
+msgid "Strength"
+msgstr "臂力"
+
+msgid "Dexterity"
+msgstr "身法"
+
+msgid "Stamina"
+msgstr "根骨"
+
+msgid "Charm"
+msgstr "魅力"
+
+msgid "Command"
+msgstr "威望"
+
+msgid "Composure"
+msgstr "定力"
+
+msgid "Intellect"
+msgstr "悟性"
+
+msgid "Perception"
+msgstr "洞察"
+
+msgid "Wits"
+msgstr "机敏"
+
+msgid "Willpower"
+msgstr "意志"
+
+msgid "Mana"
+msgstr "内力"
+
+msgid "Luck"
+msgstr "福缘"
+
+msgid "Physical"
+msgstr "体魄"
+
+msgid "Social"
+msgstr "人脉"
+
+msgid "Mental"
+msgstr "心性"
+
+msgid "Special"
+msgstr "殊异"
+
+msgid "Value"
+msgstr "数值"
+
+msgid "Skill"
+msgstr "武功"
+
+msgid "Skills"
+msgstr "武功"
+
+msgid "Ability"
+msgstr "能力"
+
+msgid "Abilities"
+msgstr "能力"
+
+msgid "Check"
+msgstr "检定"
+
+msgid "Roll"
+msgstr "投骰"
+
+msgid "Level"
+msgstr "境界"
+
+msgid "Experience"
+msgstr "修为"
+
+msgid "XP"
+msgstr "修为"
+
+msgid "Health"
+msgstr "气血"
+
+# ============================================
+# 世界与组织 - 江山门派
+# ============================================
+
+msgid "Domain"
+msgstr "门派"
+
+msgid "Domains"
+msgstr "门派"
+
+msgid "Organization"
+msgstr "帮派"
+
+msgid "Organizations"
+msgstr "帮派"
+
+msgid "Estate"
+msgstr "府邸"
+
+msgid "Estates"
+msgstr "府邸"
+
+msgid "Army"
+msgstr "兵马"
+
+msgid "Armies"
+msgstr "兵马"
+
+msgid "Kingdom"
+msgstr "王朝"
+
+msgid "City"
+msgstr "城池"
+
+msgid "Town"
+msgstr "城镇"
+
+msgid "Village"
+msgstr "村落"
+
+msgid "Room"
+msgstr "所在"
+
+msgid "Area"
+msgstr "区域"
+
+msgid "Location"
+msgstr "方位"
+
+msgid "Fealty"
+msgstr "门派归属"
+
+msgid "Family"
+msgstr "家族"
+
+msgid "Castle"
+msgstr "城寨"
+
+msgid "Temple"
+msgstr "庙宇"
+
+msgid "Church"
+msgstr "寺庙"
+
+# ============================================
+# 物品系统 - 行囊宝物
+# ============================================
+
+msgid "Item"
+msgstr "物品"
+
+msgid "Items"
+msgstr "物品"
+
+msgid "Inventory"
+msgstr "行囊"
+
+msgid "Weapon"
+msgstr "兵器"
+
+msgid "Weapons"
+msgstr "兵器"
+
+msgid "Armor"
+msgstr "护甲"
+
+msgid "Armors"
+msgstr "护甲"
+
+msgid "Potion"
+msgstr "丹药"
+
+msgid "Potions"
+msgstr "丹药"
+
+msgid "Material"
+msgstr "材料"
+
+msgid "Materials"
+msgstr "材料"
+
+msgid "Equipment"
+msgstr "装备"
+
+msgid "Treasure"
+msgstr "宝物"
+
+msgid "Coins"
+msgstr "银两"
+
+msgid "coins"
+msgstr "银两"
+
+msgid "Money"
+msgstr "银两"
+
+# ============================================
+# 交流系统 - 传音书信
+# ============================================
+
+msgid "Channel"
+msgstr "频道"
+
+msgid "Channels"
+msgstr "频道"
+
+msgid "Message"
+msgstr "消息"
+
+msgid "Messages"
+msgstr "消息"
+
+msgid "Journal"
+msgstr "札记"
+
+msgid "Journals"
+msgstr "札记"
+
+msgid "Mail"
+msgstr "书信"
+
+msgid "Email"
+msgstr "信箱"
+
+msgid "Chat"
+msgstr "闲谈"
+
+msgid "Whisper"
+msgstr "传音"
+
+msgid "Say"
+msgstr "道"
+
+msgid "Shout"
+msgstr "呼喝"
+
+msgid "Emote"
+msgstr "动作"
+
+msgid "Pose"
+msgstr "演武"
+
+# ============================================
+# 时间与日期
+# ============================================
+
+msgid "Day"
+msgstr "日"
+
+msgid "Days"
+msgstr "日"
+
+msgid "Week"
+msgstr "周"
+
+msgid "Month"
+msgstr "月"
+
+msgid "Year"
+msgstr "年"
+
+msgid "Hour"
+msgstr "时辰"
+
+msgid "Minute"
+msgstr "刻"
+
+msgid "Second"
+msgstr "息"
+
+msgid "Today"
+msgstr "今日"
+
+msgid "Tomorrow"
+msgstr "明日"
+
+msgid "Yesterday"
+msgstr "昨日"
+
+msgid "Now"
+msgstr "此刻"
+
+msgid "Later"
+msgstr "稍后"
+
+msgid "Soon"
+msgstr "即至"
+
+# ============================================
+# 状态与动作
+# ============================================
+
+msgid "Online"
+msgstr "在线"
+
+msgid "Offline"
+msgstr "离线"
+
+msgid "Active"
+msgstr "活跃"
+
+msgid "Inactive"
+msgstr "沉寂"
+
+msgid "Alive"
+msgstr "在世"
+
+msgid "Dead"
+msgstr "阵亡"
+
+msgid "Victory"
+msgstr "得胜"
+
+msgid "Defeat"
+msgstr "落败"
+
+msgid "Win"
+msgstr "胜"
+
+msgid "Lose"
+msgstr "败"
+
+msgid "AFK"
+msgstr "暂离"
+
+msgid "idle"
+msgstr "闲置"
+
+# ============================================
+# 通用消息 - 江湖传言
+# ============================================
+
+msgid "You do not have permission to do that."
+msgstr "你无权如此行事。"
+
+msgid "That command does not exist."
+msgstr "无此指令。"
+
+msgid "Invalid arguments."
+msgstr "参数有误。"
+
+msgid "You must be logged in to do that."
+msgstr "请先入江湖。"
+
+msgid "Character not found."
+msgstr "寻不得此侠客。"
+
+msgid "Player not found."
+msgstr "寻不得此玩家。"
+
+msgid "Room not found."
+msgstr "寻不得此所在。"
+
+msgid "Item not found."
+msgstr "寻不得此物。"
+
+msgid "You cannot go that direction."
+msgstr "此路不通。"
+
+msgid "You are already here."
+msgstr "你已在此处。"
+
+msgid "You don't have enough money."
+msgstr "你银两不足。"
+
+msgid "Transaction completed."
+msgstr "交易已毕。"
+
+msgid "Action cancelled."
+msgstr "作罢。"
+
+msgid "Please try again."
+msgstr "请重试。"
+
+msgid "Welcome to the game!"
+msgstr "欢迎来到江湖！"
+
+msgid "Goodbye!"
+msgstr "江湖再见！"
+
+msgid "You are now logged in."
+msgstr "你已入江湖。"
+
+msgid "You have been logged out."
+msgstr "你已离江湖。"
+
+msgid "Your password has been changed."
+msgstr "你的口令已更改。"
+
+msgid "Invalid username or password."
+msgstr "名号或口令有误。"
+
+msgid "This username is already taken."
+msgstr "此名号已有人用。"
+
+msgid "Character created successfully."
+msgstr "侠客已创立。"
+
+msgid "Character deleted successfully."
+msgstr "侠客已销毁。"
+
+# ============================================
+# 战斗消息 - 比武交锋
+# ============================================
+
+msgid "Combat"
+msgstr "比武"
+
+msgid "Attack"
+msgstr "出招"
+
+msgid "Defense"
+msgstr "防守"
+
+msgid "Damage"
+msgstr "伤害"
+
+msgid "Heal"
+msgstr "疗伤"
+
+msgid "You enter combat."
+msgstr "你拔剑迎战！"
+
+msgid "You leave combat."
+msgstr "你收剑罢手。"
+
+msgid "You attack"
+msgstr "你出招攻向"
+
+msgid "You are attacked by"
+msgstr "有人向你出招，来者"
+
+msgid "You hit"
+msgstr "你一招命中"
+
+msgid "You miss"
+msgstr "你这一招落了空"
+
+msgid "You are hit by"
+msgstr "你中了一招，对手"
+
+msgid "You dodge"
+msgstr "你闪身避过"
+
+msgid "You parry"
+msgstr "你格挡开来"
+
+msgid "You are defeated."
+msgstr "你败下阵来。"
+
+msgid "You are victorious!"
+msgstr "你胜了此战！"
+
+msgid "You gain"
+msgstr "你获得"
+
+msgid "experience points."
+msgstr "修为。"
+
+msgid "You deal"
+msgstr "你造成"
+
+msgid "points of damage."
+msgstr "点伤害。"
+
+msgid "You are not in combat."
+msgstr "你并未比武。"
+
+msgid "You are already in combat."
+msgstr "你已在比武之中。"
+
+msgid "You cannot attack yourself."
+msgstr "不可对自己出招。"
+
+msgid "You cannot attack that."
+msgstr "无法对此出招。"
+
+msgid "You are now attacking"
+msgstr "你向"
+
+msgid "You stop attacking"
+msgstr "你停止攻击"
+
+msgid "joins the combat."
+msgstr "加入战局。"
+
+msgid "leaves the combat."
+msgstr "退出战局。"
+
+# ============================================
+# 社交消息 - 传音问候
+# ============================================
+
+msgid "says"
+msgstr "道"
+
+msgid "shouts"
+msgstr "呼喝"
+
+msgid "whispers"
+msgstr "传音"
+
+msgid "You say"
+msgstr "你道"
+
+msgid "You shout"
+msgstr "你呼喝"
+
+msgid "You whisper"
+msgstr "你传音"
+
+msgid "to"
+msgstr "对"
+
+msgid "at"
+msgstr "朝"
+
+# ============================================
+# 行囊消息
+# ============================================
+
+msgid "You pick up"
+msgstr "你收起"
+
+msgid "You drop"
+msgstr "你放下"
+
+msgid "You buy"
+msgstr "你购得"
+
+msgid "You sell"
+msgstr "你卖出"
+
+msgid "You use"
+msgstr "你使用"
+
+msgid "You equip"
+msgstr "你装备"
+
+msgid "You unequip"
+msgstr "你卸下"
+
+msgid "Your inventory is empty."
+msgstr "你行囊空空。"
+
+msgid "You cannot carry any more items."
+msgstr "你带不动更多东西了。"
+
+msgid "This item cannot be used."
+msgstr "此物无法使用。"
+
+msgid "This item cannot be equipped."
+msgstr "此物无法装备。"
+
+msgid "You are"
+msgstr "你"
+
+msgid "is"
+msgstr "是"
+
+msgid "carrying"
+msgstr "携带"
+
+msgid "not carrying anything."
+msgstr "没有携带任何物品。"
+
+msgid "Volume:"
+msgstr "负重："
+
+msgid "You can't carry"
+msgstr "你带不动"
+
+msgid "You already hold"
+msgstr "你已持有"
+
+msgid "You didn't get anything."
+msgstr "你一无所获。"
+
+msgid "What will you"
+msgstr "你要"
+
+msgid "Could not get anything."
+msgstr "一无所获。"
+
+msgid "That is not a container."
+msgstr "那不是容器。"
+
+msgid "You'll have to unlock"
+msgstr "你需先解锁"
+
+msgid "first."
+msgstr "。"
+
+msgid "You get"
+msgstr "你得到"
+
+msgid "from"
+msgstr "从"
+
+msgid "You put"
+msgstr "你将"
+
+msgid "in"
+msgstr "放入"
+
+msgid "What do you want to"
+msgstr "你想要"
+
+msgid "You don't have"
+msgstr "你没有"
+
+msgid "on you."
+msgstr "在身上。"
+
+msgid "You don't have that much money."
+msgstr "你没有那么多银两。"
+
+# ============================================
+# 移动消息 - 行走江湖
+# ============================================
+
+msgid "You go"
+msgstr "你往"
+
+msgid "north"
+msgstr "北"
+
+msgid "south"
+msgstr "南"
+
+msgid "east"
+msgstr "东"
+
+msgid "west"
+msgstr "西"
+
+msgid "up"
+msgstr "上"
+
+msgid "down"
+msgstr "下"
+
+msgid "You arrive."
+msgstr "你到了。"
+
+msgid "You leave."
+msgstr "你离去。"
+
+msgid "arrives"
+msgstr "到了"
+
+msgid "leaves"
+msgstr "离去"
+
+# ============================================
+# 门派消息
+# ============================================
+
+msgid "Your domain produces"
+msgstr "你的门派产出"
+
+msgid "resources."
+msgstr "资源。"
+
+msgid "Your army is ready."
+msgstr "你的兵马已备。"
+
+msgid "Your army needs more soldiers."
+msgstr "你的兵马需要更多人手。"
+
+msgid "Construction completed."
+msgstr "建造已毕。"
+
+msgid "Research completed."
+msgstr "研究已毕。"
+
+# ============================================
+# 武学消息 - 功法绝招
+# ============================================
+
+msgid "You cast"
+msgstr "你运起"
+
+msgid "The spell fails."
+msgstr "功法施展失败。"
+
+msgid "You don't have enough mana."
+msgstr "你内力不足。"
+
+msgid "The spell hits"
+msgstr "功法命中"
+
+msgid "The spell misses."
+msgstr "功法落空。"
+
+msgid "Magic"
+msgstr "武学"
+
+msgid "Spell"
+msgstr "功法"
+
+# ============================================
+# 命令消息
+# ============================================
+
+msgid "Brief mode is now off."
+msgstr "简略模式已关。"
+
+msgid "Brief mode is now on."
+msgstr "简略模式已开。"
+
+msgid "There is no help available for that topic."
+msgstr "此题无帮助可寻。"
+
+msgid "No matching help entries found."
+msgstr "无匹配的帮助条目。"
+
+msgid "Usage:"
+msgstr "用法："
+
+msgid "Usage"
+msgstr "用法"
+
+msgid "Aliases:"
+msgstr "别名："
+
+msgid "Category:"
+msgstr "分类："
+
+msgid "See also:"
+msgstr "另见："
+
+msgid "You are not carrying anything."
+msgstr "你行囊空空。"
+
+msgid "You are already wearing that."
+msgstr "你已穿戴此物。"
+
+msgid "You remove"
+msgstr "你卸下"
+
+msgid "You wear"
+msgstr "你穿戴"
+
+msgid "You cannot wear that."
+msgstr "此物无法穿戴。"
+
+msgid "Nothing to remove."
+msgstr "无物可卸。"
+
+msgid "Target not found."
+msgstr "寻不得目标。"
+
+msgid "You cannot see that."
+msgstr "你看不到那个。"
+
+msgid "You see nothing special."
+msgstr "你看不出什么特别。"
+
+msgid "Exits:"
+msgstr "出口："
+
+msgid "Contents:"
+msgstr "内容："
+
+msgid "You are already following"
+msgstr "你已在跟随"
+
+msgid "You stop following"
+msgstr "你不再跟随"
+
+msgid "is now following you."
+msgstr "开始跟随你。"
+
+msgid "stops following you."
+msgstr "不再跟随你。"
+
+msgid "You are not following anyone."
+msgstr "你没有跟随任何人。"
+
+msgid "You cannot follow yourself."
+msgstr "不可跟随自己。"
+
+msgid "You are now AFK."
+msgstr "你暂离江湖。"
+
+msgid "You are no longer AFK."
+msgstr "你已回来。"
+
+msgid "You have no mail."
+msgstr "你没有书信。"
+
+msgid "You have"
+msgstr "你有"
+
+msgid "unread messages."
+msgstr "封未读消息。"
+
+msgid "Message sent."
+msgstr "消息已送出。"
+
+msgid "Message deleted."
+msgstr "消息已删除。"
+
+msgid "No message by that number."
+msgstr "无此编号的消息。"
+
+msgid "muted."
+msgstr "已静音。"
+
+msgid "unmuted."
+msgstr "已解除静音。"
+
+msgid "You are not on that channel."
+msgstr "你不在该频道。"
+
+msgid "You have been removed from channel"
+msgstr "你已从频道移除"
+
+msgid "You have joined channel"
+msgstr "你已加入频道"
+
+msgid "Who"
+msgstr "江湖侠客"
+
+msgid "There are"
+msgstr "有"
+
+msgid "players online."
+msgstr "名玩家在线。"
+
+msgid "players currently online."
+msgstr "名玩家当前在线。"
+
+msgid "Idle"
+msgstr "闲置"
+
+msgid "You cannot afford that."
+msgstr "你买不起。"
+
+msgid "You cannot find anywhere to buy that."
+msgstr "无处可购此物。"
+
+msgid "You cannot sell that here."
+msgstr "此处不可出售此物。"
+
+msgid "Sold for"
+msgstr "卖出得"
+
+msgid "Purchased for"
+msgstr "购入花费"
+
+msgid "You don't have enough coins."
+msgstr "你银两不足。"
+
+msgid "You are too busy to do that."
+msgstr "你正忙，无暇顾及。"
+
+msgid "You need to be standing to do that."
+msgstr "你需站起方可为之。"
+
+msgid "You sit down."
+msgstr "你坐下。"
+
+msgid "You stand up."
+msgstr "你站起。"
+
+msgid "You lie down."
+msgstr "你躺下。"
+
+msgid "is already sitting."
+msgstr "已坐着。"
+
+msgid "is already standing."
+msgstr "已站着。"
+
+msgid "is already lying down."
+msgstr "已躺着。"
+
+msgid "sits down."
+msgstr "坐下。"
+
+msgid "stands up."
+msgstr "站起。"
+
+msgid "lies down."
+msgstr "躺下。"
+
+# ============================================
+# 账户与侠客管理
+# ============================================
+
+msgid "Character selection:"
+msgstr "选择侠客："
+
+msgid "Type the number or name of the character to play."
+msgstr "输入侠客编号或名号开始游戏。"
+
+msgid "To create a new character, use 'create <name>'."
+msgstr "创立新侠客，请用 'create <名号>'。"
+
+msgid "That character name is already taken."
+msgstr "此侠客名号已有人用。"
+
+msgid "Character created."
+msgstr "侠客已创立。"
+
+msgid "No character found with that name."
+msgstr "寻不得此名号的侠客。"
+
+msgid "You cannot delete that character."
+msgstr "你无法销毁此侠客。"
+
+msgid "Please confirm deletion of"
+msgstr "请确认销毁"
+
+msgid "by typing 'delete <name> again'."
+msgstr "再次输入 'delete <名号>'。"
+
+msgid "Character deleted:"
+msgstr "侠客已销毁："
+
+# ============================================
+# 时间与游戏信息
+# ============================================
+
+msgid "The current time is"
+msgstr "此刻是"
+
+msgid "Server time:"
+msgstr "服务器时辰："
+
+msgid "Game time:"
+msgstr "江湖时辰："
+
+msgid "You have been playing for"
+msgstr "你已入江湖"
+
+msgid "minutes."
+msgstr "刻。"
+
+msgid "hours."
+msgstr "时辰。"
+
+# ============================================
+# 锻造与炼制
+# ============================================
+
+msgid "You don't have the required materials."
+msgstr "你缺少所需材料。"
+
+msgid "You don't know that recipe."
+msgstr "你不知此配方。"
+
+msgid "Recipe not found."
+msgstr "寻不得配方。"
+
+msgid "You create"
+msgstr "你锻造出"
+
+msgid "You fail to create"
+msgstr "你锻造失败"
+
+msgid "available recipes."
+msgstr "个可用配方。"
+
+msgid "You don't know any recipes."
+msgstr "你不知任何配方。"
+
+# ============================================
+# 帮派与组织
+# ============================================
+
+msgid "You are not a member of any organization."
+msgstr "你未加入任何帮派。"
+
+msgid "You are a member of:"
+msgstr "你所属帮派："
+
+msgid "Rank:"
+msgstr "位阶："
+
+msgid "Members:"
+msgstr "成员："
+
+msgid "Leader:"
+msgstr "掌门："
+
+# ============================================
+# Web模板 - 江湖门户
+# ============================================
+
+msgid "Tools:"
+msgstr "工具："
+
+msgid "Log Out"
+msgstr "离江湖"
+
+msgid "Logged in as"
+msgstr "当前身份"
+
+msgid "Log In"
+msgstr "入江湖"
+
+msgid "Navigation:"
+msgstr "导航："
+
+msgid "Home"
+msgstr "首页"
+
+msgid "Characters"
+msgstr "侠客"
+
+msgid "World"
+msgstr "江湖"
+
+msgid "Story"
+msgstr "传记"
+
+msgid "Events"
+msgstr "盛事"
+
+msgid "Boards"
+msgstr "江湖榜"
+
+msgid "Admin Interface"
+msgstr "掌门令"
+
+msgid "Admin Search Tool"
+msgstr "搜索工具"
+
+msgid "Requests"
+msgstr "请托"
+
+msgid "Play Online"
+msgstr "在线游戏"
+
+msgid "Welcome!"
+msgstr "欢迎来到江湖！"
+
+msgid "Latest News"
+msgstr "江湖快讯"
+
+msgid "By"
+msgstr "作者"
+
+msgid "on"
+msgstr "于"
+
+msgid "More News"
+msgstr "更多快讯"
+
+msgid "Current Story"
+msgstr "当前传记"
+
+msgid "Upcoming Events"
+msgstr "即将举办"
+
+msgid "More Events"
+msgstr "更多盛事"
+
+msgid "Players"
+msgstr "侠客"
+
+msgid "There's currently"
+msgstr "现有"
+
+msgid "connected out of a total of"
+msgstr "名在线，共"
+
+msgid "players registered."
+msgstr "名注册侠客。"
+
+msgid "Recently Connected"
+msgstr "近日在线"
+
+msgid "Database Stats"
+msgstr "江湖数据"
+
+msgid "players"
+msgstr "名侠客"
+
+msgid "characters"
+msgstr "名侠客"
+
+msgid "rooms"
+msgstr "处所在"
+
+msgid "exits"
+msgstr "条通道"
+
+msgid "other objects"
+msgstr "件物品"
+
+msgid "Telnet Address"
+msgstr "连入地址"
+
+msgid "Other Stuff"
+msgstr "其他"
+
+msgid "Unofficial Arx Wiki"
+msgstr "江湖百科"
+
+msgid "Tehom's Dev Blog/Donation Links"
+msgstr "开发日志/捐赠"
+
+msgid "Your username and password didn't match. Please try again."
+msgstr "名号或口令有误，请重试。"
+
+msgid "Your account doesn't have access to this page. To proceed, please login with an account that has access."
+msgstr "你的账户无权访问此页。请用有权限的账户入江湖。"
+
+msgid "Please login to see this page."
+msgstr "请入江湖以查看此页。"
+
+msgid "login"
+msgstr "入江湖"
+
+# ============================================
+# 侠客卡 - 人物档案
+# ============================================
+
+msgid "Social Rank:"
+msgstr "江湖地位："
+
+msgid "Concept:"
+msgstr "出身："
+
+msgid "Real Concept:"
+msgstr "真实出身："
+
+msgid "Gender:"
+msgstr "性别："
+
+msgid "Marital Status:"
+msgstr "姻缘："
+
+msgid "Age:"
+msgstr "年纪："
+
+msgid "Birthday:"
+msgstr "生辰："
+
+msgid "Religion:"
+msgstr "信仰："
+
+msgid "Vocation:"
+msgstr "职司："
+
+msgid "Height:"
+msgstr "身高："
+
+msgid "Hair Color:"
+msgstr "发色："
+
+msgid "Eye Color:"
+msgstr "眸色："
+
+msgid "Skintone:"
+msgstr "肤色："
+
+msgid "Titles:"
+msgstr "头衔："
+
+msgid "Obituary:"
+msgstr "生平："
+
+msgid "Description:"
+msgstr "相貌："
+
+msgid "Personality:"
+msgstr "性情："
+
+msgid "Background:"
+msgstr "来历："
+
+msgid "Relationship Summary"
+msgstr "人脉概要"
+
+msgid "This character has no relationships yet."
+msgstr "此侠客尚无人脉。"
+
+msgid "Secrets"
+msgstr "秘辛"
+
+msgid "GM Notes"
+msgstr "掌门批注"
+
+msgid "More GM Notes"
+msgstr "更多批注"
+
+msgid "Gallery"
+msgstr "画像"
+
+msgid "Story Actions"
+msgstr "传记事迹"
+
+msgid "Flashbacks"
+msgstr "回忆"
+
+msgid "Clues"
+msgstr "线索"
+
+msgid "First Impressions"
+msgstr "初见印象"
+
+msgid "Summary"
+msgstr "概要"
+
+msgid "This character has no skills yet."
+msgstr "此侠客尚未习得武功。"
+
+# ============================================
+# 特殊消息 - 江湖特色
+# ============================================
+
+msgid "have"
+msgstr "有"
+
+msgid "has"
+msgstr "有"
+
+msgid "You"
+msgstr "你"
+
+msgid "Maximum AP"
+msgstr "最大行动点"
+
+msgid "Weekly AP Gain"
+msgstr "每周行动点"
+
+msgid "Bank Account"
+msgstr "银库存银"
+
+msgid "Prestige"
+msgstr "声望"
+
+msgid "Resources"
+msgstr "资源"
+
+msgid "Social Clout"
+msgstr "人望"
+
+msgid "Legend"
+msgstr "传奇"
+
+msgid "Economic"
+msgstr "经济"
+
+msgid "Fame"
+msgstr "名望"
+
+msgid "Military"
+msgstr "武力"
+
+msgid "Grandeur"
+msgstr "气派"
+
+msgid "Social"
+msgstr "人脉"
+
+msgid "Propriety"
+msgstr "礼数"
+
+msgid "Materials"
+msgstr "材料"
+
+# ============================================
+# 时间相关
+# ============================================
+
+msgid "ago"
+msgstr "前"
+
+# ============================================
+# 设置命令
+# ============================================
+
+msgid "Invalid switch. Valid switches are:"
+msgstr "无效开关。有效开关有："
+
+msgid "on"
+msgstr "开启"
+
+msgid "off"
+msgstr "关闭"
+
+msgid "Cleared"
+msgstr "已清除"
+
+msgid "setting."
+msgstr "设置。"
+
+msgid "Text in quotes will appear"
+msgstr "引号内文字将显示为"
+
+msgid "Mentions of your name will look like:"
+msgstr "你名号的出现将显示为："
+
+msgid "Place names will look like"
+msgstr "地名显示将为"
+
+msgid "No one to glance at."
+msgstr "此处无人可望。"
+
+msgid "无效开关。有效开关有：%s"
+msgstr "无效开关。有效开关有：%s"
+
+msgid "%s已%s。"
+msgstr "%s已%s。"
+
+msgid "已清除%s设置。"
+msgstr "已清除%s设置。"
+
+msgid "引号内文字将显示为%s「如此」。|n"
+msgstr "引号内文字将显示为%s「如此」。|n"
+
+msgid "你名号的出现将显示为：%s%s|n"
+msgstr "你名号的出现将显示为：%s%s|n"
+
+msgid "地名显示将为%s如此|n。"
+msgstr "地名显示将为%s如此|n。"
+
+msgid "此处无人可望。"
+msgstr "此处无人可望。"
+
+# ============================================
+# 社交命令 - 传音问候
+# ============================================
+
+msgid "Players who are currently LRP have a |R+|n by their name."
+msgstr "正在寻伴的侠客名旁有|R+|n标记。"
+
+msgid "No visible characters found."
+msgstr "四周空无一人。"
+
+msgid "RP preferences set to:"
+msgstr "侠缘偏好设为："
+
+msgid "RP preferences removed."
+msgstr "侠缘偏好已清除。"
+
+msgid "Note on playtimes set to:"
+msgstr "游玩时间备注设为："
+
+msgid "Note on playtimes removed."
+msgstr "游玩时间备注已清除。"
+
+msgid "Truncating some matches."
+msgstr "匹配结果过多，仅显示部分。"
+
+msgid "You have written"
+msgstr "你已撰写"
+
+msgid "journals this week."
+msgstr "篇札记本周。"
+
+msgid "Entry added to favorites."
+msgstr "已收入珍藏。"
+
+msgid "Entry removed from favorites."
+msgstr "已从珍藏移除。"
+
+msgid "No such entry to tag as a favorite."
+msgstr "无此条目可珍藏。"
+
+msgid "Entry deleted."
+msgstr "条目已删除。"
+
+msgid "You must specify materials to send."
+msgstr "你需指明要发送的材料。"
+
+msgid "That is not a valid material type."
+msgstr "此材料类型无效。"
+
+msgid "You don't have any of that material."
+msgstr "你没有这种材料。"
+
+msgid "No retainer by that ID."
+msgstr "寻不得此编号的随从。"
+
+msgid "does not have the ability to"
+msgstr "无此能力"
+
+msgid "cannot send or receive messengers at the moment."
+msgstr "此刻无法收发信使。"
+
+msgid "GM only command for now."
+msgstr "此令暂仅掌门可用。"
+
+msgid "Unrecognized switch."
+msgstr "无法识别的开关。"
+
+msgid "You do not have the delivery in your possession."
+msgstr "你身上并无此物。"
+
+msgid "cannot receive messengers."
+msgstr "无法接收信使。"
+
+msgid "No valid receivers found."
+msgstr "寻不得有效接收者。"
+
+msgid "Upcoming events:"
+msgstr "即将举办的盛事："
+
+msgid "Event creation cancelled."
+msgstr "盛事创建已取消。"
+
+msgid "Event moved to your room."
+msgstr "盛事已移至你所在之处。"
+
+msgid "You have ended the event."
+msgstr "你已结束此盛事。"
+
+msgid "You must /end an active event."
+msgstr "你需先结束当前盛事。"
+
+msgid "You have cancelled the event."
+msgstr "你已取消此盛事。"
+
+msgid "You do not currently have a location."
+msgstr "你此刻并无所在。"
+
+msgid "You have started the event."
+msgstr "你已开始此盛事。"
+
+# ============================================
+# 帮派命令
+# ============================================
+
+msgid "You are not a member of"
+msgstr "你并非"
+
+msgid "You have left"
+msgstr "你已离开"
+
+msgid "You cannot leave"
+msgstr "你无法离开"
+
+msgid "That organization does not exist."
+msgstr "无此帮派。"
+
+msgid "You are not permitted to withdraw funds."
+msgstr "你无权提取资金。"
+
+msgid "You cannot deposit negative funds."
+msgstr "不可存入负数资金。"
+
+msgid "Funds deposited."
+msgstr "资金已存入。"
+
+msgid "Funds withdrawn."
+msgstr "资金已取出。"
+
+msgid "You do not have enough funds."
+msgstr "你资金不足。"
+
+# ============================================
+# 聚所与行踪
+# ============================================
+
+msgid "Hangouts"
+msgstr "聚所"
+
+msgid "No hangouts are currently occupied."
+msgstr "当前聚所空无一人。"
+
+msgid "当前聚所空无一人。"
+msgstr "当前聚所空无一人。"
+
+msgid "聚所"
+msgstr "聚所"
+
+msgid "正在寻伴的侠客名旁有|R+|n标记。"
+msgstr "正在寻伴的侠客名旁有|R+|n标记。"
+
+# ============================================
+# 常用短语
+# ============================================
+
+msgid "is now"
+msgstr "已"
+
+msgid "set to:"
+msgstr "设为："
+
+msgid "removed."
+msgstr "已清除。"
+
+# ============================================
+# 封建等级与称谓 - 中国古代特色
+# ============================================
+
+msgid "King"
+msgstr "皇帝"
+
+msgid "Queen"
+msgstr "皇后"
+
+msgid "Prince"
+msgstr "王爷"
+
+msgid "Princess"
+msgstr "公主"
+
+msgid "Emperor"
+msgstr "皇帝"
+
+msgid "Empress"
+msgstr "皇后"
+
+msgid "Duke"
+msgstr "国公"
+
+msgid "Marquis"
+msgstr "侯爷"
+
+msgid "Count"
+msgstr "伯爵"
+
+msgid "Lord"
+msgstr "大人"
+
+msgid "Lady"
+msgstr "夫人"
+
+msgid "Knight"
+msgstr "武士"
+
+msgid "Noble"
+msgstr "世家"
+
+msgid "Nobility"
+msgstr "世家大族"
+
+# ============================================
+# 宗教与信仰 - 中国特色
+# ============================================
+
+msgid "Religion"
+msgstr "信仰"
+
+msgid "God"
+msgstr "神明"
+
+msgid "Goddess"
+msgstr "女神"
+
+msgid "Priest"
+msgstr "方丈"
+
+msgid "Priestess"
+msgstr "师太"
+
+msgid "Monk"
+msgstr "僧人"
+
+msgid "Temple"
+msgstr "庙宇"
+
+msgid "Shrine"
+msgstr "祠堂"
+
+msgid "Altar"
+msgstr "祭坛"
+
+# ============================================
+# 武学与功法 - 核心术语
+# ============================================
+
+msgid "Magic"
+msgstr "武学"
+
+msgid "Spell"
+msgstr "功法"
+
+msgid "Sorcery"
+msgstr "妖术"
+
+msgid "Enchantment"
+msgstr "炼器"
+
+msgid "Witch"
+msgstr "妖女"
+
+msgid "Wizard"
+msgstr "方士"
+
+msgid "Cult"
+msgstr "邪派"
+
+msgid "Cultist"
+msgstr "邪修"
+
+# ============================================
+# 社会阶层
+# ============================================
+
+msgid "Peasant"
+msgstr "百姓"
+
+msgid "Merchant"
+msgstr "商贾"
+
+msgid "Scholar"
+msgstr "读书人"
+
+msgid "Warrior"
+msgstr "武者"
+
+msgid "Craftsman"
+msgstr "工匠"
+
+msgid "Servant"
+msgstr "仆役"
+
+msgid "Guard"
+msgstr "护卫"
+
+msgid "Soldier"
+msgstr "军士"
+
+# ============================================
+# 组织与团体
+# ============================================
+
+msgid "Guild"
+msgstr "帮会"
+
+msgid "Clan"
+msgstr "宗族"
+
+msgid "Tribe"
+msgstr "部族"
+
+msgid "Faction"
+msgstr "势力"
+
+msgid "Order"
+msgstr "门派"
+
+msgid "Academy"
+msgstr "书院"
+
+# ============================================
+# 时间与货币
+# ============================================
+
+msgid "Hour"
+msgstr "时辰"
+
+msgid "Minute"
+msgstr "刻"
+
+msgid "Second"
+msgstr "息"
+
+msgid "Gold"
+msgstr "金锭"
+
+msgid "Silver"
+msgstr "银两"
+
+msgid "Copper"
+msgstr "铜钱"
+
+# ============================================
+# 战斗术语 - 武侠风格
+# ============================================
+
+msgid "Battle"
+msgstr "战役"
+
+msgid "Duel"
+msgstr "决斗"
+
+msgid "Tournament"
+msgstr "擂台赛"
+
+msgid "Critical Hit"
+msgstr "会心一击"
+
+msgid "Kill"
+msgstr "击杀"
+
+msgid "Death"
+msgstr "阵亡"
+
+# ============================================
+# 称谓语 - 古风礼貌
+# ============================================
+
+msgid "Sir"
+msgstr "阁下"
+
+msgid "Madam"
+msgstr "夫人"
+
+msgid "Master"
+msgstr "师父"
+
+msgid "Mistress"
+msgstr "主母"
+
+# ============================================
+# 物品 - 武侠风格
+# ============================================
+
+msgid "Staff"
+msgstr "禅杖"
+
+msgid "Robe"
+msgstr "道袍"
+
+msgid "Amulet"
+msgstr "玉佩"
+
+msgid "Scroll"
+msgstr "秘籍"
+
+msgid "Grimoire"
+msgstr "功法秘籍"
+
+# ============================================
+# 比武命令 - 武侠风格
+# ============================================
+
+msgid "No one attackable by the names you provided."
+msgstr "寻不得此名号的可攻之人。"
+
+msgid "is not in combat with you."
+msgstr "并未与你比武。"
+
+msgid "You must be in combat to prevent surrender."
+msgstr "你需在比武中方可阻止投降。"
+
+msgid "Use the command by itself to surrender."
+msgstr "单独使用此命令以认输。"
+
+msgid "You are not conscious."
+msgstr "你已昏厥。"
+
+msgid "Maximum flub value is"
+msgstr "最大失误值为"
+
+msgid "You clear any queued combat action."
+msgstr "你清除了已排定的招式。"
+
+msgid "Can only change stance between rounds."
+msgstr "只能在回合间变换架势。"
+
+msgid "Only GMs can view +combatstats of other players."
+msgstr "只有掌门可查看他人的比武数据。"
+
+msgid "Queued"
+msgstr "已排定"
+
+msgid "Set yourself to take the following action:"
+msgstr "你准备使出以下招式："
+
+msgid "You are not watching a combat."
+msgstr "你并未观战。"
+
+msgid "They are already in phase 2."
+msgstr "他们已进入第二阶段。"
+
+msgid "Risk level set to"
+msgstr "风险等级设为"
+
+msgid "They're not in combat, yo."
+msgstr "他们并未比武。"
+
+msgid "There is already a fight at your location."
+msgstr "此处已有人比武。"
+
+msgid "is already in combat."
+msgstr "已在比武之中。"
+
+msgid "Added"
+msgstr "已加入"
+
+msgid "Must provide a stat and difficulty."
+msgstr "需提供属性和难度。"
+
+msgid "Advancing to next character."
+msgstr "轮到下一位侠客。"
+
+msgid "Making all checks for"
+msgstr "为"
+
+msgid "Only usable in phase 2."
+msgstr "仅第二阶段可用。"
+
+msgid "Giving"
+msgstr "给予"
+
+msgid "an action at the end of initiative list."
+msgstr "在先攻序列末尾的行动机会。"
+
+msgid "Forcing"
+msgstr "强制"
+
+msgid "to:"
+msgstr "："
+
+msgid "Invalid switch."
+msgstr "无效开关。"
+
+msgid "Valid npc types:"
+msgstr "有效的NPC类型："
+
+msgid "Must give two integer values on right hand side."
+msgstr "右侧需提供两个整数值。"
+
+msgid "No npc by that ID."
+msgstr "寻不得此编号的NPC。"
+
+msgid "More than one match for"
+msgstr "匹配多于一个："
+
+msgid "You spawn"
+msgstr "你召出了"
+
+msgid "This switch requires some form of argument."
+msgstr "此开关需要参数。"
+
+msgid "Description for"
+msgstr ""
+
+msgid "set as:"
+msgstr "描述设为："
+
+msgid "Invalid target - you cannot dismiss that."
+msgstr "无效目标——你无法遣散。"
+
+msgid "Dismissed"
+msgstr "已遣散"
+
+msgid "No character found. Use #ID if they're not in the room."
+msgstr "寻不得此侠客。若不在同一所在，请使用 #编号。"
+
+msgid "Renamed"
+msgstr "更名"
+
+msgid "to:"
+msgstr "为："
+
+msgid "Threat must be a number."
+msgstr "威胁值需为数字。"
+
+msgid "threat set to"
+msgstr "威胁值设为"
+
+msgid "Quantity must be a number."
+msgstr "数量需为数字。"
+
+msgid "quantity set to"
+msgstr "数量设为"
+
+msgid "Must provide at least one character = number for damage amount."
+msgstr "需提供至少一个侠客=伤害数值。"
+
+msgid "Non-GM usage. Pruning others from your list."
+msgstr "非掌门使用。已从列表中剔除他人。"
+
+msgid "You permit"
+msgstr "你允许"
+
+msgid "to heal you."
+msgstr "为你疗伤。"
+
+msgid "This may only be used by the GM of an event."
+msgstr "此命令仅盛事掌门可用。"
+
+msgid "You have allowed"
+msgstr "你已允许"
+
+msgid "to use +heal."
+msgstr "使用+heal命令。"
+
+msgid "You must be awake to heal."
+msgstr "你需清醒方可疗伤。"
+
+msgid "You must have the medicine skill to heal another character."
+msgstr "你需有医术方能为人疗伤。"
+
+msgid "You are not allowed to use a command to benefit an alt."
+msgstr "你不被允许使用命令使分身受益。"
+
+# ============================================
+# 战斗消息 - 江湖风格
+# ============================================
+
+msgid "比武正在结束，此命令无法执行。"
+msgstr "比武正在结束，此命令无法执行。"
+
+msgid "此阶段无法使用此命令。"
+msgstr "此阶段无法使用此命令。"
+
+msgid "你未参与此处比武。"
+msgstr "你未参与此处比武。"
+
+msgid "此处有人比武切磋。用 @spectate_combat 观战，或 +fight 加入。"
+msgstr "此处有人比武切磋。用 @spectate_combat 观战，或 +fight 加入。"
+
+msgid "比武"
+msgstr "比武"
+
+# ============================================
+# 中国文化符号 - 特殊概念
+# ============================================
+
+msgid "Yin"
+msgstr "阴"
+
+msgid "Yang"
+msgstr "阳"
+
+msgid "Qi"
+msgstr "气"
+
+msgid "Dao"
+msgstr "道"
+
+msgid "Karma"
+msgstr "因果"
+
+msgid "Feng Shui"
+msgstr "风水"
+
+msgid "Destiny"
+msgstr "天命"
+
+msgid "Fate"
+msgstr "宿命"
+
+msgid "Meridian"
+msgstr "经脉"
+
+msgid "Acupoint"
+msgstr "穴位"
+
+msgid "Dantian"
+msgstr "丹田"
+
+msgid "Cultivation"
+msgstr "修炼"
+
+msgid "Enlightenment"
+msgstr "悟道"
+
+msgid "Tribulation"
+msgstr "劫数"
+
+msgid "Reincarnation"
+msgstr "轮回"
+
+# ============================================
+# 兵器武学 - 中国特色
+# ============================================
+
+msgid "Sword"
+msgstr "剑"
+
+msgid "Blade"
+msgstr "刀"
+
+msgid "Spear"
+msgstr "枪"
+
+msgid "Staff"
+msgstr "棍"
+
+msgid "Halberd"
+msgstr "戟"
+
+msgid "Axe"
+msgstr "斧"
+
+msgid "Mace"
+msgstr "锏"
+
+msgid "Whip"
+msgstr "鞭"
+
+msgid "Dagger"
+msgstr "匕首"
+
+msgid "Bow"
+msgstr "弓"
+
+msgid "Crossbow"
+msgstr "弩"
+
+msgid "Hidden Weapon"
+msgstr "暗器"
+
+# ============================================
+# 招式功法 - 武侠风格
+# ============================================
+
+msgid "Sword Strike"
+msgstr "剑招"
+
+msgid "Palm Strike"
+msgstr "掌法"
+
+msgid "Fist Technique"
+msgstr "拳法"
+
+msgid "Kick"
+msgstr "腿法"
+
+msgid "Internal Force"
+msgstr "内劲"
+
+msgid "Lightness Skill"
+msgstr "轻功"
+
+msgid "Body Protection"
+msgstr "护体"
+
+msgid "Sword Qi"
+msgstr "剑气"
+
+msgid "Sword Intent"
+msgstr "剑意"
+
+msgid "Killing Intent"
+msgstr "杀气"
+
+# ============================================
+|  状态效果 - 武侠风格
+# ============================================
+
+msgid "Poisoned"
+msgstr "中毒"
+
+msgid "Bleeding"
+msgstr "流血"
+
+msgid "Stunned"
+msgstr "眩晕"
+
+msgid "Paralyzed"
+msgstr "麻痹"
+
+msgid "Cursed"
+msgstr "中咒"
+
+msgid "Blessed"
+msgstr "加持"
+
+msgid "Strengthened"
+msgstr "强身"
+
+msgid "Weakened"
+msgstr "虚弱"
+
+msgid "Blinded"
+msgstr "致盲"
+
+msgid "Silenced"
+msgstr "禁言"
+
+msgid "Bound"
+msgstr "束缚"
+
+msgid "Confused"
+msgstr "混乱"
+
+# ============================================
+# 组织等级 - 中国特色
+# ============================================
+
+msgid "Sect Leader"
+msgstr "掌门"
+
+msgid "Elder"
+msgstr "长老"
+
+msgid "Disciple"
+msgstr "弟子"
+
+msgid "Inner Disciple"
+msgstr "内门弟子"
+
+msgid "Outer Disciple"
+msgstr "外门弟子"
+
+msgid "Core Disciple"
+msgstr "亲传弟子"
+
+msgid "Hall Master"
+msgstr "堂主"
+
+msgid "Protector"
+msgstr "护法"
+
+msgid "Envoy"
+msgstr "使者"
+
+# ============================================
+# 比武命令补充
+# ============================================
+
+msgid "No one found by the names you provided."
+msgstr "寻不得此名号之人。"
+
+msgid "寻不得此名号的可攻之人。"
+msgstr "寻不得此名号的可攻之人。"
+
+msgid "你已拔剑开战。"
+msgstr "你已拔剑开战。"
+
+msgid "Autoattack is now set to be off."
+msgstr "自动出招已关闭。"
+
+msgid "Autoattack is now set to be on."
+msgstr "自动出招已开启。"
+
+msgid "自动出招已关闭。"
+msgstr "自动出招已关闭。"
+
+msgid "自动出招已开启。"
+msgstr "自动出招已开启。"
+
+# ============================================
+# 护卫命令
+# ============================================
+
+msgid "You are now protecting"
+msgstr "你现在护卫着"
+
+msgid "You stop protecting"
+msgstr "你不再护卫"
+
+msgid "You are not protecting anyone."
+msgstr "你未护卫任何人。"
+
+msgid "You cannot protect yourself."
+msgstr "你无法护卫自己。"
+
+msgid "is already protecting"
+msgstr "已在护卫"
+
+msgid "They are not in your location."
+msgstr "他们不在你所在之处。"
+
+# ============================================
+# 疗伤命令
+# ============================================
+
+msgid "You heal"
+msgstr "你为"
+
+msgid "for"
+msgstr "疗伤，恢复"
+
+msgid "damage."
+msgstr "点伤势。"
+
+msgid "You cannot heal yourself."
+msgstr "你无法为自己疗伤。"
+
+msgid "Healing failed."
+msgstr "疗伤失败。"
+
+msgid "You do not have enough mana."
+msgstr "你内力不足。"
+
+msgid "The target is already at full health."
+msgstr "目标气血已满。"
+
+# ============================================
+# 功法绝招
+# ============================================
+
+msgid "You channel your energy."
+msgstr "你运功聚气。"
+
+msgid "Your attack hits"
+msgstr "你一招命中"
+
+msgid "Your attack misses."
+msgstr "你这一招落空。"
+
+msgid "You critical hit"
+msgstr "你会心一击命中"
+
+msgid "You feel your power surge."
+msgstr "你感到内力涌动。"
+
+msgid "The effect wears off."
+msgstr "效果消退。"
+
+# ============================================
+# 江湖门派指令
+# ============================================
+
+msgid "You have joined"
+msgstr "你加入了"
+
+msgid "You have left the organization."
+msgstr "你已离开此帮派。"
+
+msgid "You cannot leave this organization."
+msgstr "你无法离开此帮派。"
+
+msgid "You have been kicked out of"
+msgstr "你已被逐出"
+
+msgid "You are now the leader of"
+msgstr "你现在是"
+
+msgid "的掌门。"
+msgstr "的掌门。"
+
+msgid "You promote"
+msgstr "你提拔了"
+
+msgid "You demote"
+msgstr "你降职了"
+
+msgid "You cannot promote yourself."
+msgstr "你无法提拔自己。"
+
+msgid "You do not have permission to do that."
+msgstr "你无权如此行事。"
+
+# ============================================
+# 锻造炼丹
+# ============================================
+
+msgid "You begin crafting"
+msgstr "你开始锻造"
+
+msgid "Crafting successful!"
+msgstr "锻造成功！"
+
+msgid "Crafting failed."
+msgstr "锻造失败。"
+
+msgid "You lack the required materials."
+msgstr "你缺少所需材料。"
+
+msgid "You lack the required skill."
+msgstr "你技艺未达。"
+
+msgid "You create"
+msgstr "你炼制出"
+
+msgid "You refine"
+msgstr "你提炼了"
+
+msgid "The process is complete."
+msgstr "炼制完成。"
+
+# ============================================
+# 传音书信
+# ============================================
+
+msgid "Message delivered to"
+msgstr "消息已送达至"
+
+msgid "No such character exists."
+msgstr "无此侠客。"
+
+msgid "You cannot send messages to yourself."
+msgstr "不可给自己传音。"
+
+msgid "They are not accepting messages."
+msgstr "对方不接受传音。"
+
+msgid "Your message was blocked."
+msgstr "你的传音被阻挡。"
+
+# ============================================
+# 银两交易
+# ============================================
+
+msgid "You pay"
+msgstr "你支付了"
+
+msgid "to"
+msgstr "给"
+
+msgid "You receive"
+msgstr "你收到"
+
+msgid "from"
+msgstr "从"
+
+msgid "Transaction complete."
+msgstr "交易完成。"
+
+msgid "You cannot afford that."
+msgstr "你付不起。"
+
+msgid "They cannot afford that."
+msgstr "对方付不起。"
+
+msgid "Invalid amount."
+msgstr "金额无效。"
+
+msgid "You don't have that much silver."
+msgstr "你没有那么多银两。"
+
+# ============================================
+# 日常活动
+# ============================================
+
+msgid "You rest and recover."
+msgstr "你休息调息。"
+
+msgid "You cannot rest here."
+msgstr "此处不可休息。"
+
+msgid "You are fully rested."
+msgstr "你已完全恢复。"
+
+msgid "You meditate."
+msgstr "你打坐运功。"
+
+msgid "You practice your skills."
+msgstr "你修习武艺。"
+
+msgid "You train your"
+msgstr "你修炼"
+
+msgid "You gain experience."
+msgstr "你获得修为。"
+
+# ============================================
+# 天气时令
+# ============================================
+
+msgid "Dawn breaks."
+msgstr "东方欲晓。"
+
+msgid "The sun rises."
+msgstr "旭日东升。"
+
+msgid "Noon approaches."
+msgstr "日正当中。"
+
+msgid "The sun begins to set."
+msgstr "日落西山。"
+
+msgid "Night falls."
+msgstr "夜幕降临。"
+
+msgid "A gentle rain begins to fall."
+msgstr "细雨绵绵。"
+
+msgid "A storm approaches."
+msgstr "风雨欲来。"
+
+msgid "The wind howls."
+msgstr "狂风呼啸。"
+
+msgid "Snow begins to fall."
+msgstr "雪花飘落。"
+
+msgid "The weather clears."
+msgstr "雨过天晴。"
+
+# ============================================
+# 修正与天赋 - 状态效果系统
+# ============================================
+
+msgid "Any"
+msgstr "任意"
+
+msgid "Attack"
+msgstr "出招"
+
+msgid "Damage"
+msgstr "伤害"
+
+msgid "Defense"
+msgstr "防守"
+
+msgid "Heal"
+msgstr "疗伤"
+
+msgid "Stealth"
+msgstr "潜行"
+
+msgid "Any Combat"
+msgstr "任意比武"
+
+msgid "Perception"
+msgstr "洞察"
+
+msgid "Crafting"
+msgstr "锻造"
+
+msgid "Investigation"
+msgstr "侦查"
+
+msgid "Casting"
+msgstr "施法"
+
+msgid "Channeling"
+msgstr "引导"
+
+msgid "Weaving"
+msgstr "编织"
+
+msgid "Beseeching"
+msgstr "祈求"
+
+msgid "Any Physical"
+msgstr "任意体魄"
+
+msgid "Any Mental"
+msgstr "任意心性"
+
+msgid "Any Social"
+msgstr "任意人脉"
+
+msgid "Any Mystical"
+msgstr "任意玄术"
+
+msgid "Modifier"
+msgstr "修正"
+
+msgid "Knack"
+msgstr "天赋"
+
+msgid "任意"
+msgstr "任意"
+
+msgid "出招"
+msgstr "出招"
+
+msgid "防守"
+msgstr "防守"
+
+msgid "疗伤"
+msgstr "疗伤"
+
+msgid "潜行"
+msgstr "潜行"
+
+msgid "任意比武"
+msgstr "任意比武"
+
+msgid "洞察"
+msgstr "洞察"
+
+msgid "锻造"
+msgstr "锻造"
+
+msgid "侦查"
+msgstr "侦查"
+
+msgid "施法"
+msgstr "施法"
+
+msgid "引导"
+msgstr "引导"
+
+msgid "编织"
+msgstr "编织"
+
+msgid "祈求"
+msgstr "祈求"
+
+msgid "任意体魄"
+msgstr "任意体魄"
+
+msgid "任意心性"
+msgstr "任意心性"
+
+msgid "任意人脉"
+msgstr "任意人脉"
+
+msgid "任意玄术"
+msgstr "任意玄术"
+
+msgid "修正"
+msgstr "修正"
+
+msgid "天赋"
+msgstr "天赋"
+
+# ============================================
+# 属性权重系统
+# ============================================
+
+msgid "skill"
+msgstr "武功"
+
+msgid "stat"
+msgstr "属性"
+
+msgid "ability"
+msgstr "能力"
+
+msgid "knack"
+msgstr "天赋"
+
+msgid "stat with no skill"
+msgstr "仅属性"
+
+msgid "health for stamina"
+msgstr "根骨气血"
+
+msgid "health for boss rating"
+msgstr "首领气血"
+
+msgid "miscellaneous values (armor class, etc)"
+msgstr "杂项（护甲等级等）"
+
+msgid "trait in new check system"
+msgstr "特质"
+
+msgid "trait as a lone value in new check system"
+msgstr "单独特质"
+
+msgid "武功"
+msgstr "武功"
+
+msgid "属性"
+msgstr "属性"
+
+msgid "能力"
+msgstr "能力"
+
+msgid "仅属性"
+msgstr "仅属性"
+
+msgid "根骨气血"
+msgstr "根骨气血"
+
+msgid "首领气血"
+msgstr "首领气血"
+
+msgid "杂项（护甲等级等）"
+msgstr "杂项（护甲等级等）"
+
+msgid "特质"
+msgstr "特质"
+
+msgid "单独特质"
+msgstr "单独特质"
+
+# ============================================
+# 武学功法系统
+# ============================================
+
+msgid "You need to provide a strength and an emit!"
+msgstr "你需提供功力强度和演武内容！"
+
+msgid "You need to provide an integer value for the strength!"
+msgstr "功力强度需为整数！"
+
+msgid "Your magic word is:"
+msgstr "你的武学暗号为："
+
+msgid "Your magic word is now:"
+msgstr "你的武学暗号已设为："
+
+msgid "你需提供功力强度和演武内容！"
+msgstr "你需提供功力强度和演武内容！"
+
+msgid "功力强度需为整数！"
+msgstr "功力强度需为整数！"
+
+msgid "你的武学暗号为："
+msgstr "你的武学暗号为："
+
+msgid "你的武学暗号已设为："
+msgstr "你的武学暗号已设为："
+
+msgid "Magic word"
+msgstr "武学暗号"
+
+msgid "Practitioner"
+msgstr "修行者"
+
+msgid "Attunement"
+msgstr "共鸣"
+
+msgid "Resonance"
+msgstr "共振"
+
+msgid "Working"
+msgstr "仪式"
+
+msgid "Effect"
+msgstr "效果"
+
+# ============================================
+# 锻造系统
+# ============================================
+
+msgid "Recipe"
+msgstr "配方"
+
+msgid "Recipe name"
+msgstr "配方名称"
+
+msgid "Difficulty"
+msgstr "难度"
+
+msgid "Materials"
+msgstr "材料"
+
+msgid "Result"
+msgstr "成品"
+
+msgid "Quality"
+msgstr "品质"
+
+msgid "This recipe creates"
+msgstr "此配方可制作"
+
+msgid "Level"
+msgstr "等级"
+
+msgid "Slot"
+msgstr "部位"
+
+msgid "Volume"
+msgstr "尺寸"
+
+msgid "Base Value"
+msgstr "基础价值"
+
+msgid "Scaling"
+msgstr "递增值"
+
+msgid "Armor Penalty"
+msgstr "护甲减值"
+
+msgid "Weapon Skill"
+msgstr "兵器武功"
+
+msgid "配方名称"
+msgstr "配方名称"
+
+msgid "配方"
+msgstr "配方"
+
+msgid "难度"
+msgstr "难度"
+
+msgid "成品"
+msgstr "成品"
+
+msgid "品质"
+msgstr "品质"
+
+msgid "等级"
+msgstr "等级"
+
+msgid "部位"
+msgstr "部位"
+
+msgid "尺寸"
+msgstr "尺寸"
+
+msgid "基础价值"
+msgstr "基础价值"
+
+msgid "递增值"
+msgstr "递增值"
+
+msgid "护甲减值"
+msgstr "护甲减值"
+
+msgid "兵器武功"
+msgstr "兵器武功"
+
+# ============================================
+# 藩镇系统 - 封地与组织
+# ============================================
+
+msgid "Domain"
+msgstr "封地"
+
+msgid "Ruler"
+msgstr "领主"
+
+msgid "Minister"
+msgstr "辅臣"
+
+msgid "Vassal"
+msgstr "附庸"
+
+msgid "Liege"
+msgstr "宗主"
+
+msgid "Region"
+msgstr "区域"
+
+msgid "Land"
+msgstr "地块"
+
+msgid "Military"
+msgstr "兵马"
+
+msgid "Army"
+msgstr "军队"
+
+msgid "Unit"
+msgstr "兵卒"
+
+msgid "Castle"
+msgstr "城寨"
+
+msgid "Fortification"
+msgstr "防御工事"
+
+msgid "Project"
+msgstr "工程"
+
+msgid "Income"
+msgstr "收入"
+
+msgid "Expenses"
+msgstr "支出"
+
+msgid "Treasury"
+msgstr "府库"
+
+msgid "Population"
+msgstr "人口"
+
+msgid "Loyalty"
+msgstr "忠诚"
+
+msgid "Morale"
+msgstr "士气"
+
+msgid "封地"
+msgstr "封地"
+
+msgid "领主"
+msgstr "领主"
+
+msgid "辅臣"
+msgstr "辅臣"
+
+msgid "附庸"
+msgstr "附庸"
+
+msgid "宗主"
+msgstr "宗主"
+
+msgid "区域"
+msgstr "区域"
+
+msgid "地块"
+msgstr "地块"
+
+msgid "兵马"
+msgstr "兵马"
+
+msgid "军队"
+msgstr "军队"
+
+msgid "兵卒"
+msgstr "兵卒"
+
+msgid "城寨"
+msgstr "城寨"
+
+msgid "防御工事"
+msgstr "防御工事"
+
+msgid "工程"
+msgstr "工程"
+
+msgid "收入"
+msgstr "收入"
+
+msgid "支出"
+msgstr "支出"
+
+msgid "府库"
+msgstr "府库"
+
+msgid "人口"
+msgstr "人口"
+
+msgid "忠诚"
+msgstr "忠诚"
+
+msgid "士气"
+msgstr "士气"
+
+# ============================================
+# 组织与帮派
+# ============================================
+
+msgid "Member"
+msgstr "成员"
+
+msgid "Rank"
+msgstr "位阶"
+
+msgid "Leader"
+msgstr "掌门"
+
+msgid "Deputy"
+msgstr "副掌门"
+
+msgid "Secretary"
+msgstr "书记"
+
+msgid "Reputation"
+msgstr "名望"
+
+msgid "Prestige"
+msgstr "声望"
+
+msgid "Influence"
+msgstr "势力"
+
+msgid "成员"
+msgstr "成员"
+
+msgid "位阶"
+msgstr "位阶"
+
+msgid "掌门"
+msgstr "掌门"
+
+msgid "副掌门"
+msgstr "副掌门"
+
+msgid "书记"
+msgstr "书记"
+
+msgid "名望"
+msgstr "名望"
+
+msgid "声望"
+msgstr "声望"
+
+msgid "势力"
+msgstr "势力"
+
+# ============================================
+# 盛事与任务
+# ============================================
+
+msgid "Event"
+msgstr "盛事"
+
+msgid "Plot"
+msgstr "剧情"
+
+msgid "Crisis"
+msgstr "危机"
+
+msgid "Action"
+msgstr "行动"
+
+msgid "Task"
+msgstr "任务"
+
+msgid "Objective"
+msgstr "目标"
+
+msgid "Reward"
+msgstr "报酬"
+
+msgid "盛事"
+msgstr "盛事"
+
+msgid "剧情"
+msgstr "剧情"
+
+msgid "危机"
+msgstr "危机"
+
+msgid "行动"
+msgstr "行动"
+
+msgid "任务"
+msgstr "任务"
+
+msgid "目标"
+msgstr "目标"
+
+msgid "报酬"
+msgstr "报酬"
+
+# ============================================
+# 资源与材料
+# ============================================
+
+msgid "Silver"
+msgstr "银两"
+
+msgid "Economic"
+msgstr "经济"
+
+msgid "Social"
+msgstr "人脉"
+
+msgid "Military Resource"
+msgstr "军资"
+
+msgid "Food"
+msgstr "粮食"
+
+msgid "Stone"
+msgstr "石料"
+
+msgid "Wood"
+msgstr "木材"
+
+msgid "Iron"
+msgstr "铁矿"
+
+msgid "Steel"
+msgstr "钢材"
+
+msgid "Fabric"
+msgstr "布匹"
+
+msgid "Hide"
+msgstr "皮革"
+
+msgid "Herb"
+msgstr "药材"
+
+msgid "Gem"
+msgstr "宝石"
+
+msgid "银两"
+msgstr "银两"
+
+msgid "经济"
+msgstr "经济"
+
+msgid "人脉"
+msgstr "人脉"
+
+msgid "军资"
+msgstr "军资"
+
+msgid "粮食"
+msgstr "粮食"
+
+msgid "石料"
+msgstr "石料"
+
+msgid "木材"
+msgstr "木材"
+
+msgid "铁矿"
+msgstr "铁矿"
+
+msgid "钢材"
+msgstr "钢材"
+
+msgid "布匹"
+msgstr "布匹"
+
+msgid "皮革"
+msgstr "皮革"
+
+msgid "药材"
+msgstr "药材"
+
+msgid "宝石"
+msgstr "宝石"
+
+# ============================================
+# 传音与私信
+# ============================================
+
+msgid "Say what?"
+msgstr "说什么？"
+
+msgid "Channel"
+msgstr "频道"
+
+msgid "not found."
+msgstr "未找到。"
+
+msgid "You unmute channel"
+msgstr "你解除静音频道"
+
+msgid "Channel history for"
+msgstr "频道历史记录："
+
+msgid "You have that channel muted."
+msgstr "你已静音该频道。"
+
+msgid "Please enter a value between 1 and 20."
+msgstr "请输入1到20之间的数值。"
+
+msgid "Specify name/value for stats/skills."
+msgstr "请指定属性/武功的名称和数值。"
+
+msgid "You haven't whispered anyone yet."
+msgstr "你还没有对任何人传音。"
+
+msgid "Usage: whisper [<player> = msg]"
+msgstr "用法：whisper [<侠客> = 消息]"
+
+msgid "Who do you want to whisper?"
+msgstr "你想对谁传音？"
+
+msgid "You may only send whispers to online characters."
+msgstr "你只能向在线侠客传音。"
+
+msgid "You may only whisper characters in the same room as you."
+msgstr "你只能向同一所在的侠客传音。"
+
+msgid "No one found to whisper."
+msgstr "寻不得可传音之人。"
+
+msgid "You posed to"
+msgstr "你对"
+
+msgid "You whispered to"
+msgstr "你传音给"
+
+msgid "You last paged"
+msgstr "你上次私信给"
+
+msgid "You haven't paged anyone yet."
+msgstr "你还没有私信任何人。"
+
+msgid "You haven't received any pages."
+msgstr "你没有收到任何私信。"
+
+msgid "Who do you want to page?"
+msgstr "你想私信谁？"
+
+msgid "is not online."
+msgstr "不在线。"
+
+msgid "is IC only and cannot be sent pages."
+msgstr "正在角色扮演中，无法接收私信。"
+
+msgid "No one found to page."
+msgstr "寻不得可私信之人。"
+
+msgid "Usage: tell [<player> = msg]"
+msgstr "用法：tell [<侠客> = 消息]"
+
+# ============================================
+# 频道命令
+# ============================================
+
+msgid "Created map"
+msgstr "已创建地图"
+
+msgid "频道"
+msgstr "频道"
+
+msgid "未找到。"
+msgstr "未找到。"
+
+msgid "你解除静音频道"
+msgstr "你解除静音频道"
+
+msgid "频道历史记录："
+msgstr "频道历史记录："
+
+msgid "你已静音该频道。"
+msgstr "你已静音该频道。"
+
+msgid "请输入1到20之间的数值。"
+msgstr "请输入1到20之间的数值。"
+
+msgid "请指定属性/武功的名称和数值。"
+msgstr "请指定属性/武功的名称和数值。"
+
+msgid "你还没有对任何人传音。"
+msgstr "你还没有对任何人传音。"
+
+msgid "用法：whisper [<侠客> = 消息]"
+msgstr "用法：whisper [<侠客> = 消息]"
+
+msgid "你想对谁传音？"
+msgstr "你想对谁传音？"
+
+msgid "你只能向在线侠客传音。"
+msgstr "你只能向在线侠客传音。"
+
+msgid "你只能向同一所在的侠客传音。"
+msgstr "你只能向同一所在的侠客传音。"
+
+msgid "寻不得可传音之人。"
+msgstr "寻不得可传音之人。"
+
+msgid "你对"
+msgstr "你对"
+
+msgid "你传音给"
+msgstr "你传音给"
+
+msgid "你上次私信给"
+msgstr "你上次私信给"
+
+msgid "你还没有私信任何人。"
+msgstr "你还没有私信任何人。"
+
+msgid "你没有收到任何私信。"
+msgstr "你没有收到任何私信。"
+
+msgid "你想私信谁？"
+msgstr "你想私信谁？"
+
+msgid "不在线。"
+msgstr "不在线。"
+
+msgid "正在角色扮演中，无法接收私信。"
+msgstr "正在角色扮演中，无法接收私信。"
+
+msgid "寻不得可私信之人。"
+msgstr "寻不得可私信之人。"
+
+msgid "用法：tell [<侠客> = 消息]"
+msgstr "用法：tell [<侠客> = 消息]"
+
+# ============================================
+# 地图命令
+# ============================================
+
+msgid "已创建地图"
+msgstr "已创建地图"
+
+# ============================================
+# 更多战斗消息
+# ============================================
+
+msgid "You must be in combat to use this command."
+msgstr "你需在比武中方可使用此命令。"
+
+msgid "You are not in combat."
+msgstr "你并未比武。"
+
+msgid "You have joined the fight."
+msgstr "你已加入战局。"
+
+msgid "You have left the fight."
+msgstr "你已退出战局。"
+
+msgid "You cannot join a fight against yourself."
+msgstr "你不能加入针对自己的战斗。"
+
+msgid "You cannot join a fight you're already in."
+msgstr "你不能重复加入已在的战局。"
+
+msgid "The fight has ended."
+msgstr "比武已结束。"
+
+msgid "You are now watching the fight."
+msgstr "你正在观战。"
+
+msgid "You are no longer watching the fight."
+msgstr "你已停止观战。"
+
+msgid "There is no fight to watch."
+msgstr "此处无比武可观。"
+
+# ============================================
+# 状态与效果
+# ============================================
+
+msgid "You are now"
+msgstr "你现在"
+
+msgid "You are no longer"
+msgstr "你已不再"
+
+msgid "You feel the effects of"
+msgstr "你感到"
+
+msgid "wear off."
+msgstr "的效果消退。"
+
+msgid "You are affected by:"
+msgstr "你受到以下影响："
+
+msgid "No active effects."
+msgstr "无当前效果。"
+
+# ============================================
+# 移动与导航
+# ============================================
+
+msgid "You move to"
+msgstr "你前往"
+
+msgid "You cannot go there."
+msgstr "你无法前往那里。"
+
+msgid "You don't see that exit."
+msgstr "你看不到那个出口。"
+
+msgid "You are already in"
+msgstr "你已在"
+
+msgid "You follow"
+msgstr "你跟随"
+
+msgid "You stop following."
+msgstr "你停止跟随。"
+
+msgid "You are not following anyone."
+msgstr "你没有跟随任何人。"
+
+msgid "is now following you."
+msgstr "开始跟随你。"
+
+msgid "stops following you."
+msgstr "不再跟随你。"
+
+# ============================================
+# 物品与装备
+# ============================================
+
+msgid "You pick up"
+msgstr "你捡起"
+
+msgid "You drop"
+msgstr "你放下"
+
+msgid "You cannot pick that up."
+msgstr "你无法捡起那个。"
+
+msgid "You cannot drop that here."
+msgstr "你不能在这里放下那个。"
+
+msgid "You wear"
+msgstr "你穿戴"
+
+msgid "You remove"
+msgstr "你卸下"
+
+msgid "You wield"
+msgstr "你持起"
+
+msgid "You unwield"
+msgstr "你放下"
+
+msgid "You cannot wear that."
+msgstr "你无法穿戴那个。"
+
+msgid "You cannot wield that."
+msgstr "你无法持起那个。"
+
+msgid "You are already wearing that."
+msgstr "你已经穿戴了那个。"
+
+msgid "You are already wielding that."
+msgstr "你已经持起了那个。"
+
+# ============================================
+# 帮助系统
+# ============================================
+
+msgid "Help topic:"
+msgstr "帮助主题："
+
+msgid "Aliases:"
+msgstr "别名："
+
+msgid "This command is currently unavailable to you."
+msgstr "此命令当前对你不可用。"
+
+msgid "Related help entries:"
+msgstr "相关帮助条目："
+
+msgid "Suggested:"
+msgstr "建议："
+
+msgid "Command help entries"
+msgstr "命令帮助条目"
+
+msgid "Other help categories"
+msgstr "其他帮助分类"
+
+msgid "No help found for:"
+msgstr "未找到帮助："
+
+msgid "Did you mean one of these?"
+msgstr "你是想找这些吗？"
+
+msgid "For more help, type:"
+msgstr "更多帮助请输入："
+
+msgid "帮助主题："
+msgstr "帮助主题："
+
+msgid "别名："
+msgstr "别名："
+
+msgid "此命令当前对你不可用。"
+msgstr "此命令当前对你不可用。"
+
+msgid "相关帮助条目："
+msgstr "相关帮助条目："
+
+msgid "建议："
+msgstr "建议："
+
+msgid "命令帮助条目"
+msgstr "命令帮助条目"
+
+msgid "其他帮助分类"
+msgstr "其他帮助分类"
+
+msgid "未找到帮助："
+msgstr "未找到帮助："
+
+msgid "你是想找这些吗？"
+msgstr "你是想找这些吗？"
+
+msgid "更多帮助请输入："
+msgstr "更多帮助请输入："
+
+# ============================================
+# 故事行动命令
+# ============================================
+
+msgid "set to"
+msgstr "已设为"
+
+msgid "You have invited"
+msgstr "你已邀请"
+
+msgid "to join your action."
+msgstr "加入你的行动。"
+
+msgid "Action submitted."
+msgstr "行动已提交。"
+
+msgid "Action cancelled."
+msgstr "行动已取消。"
+
+msgid "Action deleted."
+msgstr "行动已删除。"
+
+msgid "You do not have an action by that number."
+msgstr "你没有该编号的行动。"
+
+msgid "You cannot edit an action that has been submitted."
+msgstr "你无法编辑已提交的行动。"
+
+msgid "You must provide a story for your action."
+msgstr "你必须为行动提供故事描述。"
+
+msgid "Action created."
+msgstr "行动已创建。"
+
+msgid "You have used all your actions for this week."
+msgstr "你本周已用完所有行动次数。"
+
+msgid "You have"
+msgstr "你有"
+
+msgid "actions remaining this week."
+msgstr "次本周剩余行动次数。"
+
+msgid "已设为"
+msgstr "已设为"
+
+msgid "你已邀请%s加入你的行动。"
+msgstr "你已邀请%s加入你的行动。"
+
+msgid "行动已提交。"
+msgstr "行动已提交。"
+
+msgid "行动已取消。"
+msgstr "行动已取消。"
+
+msgid "行动已删除。"
+msgstr "行动已删除。"
+
+msgid "你没有该编号的行动。"
+msgstr "你没有该编号的行动。"
+
+msgid "你无法编辑已提交的行动。"
+msgstr "你无法编辑已提交的行动。"
+
+msgid "你必须为行动提供故事描述。"
+msgstr "你必须为行动提供故事描述。"
+
+msgid "行动已创建。"
+msgstr "行动已创建。"
+
+msgid "你本周已用完所有行动次数。"
+msgstr "你本周已用完所有行动次数。"
+
+msgid "次本周剩余行动次数。"
+msgstr "次本周剩余行动次数。"
+
+# ============================================
+# 剧情与阴谋
+# ============================================
+
+msgid "Plot"
+msgstr "剧情"
+
+msgid "Crisis"
+msgstr "危机"
+
+msgid "Story"
+msgstr "故事"
+
+msgid "Action"
+msgstr "行动"
+
+msgid "Secret"
+msgstr "秘密"
+
+msgid "Revelation"
+msgstr "启示"
+
+msgid "Clue"
+msgstr "线索"
+
+msgid "剧情"
+msgstr "剧情"
+
+msgid "危机"
+msgstr "危机"
+
+msgid "故事"
+msgstr "故事"
+
+msgid "秘密"
+msgstr "秘密"
+
+msgid "启示"
+msgstr "启示"
+
+msgid "线索"
+msgstr "线索"
+
+# ============================================
+# 结束语
+# ============================================
+
+msgid "Welcome to the Jianghu!"
+msgstr "欢迎来到江湖！"
+
+msgid "Goodbye, warrior!"
+msgstr "侠客，江湖再见！"

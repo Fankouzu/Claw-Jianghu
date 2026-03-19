@@ -4,6 +4,7 @@ General Character commands usually available to all characters
 from six import string_types
 
 from django.conf import settings
+from django.utils.translation import gettext as _
 from evennia.comms.models import TempMsg
 from evennia.objects.models import ObjectDB
 from evennia.utils import utils, evtable
@@ -37,9 +38,9 @@ class CmdBriefMode(ArxCommand):
         caller = self.caller
         caller.item_data.briefmode = not caller.item_data.briefmode
         if not caller.item_data.briefmode:
-            caller.msg("Brief mode is now off.")
+            caller.msg(_("Brief mode is now off."))
         else:
-            caller.msg("Brief mode is now on.")
+            caller.msg(_("Brief mode is now on."))
 
 
 class CmdGameSettings(ArxPlayerCommand):
@@ -206,49 +207,49 @@ class CmdGameSettings(ArxPlayerCommand):
             self.set_text_colors(char, "place_color")
             return
         caller.msg(
-            "Invalid switch. Valid switches are: %s" % ", ".join(self.valid_switches)
+            _("无效开关。有效开关有：%s") % ", ".join(self.valid_switches)
         )
 
     def togglesetting(self, char, attr, tag=False, item_data=False):
         """Toggles a setting for the caller"""
         if tag:
             if not char.tags.get(attr):
-                result = "on"
+                result = _("开启")
                 char.tags.add(attr)
             else:
-                result = "off"
+                result = _("关闭")
                 char.tags.remove(attr)
                 char.tags.all()  # update cache until there's a fix for that
         elif item_data:
             new_val = not getattr(char.item_data, attr)
-            result = "on" if new_val else "off"
+            result = _("开启") if new_val else _("关闭")
             char.item_data.set_sheet_value(attr, new_val)
         else:
             new_val = not char.attributes.get(attr)
-            result = "on" if new_val else "off"
+            result = _("开启") if new_val else _("关闭")
             char.attributes.add(attr, not char.attributes.get(attr))
-        self.msg(f"{attr} is now {result}.")
+        self.msg(_("%s已%s。") % (attr, result))
 
     def set_text_colors(self, char, attr):
         """Sets either pose_quote_color or name_color for the caller"""
         args = self.args
         if not args:
             char.attributes.remove(attr)
-            char.msg("Cleared %s setting." % attr)
+            char.msg(_("已清除%s设置。") % attr)
         else:
             if not args.startswith(("|", "{")):
                 args = "|%s" % args
             if attr == "pose_quote_color":
                 char.db.pose_quote_color = args
-                char.msg('Text in quotes will appear %s"like this."|n' % args)
+                char.msg(_('引号内文字将显示为%s「如此」。|n') % args)
             elif attr == "name_color":
                 char.db.name_color = args
                 char.msg(
-                    "Mentions of your name will look like: %s%s|n" % (args, char.key)
+                    _("你名号的出现将显示为：%s%s|n") % (args, char.key)
                 )
             elif attr == "place_color":
                 char.db.place_color = args
-                char.msg("Place names will look like %sthis|n." % args)
+                char.msg(_("地名显示将为%s如此|n。") % args)
 
 
 class CmdGlance(ArxCommand):
@@ -293,7 +294,7 @@ class CmdGlance(ArxCommand):
                 return
             charlist = [char]
         if not charlist:
-            self.msg("No one to glance at.")
+            self.msg(_("此处无人可望。"))
             return
         for ob in charlist:
             try:

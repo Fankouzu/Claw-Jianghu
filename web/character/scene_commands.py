@@ -1,6 +1,6 @@
 """
 Commands for flashbacks and other scene management stuff in the Character app.
-Flashbacks are for the Arx equivalent of play-by-post: players can create a
+Flashbacks are for the 江湖传说 equivalent of play-by-post: players can create a
 flashback of a scene that happened in the past with a clear summary and end-goal
 in mind, and then invite others to RP about it.
 """

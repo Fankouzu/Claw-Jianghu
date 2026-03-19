@@ -1,55 +1,53 @@
 """
-So, what is Dominion?
+Dominion（藩镇）系统说明
 
-Dominion is the design for making the world come alive in an immersive way.
-The classic problem most MMOs and MUSHes have is ultimately limiting how
-much a player can impact the world. It's understandable, of course - an
-MMO would be utterly broken if a single player gets to call the shots. But
-MUSHes are a different animal in that we're much smaller, and trying to
-create an immersive RP experience that's similar to tabletop RPGs, just
-with much more people involved. So what Dominion is attempting to do is
-create consequences for player characters interacting with the economy,
-owning land, leading armies, or having NPCs in their organizations that
-will do their bidding. Dominion is the power and influence that a character
-can exert that isn't directly tied to their stats or what they carry on
-their person - it's what you can order npcs to do, how the world can
-change based on your choices, and ultimately attempts to make the world
-feel much more 'real' as a result.
+Dominion是让游戏世界生动起来的设计。
+经典MMO和MUSH的问题是限制玩家对世界的影响。
+这当然可以理解——如果单个玩家说了算，MMO就会乱套。
+但MUSH不同，我们要创造沉浸式的角色扮演体验，
+类似桌面角色扮演游戏，只是参与者更多。
 
-Dominion consists of several moving parts. First is the economy - it's
-to try to represent how having wealth can directly translate into power,
-and will try to create a fairly believable (albeit abstract) economic
-model for the world. With the economy, all forms of wealth, income,
-debts, and holdings should be represented for every inhabitant in the
-game world.
+Dominion的目的是为角色与经济互动、拥有领地、
+统领军队、或让组织中的NPC听从命令创造后果。
+Dominion是角色能施加的影响力和权力，
+不完全依赖于属性或随身物品——
+你可以命令NPC做什么，世界如何因你的选择而改变，
+最终让世界感觉更加"真实"。
 
-The second part is organizations, and giving who obey you orders, and
-trying to represent how those orders are obeyed. It's where we establish
-ranks, relationships such as loyalty and morale, and give strong
-consequences to social systems such as prestiege or your reputation
-because it will determine how npcs will react to a character on a macro
-level.
+Dominion由几个部分组成。首先是经济——
+试图表现财富如何直接转化为权力，
+为世界创建一个可信（尽管抽象）的经济模型。
+经济中，所有财富、收入、债务和产业
+都应为游戏世界的每个居民体现。
 
-The last part is military might - a war system for controlling armies,
-and the effects of war on the world as a whole.
+第二部分是组织，让服从你的人执行命令，
+试图表现这些命令如何被执行。
+我们建立等级、忠诚和士气等关系，
+给声望或名誉等社会系统强烈的后果，
+因为这决定了NPC在宏观层面如何对角色做出反应。
 
-Models for Dominion:
+最后一部分是武力——控制军队的战争系统，
+以及战争对世界整体的影响。
 
-For the economy, we have: AssetOwner, Ledger, AccountTransaction, and
-Domain. AssetOwner receives income from Ledger and Domain objects, with
-AccountTransaction handling positive/negative income/debt adjustments to
-a Ledger.
+Dominion模型：
 
-For the world map, we have: Region and Land. Player-held Domain objects
-will be positioned in Land squares, limited by available area.
+经济方面：AssetOwner（资产主）、Ledger（账册）、
+AccountTransaction（账户交易）和Domain（封地）。
+AssetOwner从Ledger和Domain对象获得收入，
+AccountTransaction处理Ledger的正负收入/债务调整。
 
-For domains, we have: Domain, DomainProject, Castle, and Military. Domain
-represents everything within a lord/noble's holding - the people, economy,
-military, etc. It is situated within a given Land square.
+世界地图：Region（区域）和Land（地块）。
+玩家持有的Domain对象将位于Land方格中，
+受可用面积限制。
 
-Every week, a script is called that will run execute_orders() on every
-Army, and then do weekly_adjustment() in every assetowner. So only domains
-that currently have a ruler designated will change on a weekly basis.
+封地：Domain（封地）、DomainProject（封地项目）、
+Castle（城寨）和Military（兵马）。
+Domain代表领主/世家持有的一切——
+人口、经济、兵马等。它位于给定的Land方格中。
+
+每周，脚本会对每个Army执行execute_orders()，
+然后对每个assetowner执行weekly_adjustment()。
+所以只有当前有统治者的封地才会每周变化。
 """
 from collections import namedtuple
 from datetime import datetime, timedelta
@@ -64,6 +62,7 @@ from django.db.models import Q, Count, F, Sum, Case, When
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 import typeclasses.npcs.constants
 from typeclasses.mixins import InformMixin
@@ -4618,9 +4617,9 @@ class PlotRoom(SharedMemoryModel):
                 city_center = ArxRoom.objects.get(id=13)
                 create.create_object(
                     settings.BASE_EXIT_TYPECLASS,
-                    key="Back to Arx <Arx>",
+                    key="返回天阙城",
                     location=room,
-                    aliases=["arx", "back to arx", "out"],
+                    aliases=["arx", "天阙城", "返回", "out"],
                     destination=city_center,
                 )
             except ArxRoom.DoesNotExist:

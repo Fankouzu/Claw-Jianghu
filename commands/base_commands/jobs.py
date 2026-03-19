@@ -7,8 +7,10 @@ on the superuser. While a little clunky that they are in-
 game objects, it allows for easy @ex, and doesn't require
 database migration to add in their functionality.
 
+工单/请求与角色申请命令模块。
 """
 from django.conf import settings
+from django.utils.translation import gettext as _
 
 from evennia.utils.create import create_object
 from server.utils import prettytable, helpdesk_api
@@ -107,10 +109,10 @@ class CmdJob(ArxPlayerCommand):
             open_tickets = open_tickets.filter(assigned_to__isnull=True)
         joblist = open_tickets
         if not joblist:
-            self.msg("No open tickets.")
+            self.msg(_("没有开放的工单。"))
             return
         table = prettytable.PrettyTable(
-            ["{w#", "{wPlayer", "{wRequest", "{wPriority/Q"]
+            ["{w编号", "{w玩家", "{w请求", "{w优先/队列"]
         )
         for ticket in joblist:
             color = "|r" if ticket.priority == 1 else ""
@@ -123,7 +125,7 @@ class CmdJob(ArxPlayerCommand):
                     q_category,
                 ]
             )
-        self.msg("{wOpen Tickets:{n\n%s" % table)
+        self.msg("{w开放工单：{n\n%s" % table)
 
     def func(self):
         """Implement the command"""
@@ -141,13 +143,13 @@ class CmdJob(ArxPlayerCommand):
                 ticknum = int(args)
             except ValueError:
                 self.display_open_tickets()
-                caller.msg("Usage: Argument must be a ticket number.")
+                caller.msg(_("用法：参数必须为工单编号。"))
                 return
             try:
                 ticket = Ticket.objects.get(id=ticknum)
             except Ticket.DoesNotExist:
                 self.display_open_tickets()
-                caller.msg("No ticket found by that number.")
+                caller.msg(_("未找到该编号的工单。"))
                 return
             caller.msg(ticket.display())
             return
@@ -161,11 +163,11 @@ class CmdJob(ArxPlayerCommand):
             )
             joblist = list(tickets_closed_resolved)
             if not joblist:
-                caller.msg("No closed tickets.")
+                caller.msg(_("没有已关闭的工单。"))
                 return
             # get 20 most recent
             joblist = joblist[-20:]
-            table = prettytable.PrettyTable(["{w#", "{wPlayer", "{wRequest", "{wQueue"])
+            table = prettytable.PrettyTable(["{w编号", "{w玩家", "{w请求", "{w队列"])
             for ticket in joblist:
                 table.add_row(
                     [
@@ -175,7 +177,7 @@ class CmdJob(ArxPlayerCommand):
                         ticket.queue.slug,
                     ]
                 )
-            caller.msg("{wClosed Tickets:{n\n%s" % table)
+            caller.msg("{w已关闭工单：{n\n%s" % table)
             return
         if "moreold" in switches:
             # list closed tickets
@@ -187,9 +189,9 @@ class CmdJob(ArxPlayerCommand):
             )
             joblist = list(tickets_closed_resolved)
             if not joblist:
-                caller.msg("No closed tickets.")
+                caller.msg(_("没有已关闭的工单。"))
                 return
-            table = prettytable.PrettyTable(["{w#", "{wPlayer", "{wRequest", "{wQueue"])
+            table = prettytable.PrettyTable(["{w编号", "{w玩家", "{w请求", "{w队列"])
             for ticket in joblist:
                 table.add_row(
                     [
@@ -199,23 +201,23 @@ class CmdJob(ArxPlayerCommand):
                         ticket.queue.slug,
                     ]
                 )
-            caller.msg("{wClosed Tickets:{n\n%s" % table)
+            caller.msg("{w已关闭工单：{n\n%s" % table)
             return
         try:
             ticket = Ticket.objects.get(id=self.lhs)
         except (ValueError, Ticket.DoesNotExist):
-            self.msg("No ticket found by that number.")
+            self.msg(_("未找到该编号的工单。"))
             return
         if "close" in switches:
             # Closing a ticket. Check formatting first
             if not self.rhs:
-                caller.msg("Usage: @job/close <#>=<GM Notes>")
+                caller.msg(_("用法：@job/close <编号>=<执事备注>"))
                 return
             if helpdesk_api.resolve_ticket(caller, ticket, self.rhs):
-                caller.msg("Ticket #%s successfully closed." % ticket.id)
+                caller.msg(_("工单 #%s 已成功关闭。") % ticket.id)
                 return
             else:
-                caller.msg("Failed to close ticket #%s." % ticket.id)
+                caller.msg(_("关闭工单 #%s 失败。") % ticket.id)
                 return
         if "assign" in switches:
             player = self.caller.search(self.rhs) if self.rhs else None
@@ -224,54 +226,54 @@ class CmdJob(ArxPlayerCommand):
             ticket.assigned_to = player
             ticket.save()
             inform_staff(
-                "|w%s assigned ticket #%s to |c%s|w." % (caller, ticket.id, player)
+                "|w%s 已将工单 #%s 分配给 |c%s|w。" % (caller, ticket.id, player)
             )
             return
         if "followup" in switches or "update" in switches or "follow" in switches:
             if not self.lhs or not self.rhs:
-                caller.msg("Usage: @job/followup <#>=<msg>")
+                caller.msg(_("用法：@job/followup <编号>=<消息>"))
                 return
             if helpdesk_api.add_followup(caller, ticket, self.rhs):
-                caller.msg("Followup added.")
+                caller.msg(_("已添加跟进。"))
                 return
-            caller.msg("Error in followup.")
+            caller.msg(_("跟进添加失败。"))
             return
         if "move" in switches:
             slugs = ", ".join([str(q.slug) for q in Queue.objects.all()])
             if not self.lhs or not self.rhs:
                 move_msg = (
-                    "|wUsage:|n @job/move <#>=<queue> |wQueue options:|n %s" % slugs
+                    "|w用法：|n @job/move <编号>=<队列> |w队列选项：|n %s" % slugs
                 )
                 self.msg(move_msg)
                 return
             try:
                 queue = Queue.objects.get(slug__iexact=self.rhs)
             except Queue.DoesNotExist:
-                self.msg("Queue must be one of the following: %s" % slugs)
+                self.msg(_("队列须为以下之一：%s") % slugs)
                 return
             ticket.queue = queue
             ticket.save()
-            self.msg("Ticket %s is now in queue %s." % (ticket.id, queue))
+            self.msg(_("工单 %s 已移至队列 %s。") % (ticket.id, queue))
             return
         if "delete" in switches or "del" in switches:
             if ticket.queue.slug == "Story":
                 self.msg(
-                    "Cannot delete a storyaction. Please move it to a different queue first."
+                    _("无法删除剧情动作，请先将其移至其他队列。")
                 )
                 return
-            self.msg("Deleting ticket #%s." % ticket.id)
+            self.msg(_("正在删除工单 #%s。") % ticket.id)
             ticket.delete()
             return
         if "priority" in switches:
             try:
                 ticket.priority = int(self.rhs)
             except (TypeError, ValueError):
-                self.msg("Must be a number.")
+                self.msg(_("必须为数字。"))
                 return
             ticket.save()
-            self.msg("Ticket new priority is %s." % self.rhs)
+            self.msg(_("工单新优先级为 %s。") % self.rhs)
             return
-        caller.msg("Invalid switch for @job.")
+        caller.msg(_("@job 无效选项。"))
 
 
 class CmdRequest(ArxPlayerCommand):
@@ -337,12 +339,12 @@ class CmdRequest(ArxPlayerCommand):
             status__in=[Ticket.CLOSED_STATUS, Ticket.RESOLVED_STATUS]
         )
         tickets = self.tickets.filter(status=Ticket.OPEN_STATUS)
-        msg = "{wClosed tickets:{n %s" % ", ".join(str(ticket.id) for ticket in closed)
-        msg += "\n{wOpen tickets:{n %s" % ", ".join(
+        msg = "{w已关闭工单：{n %s" % ", ".join(str(ticket.id) for ticket in closed)
+        msg += "\n{w开放工单：{n %s" % ", ".join(
             str(ticket.id) for ticket in tickets
         )
-        msg += "\nUse {w+request <#>{n to view an individual ticket. "
-        msg += "Use {w+request/followup <#>=<comment>{n to add a comment."
+        msg += "\n使用 {w+request <编号>{n 查看单个工单。 "
+        msg += "使用 {w+request/followup <编号>=<评论>{n 添加评论。"
         self.msg(msg)
 
     def get_ticket_from_args(self, args):
@@ -351,7 +353,7 @@ class CmdRequest(ArxPlayerCommand):
             ticket = self.caller.tickets.get(id=args)
             return ticket
         except (Ticket.DoesNotExist, ValueError):
-            self.msg("No ticket found by that number.")
+            self.msg(_("未找到该编号的工单。"))
             self.list_tickets()
 
     def create_ticket(self, title, message):
@@ -394,7 +396,7 @@ class CmdRequest(ArxPlayerCommand):
         caller = self.caller
 
         if not reason:
-            caller.msg("Usage: <#>=<Reason>")
+            caller.msg(_("用法：<编号>=<原因>"))
             return
 
         ticket = self.get_ticket_from_args(number)
@@ -402,9 +404,9 @@ class CmdRequest(ArxPlayerCommand):
             return
 
         if helpdesk_api.resolve_ticket(caller, ticket, reason, by_submitter=True):
-            caller.msg(f"You have successfully closed ticket #{ticket.id}.")
+            caller.msg(_("你已成功关闭工单 #%s。") % ticket.id)
         else:
-            caller.msg(f"Failed to close ticket #{ticket.id}.")
+            caller.msg(_("关闭工单 #%s 失败。") % ticket.id)
 
         return
 
@@ -412,10 +414,10 @@ class CmdRequest(ArxPlayerCommand):
         caller = self.caller
 
         if not self.lhs or not self.rhs:
-            msg = "Usage: <#>=<message>"
+            msg = _("用法：<编号>=<消息>")
             ticketnumbers = ", ".join(str(ticket.id) for ticket in self.tickets)
             if ticketnumbers:
-                msg += f"\nYour tickets: {ticketnumbers}"
+                msg += _("\n你的工单：%s") % ticketnumbers
             return caller.msg(msg)
 
         ticket = self.get_ticket_from_args(self.lhs)
@@ -423,11 +425,11 @@ class CmdRequest(ArxPlayerCommand):
             return
 
         if ticket.status == ticket.CLOSED_STATUS:
-            self.msg("That ticket is already closed. Please make a new one.")
+            self.msg(_("该工单已关闭，请新建一个。"))
             return
 
         helpdesk_api.add_followup(caller, ticket, self.rhs, mail_player=False)
-        caller.msg("Followup added.")
+        caller.msg(_("已添加跟进。"))
 
         return
 
@@ -457,12 +459,12 @@ class CmdRequest(ArxPlayerCommand):
         new_ticket = self.create_ticket(self.lhs, self.rhs)
         if new_ticket:
             caller.msg(
-                f"Thank you for submitting a request to the GM staff. Your ticket (#{new_ticket.id}) "
-                "has been added to the queue."
+                _("感谢你向执事团队提交请求。你的工单（#%s）已加入队列。")
+                % new_ticket.id
             )
         else:
             caller.msg(
-                "Ticket submission has failed for unknown reason. Please inform the administrators."
+                _("工单提交失败，原因不明。请联系管理员。")
             )
 
 
@@ -500,83 +502,83 @@ class CmdApp(ArxPlayerCommand):
         switches = self.switches
         apps = get_apps_manager()
         if not apps:
-            caller.msg("Apps manager not found! Please inform the administrators.")
+            caller.msg(_("未找到申请管理器！请联系管理员。"))
             return
         if not args and not switches:
             # '@app'
             # List all pending applications
             all_apps = apps.view_all_apps()
             if not all_apps:
-                caller.msg("No applications found.")
+                caller.msg(_("未找到申请。"))
                 return
             # application[9] field is 'True' if pending/open
             pend_list = [app for app in all_apps.values() if app[9]]
             if not pend_list:
-                caller.msg("No pending applications found.")
+                caller.msg(_("未找到待审申请。"))
                 return
             # app = [app_num, char_ob, email, date_submit, application_string,
             # gm_ob, date_answer, gm_notes, approval, pending]
-            table = prettytable.PrettyTable(["{w#", "{wCharacter", "{wEmail", "{wDate"])
+            table = prettytable.PrettyTable(["{w编号", "{w角色", "{w邮箱", "{w日期"])
             for app in pend_list:
                 table.add_row([app[0], app[1].key.capitalize(), app[2], app[3]])
-            caller.msg("{wApplications for Characters pending approval:\n%s" % table)
-            caller.msg("To view a particular application, @app <app number>")
-            caller.msg("To view closed applications, use @app/old")
+            caller.msg("{w待审批角色申请：\n%s" % table)
+            caller.msg(_("查看具体申请：@app <申请编号>"))
+            caller.msg(_("查看已关闭申请：@app/old"))
             return
         if args and not switches and not args.isdigit():
             # '@app <character>'
             # List all pending apps for a particular character
             apps_for_char = apps.view_all_apps_for_char(args)
             if not apps_for_char:
-                caller.msg("No applications found.")
+                caller.msg(_("未找到申请。"))
                 return
             pend_list = [ob for ob in apps_for_char if ob[9]]
             if not pend_list:
-                caller.msg("No pending applications found.")
+                caller.msg(_("未找到待审申请。"))
                 return
             # app = [app_num, char_ob, email, date_submit, application_string, gm_ob,
             # date_answer, gm_notes, approval, pending]
-            table = prettytable.PrettyTable(["{w#", "{wCharacter", "{wEmail", "{wDate"])
+            table = prettytable.PrettyTable(["{w编号", "{w角色", "{w邮箱", "{w日期"])
             for app in pend_list:
                 table.add_row([app[0], app[1].key.capitalize(), app[2], app[3]])
-            caller.msg("{wPending applications for %s:\n%s" % (args, table))
-            caller.msg("To view a specific application, @app <app number>")
+            caller.msg("{w%s 的待审申请：\n%s" % (args, table))
+            caller.msg(_("查看具体申请：@app <申请编号>"))
             return
         if args and args.isdigit() and (not switches or "old" in switches):
             # '@app <#>
             # List a given ticket by
             app = apps.view_app(int(args))
             if not app:
-                caller.msg("No application by that number for that character.")
+                caller.msg(_("未找到该编号的申请。"))
                 return
             email = app[2]
             alts = RosterEntry.objects.filter(current_account__email=email)
-            caller.msg("{wCharacter:{n %s" % app[1].key.capitalize())
-            caller.msg("{wApp Email:{n %s" % email)
+            caller.msg("{w角色：{n %s" % app[1].key.capitalize())
+            caller.msg("{w申请邮箱：{n %s" % email)
             if alts:
                 caller.msg(
-                    "{wCurrent characters:{n %s" % ", ".join(str(ob) for ob in alts)
+                    "{w当前角色：{n %s" % ", ".join(str(ob) for ob in alts)
                 )
-            caller.msg("{wDate Submitted:{n %s" % app[3])
-            caller.msg("{wApplication:{n %s" % app[4])
+            caller.msg("{w提交日期：{n %s" % app[3])
+            caller.msg("{w申请内容：{n %s" % app[4])
             if not app[9]:
-                caller.msg("{wGM:{n %s" % app[5])
-                caller.msg("{wDate Answered:{n %s" % app[6])
-                caller.msg("{wGM Notes:{n %s" % app[7])
-                caller.msg("{wApproved:{n %s" % app[8])
+                caller.msg("{w执事：{n %s" % app[5])
+                caller.msg("{w回复日期：{n %s" % app[6])
+                caller.msg("{w执事备注：{n %s" % app[7])
+                caller.msg("{w已批准：{n %s" % app[8])
             return
         if "approve" in switches:
             # @app/approve <#>=<notes>
             # mark a character as approved, then send an email to the player
             if not self.lhs or not self.rhs or not self.lhs.isdigit():
-                caller.msg("Usage: @app/approve <#>=<notes>")
+                caller.msg(_("用法：@app/approve <编号>=<备注>"))
                 return
             app = apps.view_app(int(self.lhs))
             if apps.close_app(int(self.lhs), caller, self.rhs, True):
-                caller.msg("Application successfully approved.")
+                caller.msg(_("申请已成功批准。"))
                 if app and app[1]:
                     inform_staff(
-                        "{w%s has approved %s's application.{n"
+                        _("{w%s 已批准 %s 的申请。{n")
                         % (caller.key.capitalize(), app[1].key.capitalize())
                     )
                 try:
@@ -648,47 +650,47 @@ class CmdApp(ArxPlayerCommand):
                     subject = "%s now active" % app[1]
                     bb.bb_post(self.caller, msg, subject=subject, poster_name="Roster")
                 except BBoard.DoesNotExist:
-                    self.msg("Board not found for posting announcement")
+                    self.msg(_("未找到发布公告的版块"))
                 return
             else:
-                caller.msg("Application closure failed.")
+                caller.msg(_("申请关闭失败。"))
                 return
         if "delete" in switches or "del" in switches:
             try:
                 apps.delete_app(caller, int(self.args))
                 return
             except (ValueError, TypeError):
-                caller.msg("Could not delete an app for value of %s." % self.args)
+                caller.msg(_("无法删除编号为 %s 的申请。") % self.args)
                 return
         if "deny" in switches:
             # @app/deny <#>=<notes>
             # mark a character as declined, then send an email to the player
             if not self.lhs or not self.rhs or not self.lhs.isdigit():
-                caller.msg("Usage: @app/deny <#>=<notes>")
+                caller.msg(_("用法：@app/deny <编号>=<备注>"))
                 return
             if apps.close_app(int(self.lhs), caller, self.rhs, False):
-                caller.msg("Application successfully declined.")
+                caller.msg(_("申请已成功拒绝。"))
                 app = apps.view_app(int(self.lhs))
                 if app and app[1]:
                     inform_staff(
-                        "{w%s has declined %s's application.{n"
+                        _("{w%s 已拒绝 %s 的申请。{n")
                         % (caller.key.capitalize(), app[1].key.capitalize())
                     )
                 return
             else:
-                caller.msg("Application closure failed.")
+                caller.msg(_("申请关闭失败。"))
                 return
         if "old" in switches:
             # List all non-pending applications
             all_apps = apps.view_all_apps()
             if not all_apps:
-                caller.msg("No applications found.")
+                caller.msg(_("未找到申请。"))
                 return
             # application[9] field is 'True' if pending/open
             pend_list = [_app for _app in all_apps.values() if not _app[9]]
             pend_list.sort(key=lambda appl: appl[0])
             if not pend_list:
-                caller.msg("No closed applications found.")
+                caller.msg(_("未找到已关闭申请。"))
                 return
             if not self.args:
                 pend_list = pend_list[-20:]
@@ -696,34 +698,34 @@ class CmdApp(ArxPlayerCommand):
                 try:
                     pend_list = pend_list[-int(self.args) :]
                 except (TypeError, ValueError):
-                    caller.msg("Could not display entries for that range.")
+                    caller.msg(_("无法显示该范围的条目。"))
                     return
             # app = [app_num, char_ob, email, date_submit, application_string, gm_ob,
             #  date_answer, gm_notes, approval, pending]
             table = prettytable.PrettyTable(
-                ["{w#", "{wCharacter", "{wEmail", "{wDate", "{wApproved"]
+                ["{w编号", "{w角色", "{w邮箱", "{w日期", "{w已批准"]
             )
             for app in pend_list:
                 table.add_row(
                     [app[0], app[1].key.capitalize(), app[2], app[3][:9], str(app[8])]
                 )
-            caller.msg("{wOld/Closed applications for characters:\n%s" % table)
-            caller.msg("To view a particular application, @app <app number>")
+            caller.msg("{w已关闭的角色申请：\n%s" % table)
+            caller.msg(_("查看具体申请：@app <申请编号>"))
             return
             pass
         if "oldchar" in switches:
             apps_for_char = apps.view_all_apps_for_char(args)
             if not apps_for_char:
-                caller.msg("No applications found.")
+                caller.msg(_("未找到申请。"))
                 return
             pend_list = [ob for ob in apps_for_char if not ob[9]]
             if not pend_list:
-                caller.msg("No closed applications found.")
+                caller.msg(_("未找到已关闭申请。"))
                 return
             # app = [app_num, char_ob, email, date_submit, application_string, gm_ob,
             # date_answer, gm_notes, approval, pending]
             table = prettytable.PrettyTable(
-                ["{w#", "{wCharacter", "{wEmail", "{wDate", "{wGM", "{wApproved"]
+                ["{w编号", "{w角色", "{w邮箱", "{w日期", "{w执事", "{w已批准"]
             )
             for app in pend_list:
                 table.add_row(
@@ -736,33 +738,33 @@ class CmdApp(ArxPlayerCommand):
                         str(app[8]),
                     ]
                 )
-            caller.msg("{wOld/Closed applications for %s:\n%s" % (args, table))
-            caller.msg("To view a particular application, @app <app number>")
+            caller.msg("{w%s 的已关闭申请：\n%s" % (args, table))
+            caller.msg(_("查看具体申请：@app <申请编号>"))
             return
         if "email" in switches:
             apps_for_email = apps.view_apps_for_email(args)
             if not apps_for_email:
-                caller.msg("No applications found.")
+                caller.msg(_("未找到申请。"))
                 return
-            table = prettytable.PrettyTable(["{w#", "{wCharacter", "{wEmail", "{wDate"])
+            table = prettytable.PrettyTable(["{w编号", "{w角色", "{w邮箱", "{w日期"])
             for app in apps_for_email:
                 table.add_row([app[0], app[1].key.capitalize(), app[2], app[3]])
-            caller.msg("{wApplications for %s:\n%s" % (args, table))
-            caller.msg("To view a particular application, @app <app number>")
+            caller.msg("{w%s 的申请：\n%s" % (args, table))
+            caller.msg(_("查看具体申请：@app <申请编号>"))
             return
         if "fixemail" in switches:
             try:
                 if apps.fix_email(int(self.lhs), caller, self.rhs):
-                    caller.msg("App email changed to %s." % self.rhs)
+                    caller.msg(_("申请邮箱已改为 %s。") % self.rhs)
                 return
             except (TypeError, ValueError, AttributeError):
-                caller.msg("Must provide an app # and an email address.")
+                caller.msg(_("必须提供申请编号和邮箱地址。"))
                 return
         if "resend" in switches:
             try:
                 apps.resend(int(self.lhs), caller)
                 return
             except (ValueError, TypeError, AttributeError):
-                caller.msg("Must provide a valid app #.")
+                caller.msg(_("必须提供有效的申请编号。"))
                 return
-        caller.msg("Invalid switch for @app.")
+        caller.msg(_("@app 无效选项。"))

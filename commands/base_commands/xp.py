@@ -9,6 +9,7 @@ be here, as well as related commands such as voting to give
 other players xp awards for good roleplay.
 """
 
+from django.utils.translation import gettext as _
 from commands.base import ArxCommand, ArxPlayerCommand
 from world import stats_and_skills
 from server.utils.arx_utils import inform_staff
@@ -44,17 +45,17 @@ class CmdUseXP(ArxCommand):
 
     def display_traits(self):
         caller = self.caller
-        caller.msg("{wCurrent Teacher:{n %s" % caller.db.trainer)
-        caller.msg("{wUnspent XP:{n %s" % caller.item_data.xp)
-        caller.msg("{wLifetime Earned XP:{n %s" % caller.item_data.total_xp)
+        caller.msg("{w当前师父：{n %s" % caller.db.trainer)
+        caller.msg("{w未使用修为：{n %s" % caller.item_data.xp)
+        caller.msg("{w累计获得修为：{n %s" % caller.item_data.total_xp)
         all_stats = ", ".join(Trait.get_valid_stat_names())
-        caller.msg("\n{wStat names:{n")
+        caller.msg("\n{w属性名称：{n")
         caller.msg(all_stats)
-        caller.msg("\n{wSkill names:{n")
+        caller.msg("\n{w武功名称：{n")
         caller.msg(", ".join(Trait.get_valid_skill_names()))
-        caller.msg("\n{wDominion skill names:{n")
+        caller.msg("\n{w藩镇武功名称：{n")
         caller.msg(", ".join(skill for skill in stats_and_skills.DOM_SKILLS))
-        caller.msg("\n{wAbility names:{n")
+        caller.msg("\n{w能力名称：{n")
         crafting = Trait.get_valid_ability_names(Trait.CRAFTING)
         abilities = caller.traits.abilities
         abilities = set(abilities.keys()) | set(crafting)

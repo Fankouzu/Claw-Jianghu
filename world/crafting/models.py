@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from evennia.locks.lockhandler import LockHandler
 from evennia.utils.idmapper.models import SharedMemoryModel
@@ -39,57 +40,56 @@ class CraftingRecipe(CachedPropertiesMixin, SharedMemoryModel):
     level = models.PositiveSmallIntegerField(default=1)
     allow_adorn = models.BooleanField(default=True)
     lock_storage = models.TextField(
-        "locks", blank=True, help_text="defined in setup_utils"
+        "locks", blank=True, help_text=_("定义于setup_utils")
     )
     # values for items created by this recipe
     volume = models.IntegerField(
-        default=0, help_text="The size of objects created by this recipe."
+        default=0, help_text=_("此配方所造物品的尺寸。")
     )
     base_value = models.DecimalField(
         default=0.0,
-        help_text="Value the recipe uses in different "
-        "calculations for typeclass properties.",
+        help_text=_("配方用于各类计算的基础数值。"),
         max_digits=6,
         decimal_places=2,
     )
     scaling = models.DecimalField(
         default=0.0,
-        help_text="Adjusts calculated value based on item quality",
+        help_text=_("根据物品品质调整的数值"),
         max_digits=6,
         decimal_places=2,
     )
     # values for containers
     displayable = models.BooleanField(
-        default=True, help_text="Used for furniture types"
+        default=True, help_text=_("用于家具类型")
     )
     display_by_line = models.BooleanField(
         default=True,
-        help_text="If true, display inventory by line for container recipe",
+        help_text=_("若为真，容器配方按行显示行囊"),
     )
     # values for equipment
     slot = models.CharField(
-        max_length=80, blank=True, help_text="Location where clothing/armor is worn"
+        max_length=80, blank=True, help_text=_("衣物/护甲穿戴位置")
     )
     slot_limit = models.PositiveSmallIntegerField(
-        default=1, help_text="Max number that can be worn"
+        default=1, help_text=_("可穿戴最大数量")
     )
     fashion_mult = models.DecimalField(
         null=True,
         blank=True,
-        help_text="If defined, multiplier for modeling",
+        help_text=_("若定义，为展示时乘数"),
         max_digits=6,
         decimal_places=2,
     )
     armor_penalty = models.DecimalField(
         default=0.0,
-        help_text="Value for armor impairing movement",
+        help_text=_("护甲妨碍行动的数值"),
         max_digits=6,
         decimal_places=2,
     )
     weapon_skill = models.CharField(
         max_length=80,
         blank=True,
-        help_text="Weapon skill used for weapons made by this recipe",
+        help_text=_("此配方所造兵器使用的武功"),
     )
 
     def __init__(self, *args, **kwargs):

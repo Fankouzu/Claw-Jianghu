@@ -266,6 +266,16 @@ class GeneratedLootFragment(SharedMemoryModel):
     def generate_weapon_name(
         cls, material="rubicund", wpn_type=MEDIUM_WEAPON_TYPE, include_name=True
     ):
+        # 材料名称中英文映射
+        material_names = {
+            "steel": "精钢",
+            "rubicund": "赤血砂",
+            "diamondplate": "玄铁精",
+            "alaricite": "千年灵芝",
+            "star iron": "天星铁",
+            "iridescite": "七彩琉璃",
+            "stygian": "幽冥石",
+        }
 
         result = ""
 
@@ -286,9 +296,11 @@ class GeneratedLootFragment(SharedMemoryModel):
                 name_second = name_second[1:]
 
             wpn_name = "{}{}".format(name_first, name_second).capitalize()
-            result += wpn_name + ", "
+            result += wpn_name + "，"
 
-        result += "an ancient {} ".format(material)
+        # 使用中文名称
+        chi_material = material_names.get(material, material)
+        result += "上古{}兵器".format(chi_material)
 
         result += cls.pick_random_fragment(wpn_type)
         return result
@@ -310,10 +322,8 @@ class GeneratedLootFragment(SharedMemoryModel):
 
 class ShardhavenType(SharedMemoryModel):
     """
-    This model is to bind together Shardhavens and plotroom tilesets, as well as
-    eventually the types of monsters and treasures that one finds there.  This is
-    simply a model so we can easily add new types without having to update Choice
-    fields in Shardhaven, Plotroom, and others.
+    秘境类型模型。用于绑定秘境和场景模板，
+    以及定义其中出现的怪物和宝物类型。
     """
 
     name = models.CharField(blank=False, null=False, max_length=32, db_index=True)
@@ -325,9 +335,8 @@ class ShardhavenType(SharedMemoryModel):
 
 class Shardhaven(SharedMemoryModel):
     """
-    This model represents an actual Shardhaven.  Right now, it's just meant to
-    be used for storing the Shardhavens we create so we can easily refer back to them
-    later.  Down the road, it will be used for the exploration system.
+    秘境模型。用于存储生成的秘境，便于后续引用。
+    未来将用于探索系统。
     """
 
     name = models.CharField(blank=False, null=False, max_length=78, db_index=True)

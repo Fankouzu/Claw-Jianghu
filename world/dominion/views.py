@@ -474,7 +474,7 @@ def map_wrapper(request):
             imagemap_file.close()
 
         context = {
-            "page_title": "Map of Arvum",
+            "page_title": "中原地图",
             "img_width": img_width,
             "img_height": img_height,
             "imagemap_html": imagemap_html,
@@ -567,7 +567,7 @@ def map_wrapper(request):
         "img_height": img_height,
         "imagemap_html": imagemap_html,
         "regen_link": regen and "?regenerate=1" or "",
-        "page_title": "Map of Arvum",
+        "page_title": "中原地图",
     }
     return render(request, "dominion/map_pregen.html", context)
 

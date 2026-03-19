@@ -2,8 +2,9 @@
 
 {% load cloudinary %}
 {% load static %}
+{% load i18n %}
 
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
   <head>
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js'></script>
     {% cloudinary_includes %}
@@ -31,7 +32,7 @@
     {% block header_ext %}
     {% endblock %}
 
-    <title>Arx - {% if flatpage %}{{flatpage.title}}{% else %}{% block titleblock %}{{page_title}}{% endblock %}{% endif %}</title>
+    <title>江湖传说 - {% if flatpage %}{{flatpage.title}}{% else %}{% block titleblock %}{{page_title}}{% endblock %}{% endif %}</title>
   </head>
 
   <body>
@@ -47,7 +48,7 @@
       </div>
 
       <div class="midHeader">
-        <img src="{% static 'website/images/arx_badge.png' %}" height='100' width='100' align='left'/> <h1 class="headerTitle" lang="la">Arx, After the Reckoning</h1>
+        <img src="{% static 'website/images/arx_badge.png' %}" height='100' width='100' align='left'/> <h1 class="headerTitle">江湖传说</h1>
         <div class="headerSubTitle" title="Slogan">
         <!-- Insert a slogan here if you want -->
         {{game_slogan}}			&nbsp;
@@ -56,40 +57,40 @@
         <br class="doNotDisplay doNotPrint" />
 
         <div class="headerLinks">
-          <span class="doNotDisplay">Tools:</span>
+          <span class="doNotDisplay">{% trans "Tools:" %}</span>
           {% if user.is_authenticated %}
-            <a href="/accounts/logout/">Log Out &laquo;</a>
+            <a href="/accounts/logout/">{% trans "Log Out" %} &laquo;</a>
             <span class="doNotDisplay">|</span>
             {% if user.char_ob %}
-              <a href="/character/sheet/{{ user.char_ob.id }}"> Logged in as {{ user.username }} &laquo;</a>
+              <a href="/character/sheet/{{ user.char_ob.id }}"> {% blocktrans with username=user.username %}Logged in as {{ username }}{% endblocktrans %} &laquo;</a>
             {% else %}
-              Logged in as {{user.username}} &laquo;
+              {% blocktrans with username=user.username %}Logged in as {{ username }}{% endblocktrans %} &laquo;
             {% endif %}
           {% else %}
-            <a href="/accounts/login/?next={{ request.get_full_path|urlencode }}">Log In &laquo;</a>
+            <a href="/accounts/login/?next={{ request.get_full_path|urlencode }}">{% trans "Log In" %} &laquo;</a>
             <span class="doNotDisplay">|</span>
           {% endif %}
         </div>
       </div>
 
       <div class="subHeader">
-        <!--span class="doNotDisplay">Navigation:</span-->
-        <a href="/">Home</a> |
-        <a href="/character/{% if user.is_authenticated %}active{% else %}available{% endif %}">Characters</a> |
-        <a href="/topics/">World</a> |
-        <a href="/character/story/">Story</a> |
-		<a href="/dom/cal/list/">Events</a> |
-		<a href="/comms/journals/list/">Journals</a> |
-        <a href="/comms/boards/">Boards</a>
+        <!--span class="doNotDisplay">{% trans "Navigation:" %}</span-->
+        <a href="/">{% trans "Home" %}</a> |
+        <a href="/character/{% if user.is_authenticated %}active{% else %}available{% endif %}">{% trans "Characters" %}</a> |
+        <a href="/topics/">{% trans "World" %}</a> |
+        <a href="/character/story/">{% trans "Story" %}</a> |
+		<a href="/dom/cal/list/">{% trans "Events" %}</a> |
+		<a href="/comms/journals/list/">{% trans "Journals" %}</a> |
+        <a href="/comms/boards/">{% trans "Boards" %}</a>
         {% if user.is_authenticated and user.is_staff %}
-         | <a href="/admin/">Admin Interface</a>
-         | <a href="/admintools/search/">Admin Search Tool</a>
-         | <a href="/support/">Requests</a>
+         | <a href="/admin/">{% trans "Admin Interface" %}</a>
+         | <a href="/admintools/search/">{% trans "Admin Search Tool" %}</a>
+         | <a href="/support/">{% trans "Requests" %}</a>
         {% endif %}
         {% if webclient_enabled %}
-         | <a href="/webclient">Play Online</a>
+         | <a href="/webclient">{% trans "Play Online" %}</a>
         {% endif %}
-        
+
       </div>
     </div>
 

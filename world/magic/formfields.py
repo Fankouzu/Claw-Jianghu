@@ -50,7 +50,7 @@ class AlignmentField(Paxfield):
         return self._alignment.name
 
     def get_display_params(self):
-        return "<Primal||Elysian||Abyssal>"
+        return "<天道||人道||鬼道>"
 
     def validate(self, caller=None):
         return True, ""
@@ -62,9 +62,9 @@ class AlignmentField(Paxfield):
 
         choices = (
             (-1, "----"),
-            (Alignment.PRIMAL.id, "Primal"),
-            (Alignment.ELYSIAN.id, "Elysian"),
-            (Alignment.ABYSSAL.id, "Abyssal"),
+            (Alignment.PRIMAL.id, "天道"),
+            (Alignment.ELYSIAN.id, "人道"),
+            (Alignment.ABYSSAL.id, "鬼道"),
         )
 
         options["choices"] = choices

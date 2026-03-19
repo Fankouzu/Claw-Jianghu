@@ -1550,7 +1550,7 @@ class Domain(CachedPropertiesMixin, SharedMemoryModel):
     def display(self):
         """Returns formatted string display for a domain"""
         castellan = None
-        liege = "Crownsworn"
+        liege = "朝廷命官"
         ministers = []
         if self.ruler:
             castellan = self.ruler.castellan

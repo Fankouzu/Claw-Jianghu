@@ -1,8 +1,10 @@
 """
 Crafting commands. BEHOLD THE MINIGAME.
+炼制命令。
 """
 from django.conf import settings
 from django.db.models import Q, Prefetch
+from django.utils.translation import gettext as _
 
 from commands.base import ArxCommand
 from evennia.utils import utils
@@ -36,18 +38,18 @@ PERFUME = "typeclasses.consumable.perfume.Perfume"
 MASK = "typeclasses.disguises.disguises.Mask"
 
 QUALITY_LEVELS = {
-    0: "{rawful{n",
-    1: "{mmediocre{n",
-    2: "{caverage{n",
-    3: "{cabove average{n",
-    4: "{ygood{n",
-    5: "{yvery good{n",
-    6: "{gexcellent{n",
-    7: "{gexceptional{n",
-    8: "{gsuperb{n",
-    9: "{454perfect{n",
-    10: "{553divine{n",
-    11: "|355transcendent|n",
+    0: "{r拙劣{n",
+    1: "{m平庸{n",
+    2: "{c寻常{n",
+    3: "{c中上{n",
+    4: "{y精良{n",
+    5: "{y上乘{n",
+    6: "{g卓越{n",
+    7: "{g绝品{n",
+    8: "{g神工{n",
+    9: "{454完美{n",
+    10: "{553天工{n",
+    11: "|355化境|n",
 }
 
 
@@ -311,20 +313,20 @@ class CmdCraft(ArxCommand, TemplateMixins):
         caller = self.caller
         dompc = caller.player_ob.Dominion
         recipe = CraftingRecipe.objects.get(id=proj[0])
-        msg = "{wRecipe:{n %s\n" % recipe.name
-        msg += "{wName:{n %s\n" % proj[1]
-        msg += "{wDesc:{n %s\n" % proj[2]
+        msg = "{w配方：{n %s\n" % recipe.name
+        msg += "{w名称：{n %s\n" % proj[1]
+        msg += "{w描述：{n %s\n" % proj[2]
         if len(proj) > 6 and proj[6]:
-            msg += "{wAlt Desc:{n %s\n" % proj[6]
+            msg += "{w伪装描述：{n %s\n" % proj[6]
         adorns, forgery = proj[3], proj[4]
         if adorns:
-            msg += "{wAdornments:{n %s\n" % ", ".join(
+            msg += "{w镶嵌材料：{n %s\n" % ", ".join(
                 "%s: %s" % (CraftingMaterialType.objects.get(id=mat).name, amt)
                 for mat, amt in adorns.items()
             )
         if forgery:
-            msg += "{wForgeries:{n %s\n" % ", ".join(
-                "%s as %s"
+            msg += "{w伪造：{n %s\n" % ", ".join(
+                "%s 充作 %s"
                 % (
                     CraftingMaterialType.objects.get(id=value).name,
                     CraftingMaterialType.objects.get(id=key).name,
@@ -334,18 +336,18 @@ class CmdCraft(ArxCommand, TemplateMixins):
         try:
             translation = proj[5]
             if translation:
-                msg += "{wTranslation for{n %s\n" % "\n\n".join(
+                msg += "{w译文：{n %s\n" % "\n\n".join(
                     "%s:\n%s" % (lang, text) for lang, text in translation.items()
                 )
         except IndexError:
             pass
         caller.msg(msg)
-        caller.msg("{wTo finish it, use /finish after you gather the following:{n")
+        caller.msg("{w完成炼制需准备以下材料，使用 /finish 命令：{n")
         caller.msg(recipe.display_reqs(dompc))
 
     def check_max_invest(self, recipe, invest):
         if invest > recipe.value:
-            self.msg("The maximum amount you can invest is %s." % recipe.value)
+            self.msg(_("你最多只能投入 %s 银两。") % recipe.value)
             return
         return True
 
@@ -371,11 +373,11 @@ class CmdCraft(ArxCommand, TemplateMixins):
             # display recipes and any crafting project we have unfinished
             materials = assets.owned_materials.all()
             caller.msg(
-                "{wAvailable recipes:{n %s"
+                "{w已习得配方：{n %s"
                 % ", ".join(recipe.name for recipe in recipes)
             )
             caller.msg(
-                "{wYour materials:{n %s" % ", ".join(str(mat) for mat in materials)
+                "{w持有材料：{n %s" % ", ".join(str(mat) for mat in materials)
             )
             project = caller.db.crafting_project
             if project:
@@ -386,19 +388,19 @@ class CmdCraft(ArxCommand, TemplateMixins):
             try:
                 recipe = recipes.get(name__iexact=self.lhs)
             except CraftingRecipe.DoesNotExist:
-                caller.msg("No recipe found by the name %s." % self.lhs)
+                caller.msg(_("寻不得名为 %s 的配方。") % self.lhs)
                 return
             try:
                 self.get_recipe_price(recipe)
             except ValueError:
-                caller.msg("That recipe does not have a price defined.")
+                caller.msg(_("该配方未定义价格。"))
                 return
             # proj = [id, name, desc, adorns, forgery, translation]
             proj = [recipe.id, "", "", {}, {}, {}, ""]
             caller.db.crafting_project = proj
-            stmsg = "You have" if caller == crafter else "%s has" % crafter
-            caller.msg("{w%s started to craft:{n %s." % (stmsg, recipe.name))
-            caller.msg("{wTo finish it, use /finish after you gather the following:{n")
+            stmsg = "你已" if caller == crafter else "%s已" % crafter
+            caller.msg("{w%s开始炼制：{n %s。" % (stmsg, recipe.name))
+            caller.msg("{w完成炼制需准备以下材料，使用 /finish 命令：{n")
             caller.msg(recipe.display_reqs(dompc))
             return
         if (
@@ -415,21 +417,21 @@ class CmdCraft(ArxCommand, TemplateMixins):
             except AttributeError:
                 pass
             if not recipe:
-                caller.msg("No recipe found for that item.")
+                caller.msg(_("该物品无配方记录。"))
                 return
             if "changename" in self.switches:
                 if not self.rhs:
-                    self.msg("Usage: /changename <object>=<new name>")
+                    self.msg(_("用法：/changename <物品>=<新名称"))
                     return
                 if not validate_name(self.rhs):
-                    caller.msg("That is not a valid name.")
+                    caller.msg(_("名称无效。"))
                     return
                 if targ.tags.get("plot"):
-                    self.msg("It cannot be renamed.")
+                    self.msg(_("此物不可更名。"))
                     return
                 targ.aliases.clear()
                 targ.name = self.rhs
-                caller.msg("Changed name to %s." % targ)
+                caller.msg(_("名称已改为 %s。") % targ)
                 return
             # adding adorns post-creation
             if "addadorn" in self.switches:
@@ -439,18 +441,18 @@ class CmdCraft(ArxCommand, TemplateMixins):
                     if amt < 1 and not caller.check_permstring("builders"):
                         raise ValueError
                 except (IndexError, ValueError, TypeError):
-                    caller.msg("Usage: /addadorn <object>=<adornment>,<amount>")
+                    caller.msg(_("用法：/addadorn <物品>=<材料>,<数量"))
                     return
                 if not recipe.allow_adorn:
                     caller.msg(
-                        "This recipe does not allow for additional materials to be used."
+                        _("此配方不可额外添加材料。")
                     )
                     return
                 try:
                     mat = CraftingMaterialType.objects.get(name__iexact=material)
                 except CraftingMaterialType.DoesNotExist:
                     self.msg(
-                        "Cannot use %s as it does not appear to be a crafting material."
+                        _("无法使用 %s，并非炼制材料。")
                         % material
                     )
                     return
@@ -461,30 +463,30 @@ class CmdCraft(ArxCommand, TemplateMixins):
                         pmat = pmats.get(type=mat)
                         if pmat.amount < amt:
                             caller.msg(
-                                "You need %s of %s, and only have %s."
+                                _("你需要 %s 份 %s，但仅有 %s 份。")
                                 % (amt, mat.name, pmat.amount)
                             )
                             return
                     except OwnedMaterial.DoesNotExist:
-                        caller.msg("You do not have any of the material %s." % mat.name)
+                        caller.msg(_("你没有 %s 材料。") % mat.name)
                         return
                     pmat.amount -= amt
                     pmat.save()
                 targ.item_data.add_adorn(mat, amt)
                 caller.msg(
-                    "%s is now adorned with %s of the material %s." % (targ, amt, mat)
+                    _("%s 已镶嵌 %s 份 %s 材料。") % (targ, amt, mat)
                 )
                 return
             if "refine" in self.switches:
                 base_cost = recipe.value / 4
-                caller.msg("The base cost of refining this recipe is %s." % base_cost)
+                caller.msg(_("精炼基础花费为 %s 银两。") % base_cost)
                 try:
                     price = self.get_refine_price(base_cost)
                 except ValueError:
-                    caller.msg("Price for refining not set.")
+                    caller.msg(_("精炼价格未设定。"))
                     return
                 if price:
-                    caller.msg("The additional price for refining is %s." % price)
+                    caller.msg(_("精炼额外价格为 %s 银两。") % price)
                 action_points = 0
                 invest = 0
                 if self.rhs:
@@ -494,23 +496,23 @@ class CmdCraft(ArxCommand, TemplateMixins):
                             action_points = int(self.rhslist[1])
                     except ValueError:
                         caller.msg(
-                            "Amount of silver/action points to invest must be a number."
+                            _("投入的银两和行动点必须为数字。")
                         )
                         return
                     if invest < 0 or action_points < 0:
-                        caller.msg("Amount must be positive.")
+                        caller.msg(_("数值必须为正数。"))
                         return
                 if not recipe:
-                    caller.msg("This is not a crafted object that can be refined.")
+                    caller.msg(_("此非炼制品，无法精炼。"))
                     return
                 if targ.item_data.quality_level and targ.item_data.quality_level >= 10:
-                    caller.msg("This object can no longer be improved.")
+                    caller.msg(_("此物已达极致，无法再提升。"))
                     return
                 ability = get_ability_val(crafter, recipe)
                 if ability < recipe.level:
-                    err = "You lack" if crafter == caller else "%s lacks" % crafter
+                    err = "你欠缺" if crafter == caller else "%s欠缺" % crafter
                     caller.msg(
-                        "%s the skill required to attempt to improve this." % err
+                        _("%s精炼此物所需的技艺。") % err
                     )
                     return
                 if not self.check_max_invest(recipe, invest):
@@ -528,32 +530,32 @@ class CmdCraft(ArxCommand, TemplateMixins):
                 diffmod += attempts
                 if diffmod:
                     self.msg(
-                        "Based on silver spent and previous attempts, the difficulty is adjusted by %s."
+                        _("根据银两消耗和尝试次数，难度调整 %s。")
                         % diffmod
                     )
                 if caller.ndb.refine_targ != (targ, cost):
                     caller.ndb.refine_targ = (targ, cost)
                     caller.msg(
-                        "The total cost would be {w%s{n. To confirm this, execute the command again."
+                        _("总花费为 {w%s{n 银两。再次执行命令以确认。")
                         % cost
                     )
                     return
                 if cost > caller.item_data.currency:
                     caller.msg(
-                        "This would cost %s, and you only have %s."
+                        _("需花费 %s 银两，但你仅有 %s。")
                         % (cost, caller.item_data.currency)
                     )
                     return
                 if action_points and not caller.player_ob.pay_action_points(
                     action_points
                 ):
-                    self.msg("You do not have enough action points to refine.")
+                    self.msg(_("你没有足够的行动点来精炼。"))
                     return
                 # pay for it
                 caller.pay_money(cost)
                 self.pay_owner(
                     price,
-                    "%s has refined '%s', a %s, at your shop and you earn %s silver."
+                    _("%s 在你的店铺精炼了 '%s'（%s），你获得 %s 银两。")
                     % (caller, targ, recipe.name, price),
                 )
 
@@ -565,36 +567,36 @@ class CmdCraft(ArxCommand, TemplateMixins):
                 attempts += 1
                 targ.item_data.set_refine_attempts_for_character(crafter, attempts)
                 self.msg(
-                    "The roll is %s, a quality level of %s."
+                    _("投骰结果 %s，品质等级 %s。")
                     % (roll, QUALITY_LEVELS[quality])
                 )
                 if quality <= old:
                     caller.msg(
-                        "You failed to improve %s; the quality will remain %s."
+                        _("精炼失败，%s 品质仍为 %s。")
                         % (targ, QUALITY_LEVELS[old])
                     )
                     return
-                caller.msg("New quality level is %s." % QUALITY_LEVELS[quality])
+                caller.msg(_("新品质等级为 %s。") % QUALITY_LEVELS[quality])
                 targ.item_data.quality_level = quality
                 return
         proj = caller.db.crafting_project
         if not proj:
-            caller.msg("You have no crafting project.")
+            caller.msg(_("你当前没有炼制项目。"))
             return
         if "name" in self.switches:
             if not self.args:
-                caller.msg("Name it what?")
+                caller.msg(_("取何名称？"))
                 return
             if not validate_name(self.args):
-                caller.msg("That is not a valid name.")
+                caller.msg(_("名称无效。"))
                 return
             proj[1] = self.args
             caller.db.crafting_project = proj
-            caller.msg("Name set to %s." % self.args)
+            caller.msg(_("名称已设为 %s。") % self.args)
             return
         if "desc" in self.switches:
             if not self.args:
-                caller.msg("Describe it how?")
+                caller.msg(_("如何描述？"))
                 return
 
             if not self.can_apply_templates(self.caller, self.args):
@@ -602,21 +604,21 @@ class CmdCraft(ArxCommand, TemplateMixins):
 
             proj[2] = self.args
             caller.db.crafting_project = proj
-            caller.msg("Desc set to:\n%s" % self.args)
+            caller.msg(_("描述已设为：\n%s") % self.args)
             return
         if "abandon" in self.switches:
             caller.msg(
-                "You have abandoned this crafting project. You may now start another."
+                _("你已放弃此炼制项目，可另起炉灶。")
             )
             caller.db.crafting_project = None
             return
         if "translated_text" in self.switches:
             if not (self.lhs and self.rhs):
-                caller.msg("Usage: craft/translated_text <language>=<text>")
+                caller.msg(_("用法：craft/translated_text <语言>=<文本"))
                 return
             lhs = self.lhs.lower()
             if lhs not in self.caller.languages.known_languages:
-                caller.msg("Nice try. You cannot speak %s." % self.lhs)
+                caller.msg(_("休想欺瞒，你不会说 %s。") % self.lhs)
                 return
             proj[5].update({lhs: self.rhs})
             caller.db.crafting_project = proj
@@ -624,37 +626,37 @@ class CmdCraft(ArxCommand, TemplateMixins):
             return
         if "altdesc" in self.switches:
             if not self.args:
-                caller.msg("Describe them how? This is only used for disguise recipes.")
+                caller.msg(_("如何描述伪装？仅用于伪装配方。"))
                 return
             proj[6] = self.args
             caller.msg(
-                "This is only used for disguise recipes. Alternate description set to:\n%s"
+                _("此仅用于伪装配方。伪装描述已设为：\n%s")
                 % self.args
             )
             return
         if "adorn" in self.switches:
             if not (self.lhs and self.rhs):
-                caller.msg("Usage: craft/adorn <material>=<amount>")
+                caller.msg(_("用法：craft/adorn <材料>=<数量"))
                 return
             try:
                 mat = CraftingMaterialType.objects.get(name__iexact=self.lhs)
                 amt = int(self.rhs)
             except CraftingMaterialType.DoesNotExist:
-                caller.msg("No material named %s." % self.lhs)
+                caller.msg(_("无名为 %s 的材料。") % self.lhs)
                 return
             except CraftingMaterialType.MultipleObjectsReturned:
-                caller.msg("More than one match. Please be more specific.")
+                caller.msg(_("匹配多个材料，请更精确。"))
                 return
             except (TypeError, ValueError):
-                caller.msg("Amount must be a number.")
+                caller.msg(_("数量必须为数字。"))
                 return
             if amt < 1:
-                caller.msg("Amount must be positive.")
+                caller.msg(_("数量必须为正数。"))
                 return
             recipe = CraftingRecipe.objects.get(id=proj[0])
             if not recipe.allow_adorn:
                 caller.msg(
-                    "This recipe does not allow for additional materials to be used."
+                    _("此配方不可额外添加材料。")
                 )
                 return
             adorns = proj[3] or {}
@@ -662,7 +664,7 @@ class CmdCraft(ArxCommand, TemplateMixins):
             proj[3] = adorns
             caller.db.crafting_project = proj
             caller.msg(
-                "Additional materials: %s"
+                _("额外材料：%s")
                 % ", ".join(
                     "%s: %s" % (CraftingMaterialType.objects.get(id=mat).name, amt)
                     for mat, amt in adorns.items()
@@ -670,7 +672,7 @@ class CmdCraft(ArxCommand, TemplateMixins):
             )
             return
         if "forgery" in self.switches:
-            self.msg("Temporarily disabled until I have time to revamp this.")
+            self.msg(_("暂时停用，待日后重修。"))
             return
         if "preview" in self.switches:
             if self.args:
@@ -678,24 +680,24 @@ class CmdCraft(ArxCommand, TemplateMixins):
                 if not viewer:
                     return
                 viewer.msg(
-                    "{c%s{n is sharing a preview of their crafting project with you."
+                    _("{c%s{n 正与你分享炼制项目的预览。")
                     % self.caller
                 )
                 self.msg(
-                    "You share a preview of your crafting project with %s." % viewer
+                    _("你与 %s 分享了炼制项目的预览。") % viewer
                 )
             else:
                 viewer = self.caller.player
-            name = proj[1] or "[No Name Yet]"
-            viewer.msg("{wPreview of {n%s {wdesc:{n\n%s" % (name, proj[2]))
+            name = proj[1] or "[尚未命名]"
+            viewer.msg("{w%s 描述预览：{n\n%s" % (name, proj[2]))
             return
         # do rolls for our crafting. determine quality level, handle forgery stuff
         if "finish" in self.switches:
             if not proj[1]:
-                caller.msg("You must give it a name first.")
+                caller.msg(_("你必须先为其命名。"))
                 return
             if not proj[2]:
-                caller.msg("You must write a description first.")
+                caller.msg(_("你必须先撰写描述。"))
                 return
             invest = 0
             action_points = 0
@@ -705,24 +707,24 @@ class CmdCraft(ArxCommand, TemplateMixins):
                     if len(self.lhslist) > 1:
                         action_points = int(self.lhslist[1])
                 except ValueError:
-                    caller.msg("Silver/Action Points to invest must be a number.")
+                    caller.msg(_("投入的银两和行动点必须为数字。"))
                     return
                 if invest < 0 or action_points < 0:
-                    caller.msg("Silver/Action Points cannot be a negative number.")
+                    caller.msg(_("银两和行动点不可为负数。"))
                     return
             # first, check if we have all the materials required
             mats = {}
             try:
                 recipe = recipes.get(id=proj[0])
             except CraftingRecipe.DoesNotExist:
-                caller.msg("You lack the ability to finish that recipe.")
+                caller.msg(_("你无力完成此配方。"))
                 return
             if not self.check_max_invest(recipe, invest):
                 return
             if recipe.type == "disguise":
                 if not proj[6]:
                     caller.msg(
-                        "This kind of item requires craft/altdesc before it can be finished."
+                        _("此类物品需先用 craft/altdesc 设定伪装描述方可完成。")
                     )
                     return
             for mat in recipe.required_materials.all():
@@ -741,7 +743,7 @@ class CmdCraft(ArxCommand, TemplateMixins):
             try:
                 price = self.get_recipe_price(recipe)
             except ValueError:
-                caller.msg("That recipe does not have a price defined.")
+                caller.msg(_("该配方未定义价格。"))
                 return
             cost = recipe.additional_cost + invest + price
             if cost < 0 or price < 0:
@@ -756,16 +758,16 @@ class CmdCraft(ArxCommand, TemplateMixins):
             if not caller.check_permstring("builders"):
                 if caller.item_data.currency < cost:
                     caller.msg(
-                        "The recipe costs %s on its own, and you are trying to spend an additional %s."
+                        _("配方本身需花费 %s 银两，你打算额外投入 %s。")
                         % (recipe.additional_cost, invest)
                     )
                     if price:
                         caller.msg(
-                            "The additional price charged by the crafter for this recipe is %s."
+                            _("炼制师额外收费 %s 银两。")
                             % price
                         )
                     caller.msg(
-                        "You need %s silver total, and have only %s."
+                        _("共需 %s 银两，但你仅有 %s。")
                         % (cost, caller.item_data.currency)
                     )
                     return
@@ -777,30 +779,30 @@ class CmdCraft(ArxCommand, TemplateMixins):
                         c_mat = CraftingMaterialType.objects.get(id=mat)
                     except CraftingMaterialType.DoesNotExist:
                         inform_staff(
-                            "Attempted to craft using material %s which does not exist."
+                            _("尝试使用不存在的材料 %s 进行炼制。")
                             % mat
                         )
                         self.msg(
-                            "One of the materials required no longer seems to exist. Informing staff."
+                            _("所需材料似乎已不存在，已通报执事。")
                         )
                         return
                     try:
                         pmat = pmats.get(type=c_mat)
                         if pmat.amount < mats[mat]:
                             caller.msg(
-                                "You need %s of %s, and only have %s."
+                                _("你需要 %s 份 %s，但仅有 %s 份。")
                                 % (mats[mat], c_mat.name, pmat.amount)
                             )
                             return
                         realvalue += c_mat.value * mats[mat]
                     except OwnedMaterial.DoesNotExist:
                         caller.msg(
-                            "You do not have any of the material %s." % c_mat.name
+                            _("你没有 %s 材料。") % c_mat.name
                         )
                         return
                 # check if they have enough action points
                 if not caller.player_ob.pay_action_points(2 + action_points):
-                    self.msg("You do not have enough action points left to craft that.")
+                    self.msg(_("你没有足够的行动点来炼制。"))
                     return
                 # pay the money
                 caller.pay_money(cost)
@@ -852,7 +854,7 @@ class CmdCraft(ArxCommand, TemplateMixins):
                 obj.item_data.add_adorn(mat_id, amount)
             self.pay_owner(
                 price,
-                "%s has crafted '%s', a %s, at your shop and you earn %s silver."
+                _("%s 在你的店铺炼制了 '%s'（%s），你获得 %s 银两。")
                 % (caller, obj, recipe.name, price),
             )
             try:
@@ -860,10 +862,10 @@ class CmdCraft(ArxCommand, TemplateMixins):
                     obj.item_data.add_translation(lang, text)
             except IndexError:
                 pass
-            cnoun = "You" if caller == crafter else crafter
-            caller.msg("%s created %s." % (cnoun, obj.name))
+            cnoun = "你" if caller == crafter else crafter
+            caller.msg(_("%s炼成了 %s。") % (cnoun, obj.name))
             quality = QUALITY_LEVELS[quality]
-            caller.msg("It is of %s quality." % quality)
+            caller.msg(_("品质为 %s。") % quality)
             caller.db.crafting_project = None
             return
 
@@ -894,13 +896,13 @@ class CmdRecipes(ArxCommand):
         from server.utils import arx_more
 
         if not recipes:
-            self.msg("(No recipes qualify.)")
+            self.msg(_("(无符合条件的配方)"))
             return
         known_list = CraftingRecipe.objects.filter(
             known_by__player__player=self.caller.player
         )
         table = PrettyTable(
-            ["{wKnown{n", "{wName{n", "{wAbility{n", "{wLvl{n", "{wCost{n"]
+            ["{w已习{n", "{w名称{n", "{w技艺{n", "{w难度{n", "{w花费{n"]
         )
 
         def getter(a):
@@ -908,7 +910,7 @@ class CmdRecipes(ArxCommand):
 
         recipes = sorted(recipes, key=getter)
         for recipe in recipes:
-            known = "{wX{n" if recipe in known_list else ""
+            known = "{w√{n" if recipe in known_list else ""
             table.add_row(
                 [
                     known,
@@ -958,26 +960,26 @@ class CmdRecipes(ArxCommand):
             if self.args:
                 match = [ob for ob in can_learn if ob.name.lower() == self.args.lower()]
             if not match:
-                learn_msg = ("You cannot learn '%s'. " % self.lhs) if self.lhs else ""
-                caller.msg("%sRecipes you can learn:" % learn_msg)
+                learn_msg = (_("你无法习得 '%s'。") % self.lhs) if self.lhs else ""
+                caller.msg(_("%s可习得的配方：") % learn_msg)
                 self.display_recipes(can_learn)
                 return
             match = match[0]
             cost = 0 if caller.check_permstring("builders") else match.additional_cost
-            cost_msg = "It will cost %s for you to learn %s." % (
-                cost or "nothing",
+            cost_msg = _("习得 %s 需花费 %s。") % (
                 match.name,
+                cost or _("免费"),
             )
             if "cost" in self.switches:
                 return caller.msg(cost_msg)
             elif cost > caller.currency:
                 return caller.msg(
-                    "You have %s silver. %s" % (caller.currency, cost_msg)
+                    _("你持有 %s 银两。%s") % (caller.currency, cost_msg)
                 )
             caller.pay_money(cost)
             dompc.assets.crafting_recipes.add(match)
-            coststr = (" for %s silver" % cost) if cost else ""
-            caller.msg("You have learned %s%s." % (match.name, coststr))
+            coststr = _("，花费 %s 银两") % cost if cost else ""
+            caller.msg(_("你已习得 %s%s。") % (match.name, coststr))
             return
         if "info" in self.switches:
             match = None
@@ -985,7 +987,7 @@ class CmdRecipes(ArxCommand):
             if self.args:
                 match = [ob for ob in info if ob.name.lower() == self.args.lower()]
             if not match:
-                caller.msg("No recipe by that name. Recipes you can get /info on:")
+                caller.msg(_("无此配方。可查询详情的配方："))
                 self.display_recipes(info)
                 return
             match = match[0]
@@ -998,8 +1000,8 @@ class CmdRecipes(ArxCommand):
             if self.rhs:
                 match = [ob for ob in can_teach if ob.name.lower() == self.rhs.lower()]
             if not match:
-                teach_msg = ("You cannot teach '%s'. " % self.rhs) if self.rhs else ""
-                caller.msg("%sRecipes you can teach:" % teach_msg)
+                teach_msg = (_("你无法传授 '%s'。") % self.rhs) if self.rhs else ""
+                caller.msg(_("%s可传授的配方：") % teach_msg)
                 self.display_recipes(can_teach)
                 return
             recipe = match[0]
@@ -1007,17 +1009,17 @@ class CmdRecipes(ArxCommand):
             if not character:
                 return
             if not recipe.access(character, "learn"):
-                caller.msg("They cannot learn %s." % recipe.name)
+                caller.msg(_("对方无法习得 %s。") % recipe.name)
                 return
             try:
                 dompc = PlayerOrNpc.objects.get(player=character.player)
             except PlayerOrNpc.DoesNotExist:
                 dompc = setup_dom_for_char(character)
             if recipe in dompc.assets.crafting_recipes.all():
-                caller.msg("They already know %s." % recipe.name)
+                caller.msg(_("对方已习得 %s。") % recipe.name)
                 return
             dompc.assets.crafting_recipes.add(recipe)
-            caller.msg("Taught %s %s." % (character, recipe.name))
+            caller.msg(_("已传授 %s 给 %s。") % (recipe.name, character))
 
 
 class CmdJunk(ArxCommand):
@@ -1027,8 +1029,7 @@ class CmdJunk(ArxCommand):
     Usage:
         +junk <object>
 
-    Destroys an object, retrieving a portion of the materials
-    used to craft it.
+    销毁物品，回收部分炼制材料。
     """
 
     key = "junk"
@@ -1049,9 +1050,9 @@ class CmdJunk(ArxCommand):
 
         try:
             if obj.player_ob or obj.player:
-                raise CommandError("You cannot +junk a character.")
+                raise CommandError(_("你不可销毁角色。"))
             obj.junk_handler.junk(self.caller)
         except AttributeError:
-            self.msg("You may only +junk crafted objects.")
+            self.msg(_("只能销毁炼制品。"))
         except CommandError as err:
             self.msg(err)

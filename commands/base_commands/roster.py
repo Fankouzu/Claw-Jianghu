@@ -1611,11 +1611,11 @@ class CmdRelationship(ArxPlayerCommand):
         "ally",
         "spouse",
         "The Crown",
-        "Crownlands",
-        "Oathlands",
-        "Lyceum",
-        "Mourning Isles",
-        "Northlands",
+        "中原",
+        "西域",
+        "江南",
+        "西南",
+        "京师",
         "deceased",
     ]
 

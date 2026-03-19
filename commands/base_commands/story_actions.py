@@ -3,6 +3,7 @@ Commands related to @actions, the main way that players interact with the metapl
 own personal story.
 """
 from django.db.models import Q
+from django.utils.translation import gettext as _
 
 from commands.base import ArxPlayerCommand
 from evennia.objects.models import ObjectDB
@@ -36,7 +37,7 @@ class ActionCommandMixin(object):
         verbose_name = verbose_name or field_name
         if field_name in ("status", "category"):
             value = getattr(action, "get_%s_display" % field_name)()
-        self.msg("%s set to %s." % (verbose_name, value))
+        self.msg(_("%s已设为%s。") % (verbose_name, value))
 
     def view_action(self, action, disp_old=False):
         """Views an action for caller"""
@@ -56,7 +57,7 @@ class ActionCommandMixin(object):
             except ActionSubmissionError as err:
                 self.msg(err)
             else:
-                self.msg("You have invited %s to join your action." % dompc)
+                self.msg(_("你已邀请%s加入你的行动。") % dompc)
 
 
 class CmdAction(ActionCommandMixin, ArxPlayerCommand):

@@ -1,6 +1,7 @@
 """
 
 Admin commands
+执事命令
 
 """
 from typing import Tuple, Optional, List
@@ -9,6 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction, DatabaseError
 from django.db.models import Q, Count, Subquery, OuterRef, IntegerField
+from django.utils.translation import gettext as _
 
 from evennia.server.sessionhandler import SESSIONS
 from evennia.utils import evtable
@@ -80,25 +82,25 @@ class CmdHome(ArxCommand):
         if not caller.check_permstring("builders"):
             if cscript:
                 caller.msg(
-                    "You cannot use home to leave a room where a combat is occurring."
+                    _("战斗进行中无法使用 home 离开房间。")
                 )
                 return
             if "private" in room.tags.all():
                 if len([ob for ob in room.contents if ob.player]) > 1:
                     caller.msg(
-                        "You cannot use home to leave a private room if you are not alone."
+                        _("私人房间内有他人时无法使用 home 离开。")
                     )
                     return
         if not home:
-            caller.msg("You have no home!")
+            caller.msg(_("你没有设置居所！"))
         elif home == caller.location:
-            caller.msg("You are already home!")
+            caller.msg(_("你已身处居所！"))
         elif not caller.conscious:
-            caller.msg("You must be conscious to go home.")
+            caller.msg(_("你需清醒方可返回居所。"))
         else:
             mapping = {"secret": True}
             caller.move_to(home, mapping=mapping)
-            caller.msg("There's no place like home ...")
+            caller.msg(_("金窝银窝不如自己的草窝..."))
             for guard in guards:
                 if guard.location:
                     if "stationary_guard" not in guard.tags.all():
@@ -135,16 +137,16 @@ class CmdGemit(ArxPlayerCommand):
         """Implements command"""
         try:
             if not self.args:
-                raise CommandError("Usage: @gemit <message>")
+                raise CommandError(_("用法：@gemit <消息>"))
             elif "norecord" in self.switches:
-                self.msg("Announcing to all connected players ...")
+                self.msg(_("向所有在线玩家发布公告..."))
                 if not self.args.startswith("{") and not self.args.startswith("|"):
                     self.args = "|g" + self.args
                 broadcast(self.args, format_announcement=False)
                 return
             elif "startepisode" in self.switches:
                 if not self.caller.check_permstring("Owner"):
-                    raise CommandError("Only an owner can advance an episode.")
+                    raise CommandError(_("只有所有者可以推进章节。"))
                 msg = self.rhs
                 lhslist = self.lhs.split("/")
                 episode_name = lhslist[0]
@@ -153,14 +155,14 @@ class CmdGemit(ArxPlayerCommand):
                     synopsis = lhslist[1]
                 if not episode_name or not msg:
                     raise CommandError(
-                        "You must give a name & message for the new episode."
+                        _("必须为新章节提供名称和消息。")
                     )
                 create_gemit_and_post(msg, self.caller, episode_name, synopsis)
             else:
                 orgs_list = None
                 if "orgs" in self.switches or "org" in self.switches:
                     if not self.lhs or not self.rhs:
-                        raise CommandError("Specify at least one org and the message.")
+                        raise CommandError(_("请指定至少一个帮派和消息。"))
                     orgs_list = []
                     msg = self.rhs
                     for arg in self.lhslist:
@@ -168,7 +170,7 @@ class CmdGemit(ArxPlayerCommand):
                             org = Organization.objects.get(name__iexact=arg)
                         except Organization.DoesNotExist:
                             raise CommandError(
-                                "No organization named '%s' was found." % arg
+                                _("未找到名为 '%s' 的帮派。") % arg
                             )
                         else:
                             orgs_list.append(org)

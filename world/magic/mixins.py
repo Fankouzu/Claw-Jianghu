@@ -7,6 +7,35 @@ from evennia.utils import logger
 _MAX_PRIMUM_TIER1 = 20
 _MAX_PRIMUM_TIER2 = 10
 
+# 魔法材料名称映射（英文名: (中文名, 品阶)）
+# Magic material name mapping (English: (Chinese, tier))
+MAGIC_MATERIALS = {
+    # 一阶材料 / Tier 1 materials
+    "alaricite": ("千年灵芝", 1),
+    "star iron": ("天星铁", 1),
+    # 二阶材料 / Tier 2 materials
+    "diamondplate": ("玄铁精", 2),
+    "iridescite": ("七彩琉璃", 2),
+    "stygian": ("幽冥石", 2),
+    "rubicund": ("赤血砂", 2),
+}
+
+
+def get_material_tier(name):
+    """
+    根据材料名称获取品阶。
+    支持英文名称和中文名称。
+    Returns the tier of a material by name.
+    Supports both English and Chinese names.
+    """
+    if not name:
+        return None
+    lower_name = name.lower()
+    for eng_name, (chi_name, tier) in MAGIC_MATERIALS.items():
+        if eng_name in lower_name or chi_name in name:
+            return tier
+    return None
+
 
 class MagicMixins(object):
     @property
@@ -68,17 +97,10 @@ class MagicMixins(object):
     def quality_level_from_primum(self, primum):
         try:
             recipe = self.item_data.recipe
-
-            lower_name = recipe.name.lower()
-            if "alaricite" in lower_name:
+            tier = get_material_tier(recipe.name)
+            if tier == 1:
                 return primum / _MAX_PRIMUM_TIER1
-            elif "diamondplate" in lower_name:
-                return primum / _MAX_PRIMUM_TIER2
-            elif "star iron" in lower_name:
-                return primum / _MAX_PRIMUM_TIER1
-            elif "iridescite" in lower_name:
-                return primum / _MAX_PRIMUM_TIER2
-            elif "stygian" in lower_name:
+            elif tier == 2:
                 return primum / _MAX_PRIMUM_TIER2
         except AttributeError:
             pass
@@ -90,23 +112,18 @@ class MagicMixins(object):
 
         if self.item_data.recipe:
             try:
-                lower_name = self.item_data.recipe.name.lower()
+                recipe_name = self.item_data.recipe.name
             except CraftingRecipe.DoesNotExist:
                 return self.potential
         else:
             return self.potential
 
         result = None
-        if lower_name:
-            if "alaricite" in lower_name:
+        if recipe_name:
+            tier = get_material_tier(recipe_name)
+            if tier == 1:
                 result = _MAX_PRIMUM_TIER1 * 11
-            elif "diamondplate" in lower_name:
-                result = _MAX_PRIMUM_TIER2 * 11
-            elif "star iron" in lower_name:
-                result = _MAX_PRIMUM_TIER1 * 11
-            elif "iridescite" in lower_name:
-                result = _MAX_PRIMUM_TIER2 * 11
-            elif "stygian" in lower_name:
+            elif tier == 2:
                 result = _MAX_PRIMUM_TIER2 * 11
 
         if not result:
@@ -137,13 +154,13 @@ class MagicMixins(object):
         quality_level = self.item_data.quality_level
 
         result = quality_level
-        lower_name = None
+        material_name = None
         if self.item_data.recipe and quality_level > 0:
 
             try:
                 recipe = self.item_data.recipe
 
-                lower_name = recipe.name.lower()
+                material_name = recipe.name
             except AttributeError:
                 pass
 
@@ -155,21 +172,16 @@ class MagicMixins(object):
 
             try:
                 material = CraftingMaterialType.objects.get(id=material_id)
-                lower_name = material.name.lower()
+                material_name = material.name
                 quality_level = 1
             except CraftingMaterialType.DoesNotExist:
                 pass
 
-        if lower_name:
-            if "alaricite" in lower_name:
+        if material_name:
+            tier = get_material_tier(material_name)
+            if tier == 1:
                 result = _MAX_PRIMUM_TIER1 * quality_level
-            elif "diamondplate" in lower_name:
-                result = _MAX_PRIMUM_TIER2 * quality_level
-            elif "star iron" in lower_name:
-                result = _MAX_PRIMUM_TIER1 * quality_level
-            elif "iridescite" in lower_name:
-                result = _MAX_PRIMUM_TIER2 * quality_level
-            elif "stygian" in lower_name:
+            elif tier == 2:
                 result = _MAX_PRIMUM_TIER2 * quality_level
 
         quantity = 1

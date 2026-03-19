@@ -7,6 +7,7 @@ make sure to homogenize self.caller to always be the player object
 for easy handling.
 
 """
+from django.utils.translation import gettext as _
 from evennia.utils import create
 from commands.base import ArxCommand
 from evennia.objects.models import ObjectDB
@@ -35,12 +36,12 @@ class CmdMap(ArxCommand):
         room = caller.location
         map = room.db.map
         if not map:
-            caller.msg("There is no map available at your current location.")
+            caller.msg(_("你所在位置没有可用地图。"))
             return
-        caller.msg("Map of {c%s{n." % map.key)
+        caller.msg(_("{c%s{n 的地图。") % map.key)
         from typeclasses.map import _CALLER_ICON
 
-        caller.msg("Your location displayed as %s." % _CALLER_ICON)
+        caller.msg(_("你的位置显示为 %s。") % _CALLER_ICON)
         directions = caller.ndb.waypoint
         caller.msg(map.draw_map(room, destination=directions))
 
@@ -65,20 +66,20 @@ class CmdMapCreate(ArxCommand):
         typeclass = MAP_TYPECLASS
         if not self.args:
             maps = ObjectDB.objects.filter(db_typeclass_path=typeclass)
-            caller.msg("Maps: %s" % ", ".join(map.key for map in maps))
+            caller.msg(_("地图：%s") % ", ".join(map.key for map in maps))
             return
 
         try:
             name = self.lhs
 
         except (ValueError, KeyError, AttributeError):
-            caller.msg("Usage @mapcreate <mapname>")
+            caller.msg(_("用法：@mapcreate <地图名>"))
             return
 
         if ObjectDB.objects.filter(db_typeclass_path=typeclass, db_key__iexact=name):
-            caller.msg("There already exists a map by that name.")
+            caller.msg(_("已存在同名地图。"))
             return
-        description = "A map."
+        description = _("一张地图。")
         # Create and set the map up
         lockstring = "view:all();delete:perm(Immortals);edit:id(%s)" % caller.id
         new_map = create.create_object(
@@ -94,7 +95,7 @@ class CmdMapCreate(ArxCommand):
             nohome=False,
         )
         new_map.desc = description
-        self.msg("Created map %s." % new_map.key)
+        self.msg(_("已创建地图 %s。") % new_map.key)
         new_map.save()
 
 
@@ -130,15 +131,15 @@ class CmdMapRoom(ArxCommand):
                 db_typeclass_path=MAP_TYPECLASS, db_key__iexact=self.lhs
             )
         except (KeyError, AttributeError, TypeError, ValueError):
-            caller.msg("Usage error. Example of correct usage:")
+            caller.msg(_("用法错误。正确用法示例："))
             caller.msg("@maproom crownward=5,3,C7")
             return
         except ObjectDB.DoesNotExist:
-            caller.msg("No map found for %s." % self.lhs)
+            caller.msg(_("未找到名为 %s 的地图。") % self.lhs)
             return
         if "clear" in self.switches:
             map.db.rooms[(x, y)] = None
-            caller.msg("Location (%s, %s) will be a blank space." % (x, y))
+            caller.msg(_("位置 (%s, %s) 将显示为空白。") % (x, y))
             return
         # set up room
         room = caller.location
@@ -146,5 +147,5 @@ class CmdMapRoom(ArxCommand):
         room.db.x_coord = x
         room.db.y_coord = y
         map.add_room(room)
-        caller.msg("Added %s at (%s, %s)." % (room, x, y))
+        caller.msg(_("已添加 %s 于坐标 (%s, %s)。") % (room, x, y))
         return

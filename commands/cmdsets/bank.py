@@ -1,7 +1,9 @@
 """
 Commands for banking.
+银号相关命令。
 """
 
+from django.utils.translation import gettext as _
 from evennia.commands.cmdset import CmdSet
 from evennia.utils import evtable
 from commands.base import ArxCommand
@@ -67,7 +69,7 @@ class CmdBank(ArxCommand):
         matches = [ob for ob in all_accounts if str(ob.owner).lower() == name]
         if not matches:
             self.msg(
-                "No matches. Choose one of the following: %s"
+                _("未找到匹配。请选择： %s")
                 % ", ".join(str(ob.owner) for ob in all_accounts)
             )
             return
@@ -77,16 +79,16 @@ class CmdBank(ArxCommand):
     def get_debt_table(debts):
         x = 0
         table = evtable.EvTable(
-            "{w#{n",
-            "{wReceiver{n",
-            "{wAmount{n",
-            "{wTime Remaining{n",
+            "{w编号{n",
+            "{w收款方{n",
+            "{w金额{n",
+            "{w剩余期数{n",
             width=60,
             align="r",
         )
         for debt in debts:
             x += 1
-            time = "Permanent" if debt.repetitions_left == -1 else debt.repetitions_left
+            time = _("永久") if debt.repetitions_left == -1 else debt.repetitions_left
             table.add_row(
                 debt.id, debt.receiver, "{:,}".format(debt.weekly_amount), time
             )
@@ -103,9 +105,9 @@ class CmdBank(ArxCommand):
     def inform_owner(self, owner, verb, amt, attr_type="silver", mat_str="silver"):
         attr_name = "min_%s_for_inform" % attr_type
         if amt >= getattr(owner, attr_name):
-            preposition = "to" if "deposit" in verb.lower() else "from"
-            msg = "{} has {} {:,} {} {} {} account.".format(
-                self.caller, verb, amt, mat_str, preposition, owner
+            preposition = _("存入") if "deposit" in verb.lower() else _("取出")
+            msg = _("%s 已从 %s 的账户中%s %s %s。") % (
+                self.caller, owner, verb, amt, mat_str
             )
             owner.inform(msg, category="Bank Transaction")
 
@@ -143,27 +145,27 @@ class CmdBank(ArxCommand):
                         id=val, id__in=(ob.id for ob in debts)
                     )
                 except (ValueError, AccountTransaction.DoesNotExist):
-                    caller.msg("Invalid number. Select one of the following:")
+                    caller.msg(_("无效编号，请选择："))
                     caller.msg(str(self.get_debt_table(debts)), options={"box": True})
                     return
                 if "endpayment" in self.switches:
                     debt.delete()
-                    caller.msg("Payment cancelled.")
+                    caller.msg(_("定期支付已取消。"))
                     return
                 try:
                     amt = int(self.rhs)
                     if amt <= 0:
                         raise ValueError
                 except ValueError:
-                    caller.msg("Please give a positive value as the new amount.")
+                    caller.msg(_("请输入正数作为新金额。"))
                     return
                 check = self.check_money(debt.sender, (amt - debt.weekly_amount))
                 if check < 0:
-                    caller.msg("Insufficient funds. You need {:,} more.".format(-check))
+                    caller.msg(_("余额不足，还需 %s 银两。") % (-check))
                     return
                 debt.weekly_amount = amt
                 debt.save()
-                caller.msg("Weekly payment amount is now {:,}.".format(amt))
+                caller.msg(_("每周支付金额已改为 %s。") % amt)
                 return
             # set up a new payment
             try:
@@ -171,7 +173,7 @@ class CmdBank(ArxCommand):
                 if not sender:
                     return
                 if not sender.access(caller, "withdraw"):
-                    caller.msg("You lack permission to set up a payment.")
+                    caller.msg(_("你没有权限设置定期支付。"))
                     return
                 amt = int(self.lhslist[1])
                 if amt <= 0:
@@ -185,42 +187,40 @@ class CmdBank(ArxCommand):
                         organization_owner__name__iexact=self.rhs
                     )
                 if sender == receiver:
-                    caller.msg("Sender and receiver must be different.")
+                    caller.msg(_("付款方和收款方不能相同。"))
                     return
             except (ValueError, IndexError):
-                caller.msg("Must give a positive number as an amount.")
+                caller.msg(_("金额必须为正数。"))
                 return
             except (AssetOwner.DoesNotExist, AssetOwner.MultipleObjectsReturned):
-                caller.msg("Could find neither a player nor organization by that name.")
+                caller.msg(_("未找到该名称的玩家或帮派。"))
                 return
             check = self.check_money(sender, amt)
             if check < 0:
                 caller.msg(
-                    "Insufficient funds: {:,} more required to set up payment.".format(
-                        -check
-                    )
+                    _("余额不足，还需 %s 银两才能设置定期支付。")
+                    % (-check)
                 )
                 return
             sender.debts.create(
                 receiver=receiver, weekly_amount=amt, repetitions_left=-1
             )
             caller.msg(
-                "New weekly payment set up: {} pays {:,} to {} every week.".format(
-                    sender, amt, receiver
-                )
+                _("已设置每周定期支付： %s 每周支付 %s 银两给 %s。")
+                % (sender, amt, receiver)
             )
             return
         if not self.args:
-            msg = "{wAccounts{n".center(60)
+            msg = "{w账户{n".center(60)
             msg += "\n"
             actable = evtable.EvTable(
-                "{wOwner{n",
-                "{wBalance{n",
-                "{wNet Income{n",
-                "{wMaterials{n",
-                "{wEcon{n",
-                "{wSoc{n",
-                "{wMil{n",
+                "{w户主{n",
+                "{w余额{n",
+                "{w净收入{n",
+                "{w材料{n",
+                "{w经济{n",
+                "{w社会{n",
+                "{w军事{n",
                 width=78,
                 border="cells",
             )
@@ -250,18 +250,18 @@ class CmdBank(ArxCommand):
                 incomes = account.incomes.all()
                 debts = account.debts.all()
                 if incomes:
-                    msg += ("{w%s Incomes{n" % str(account)).center(60)
+                    msg += ("{w%s 收入{n" % str(account)).center(60)
                     msg += "\n"
                     table = evtable.EvTable(
-                        "{wSender{n",
-                        "{wAmount{n",
-                        "{wTime Remaining{n",
+                        "{w付款方{n",
+                        "{w金额{n",
+                        "{w剩余期数{n",
                         width=60,
                         align="r",
                     )
                     for inc in incomes:
                         time = (
-                            "Permanent"
+                            _("永久")
                             if inc.repetitions_left == -1
                             else inc.repetitions_left
                         )
@@ -271,7 +271,7 @@ class CmdBank(ArxCommand):
                     msg += str(table)
                     msg += "\n"
                 if debts:
-                    msg += ("{w%s Payments{n" % str(account)).center(60)
+                    msg += ("{w%s 定期支付{n" % str(account)).center(60)
                     msg += "\n"
                     msg += str(self.get_debt_table(debts))
                     msg += "\n"
@@ -289,9 +289,7 @@ class CmdBank(ArxCommand):
                 return
             if account == dompc.assets:
                 caller.msg(
-                    "Characters always have access to their own materials as an "
-                    "abstraction, so withdraws and deposits "
-                    + "are only between organizations and characters."
+                    _("角色随时可取用自己的材料，存取仅用于帮派与角色之间。")
                 )
                 return
             usingmats = (
@@ -308,7 +306,7 @@ class CmdBank(ArxCommand):
             else:
                 if not account.access(caller, "withdraw"):
                     caller.msg(
-                        "You do not have permission to withdraw from that account."
+                        _("你没有权限从该账户取款。")
                     )
                     return
                 receiver = dompc.assets
@@ -319,15 +317,14 @@ class CmdBank(ArxCommand):
                 source = sender
                 targ = receiver
                 if val <= 0:
-                    caller.msg("You must specify a positive number.")
+                    caller.msg(_("必须指定正数。"))
                     return
                 if usingmats:
                     source = sender.owned_materials.get(type__name__iexact=matname)
                     if source.amount < val:
                         caller.msg(
-                            "You tried to {} {:,} {}, but only {:,} available.".format(
-                                verb, val, source.type.name, source.amount
-                            )
+                            _("你尝试%s %s %s，但仅有 %s 可用。")
+                            % (verb, val, source.type.name, source.amount)
                         )
                         return
                     try:
@@ -344,15 +341,14 @@ class CmdBank(ArxCommand):
                     restypes = ("economic", "social", "military")
                     matname = matname.lower()
                     if matname not in restypes:
-                        caller.msg("Resource must be one of: %s" % ", ".join(restypes))
+                        caller.msg(_("资源类型须为：%s") % ", ".join(restypes))
                         return
                     sresamt = getattr(sender, matname)
                     if sresamt < val:
-                        matname += " resources"
+                        matname += _("资源")
                         caller.msg(
-                            "You tried to {} {:,} {}, but only {:,} available.".format(
-                                verb, val, matname, sresamt
-                            )
+                            _("你尝试%s %s %s，但仅有 %s 可用。")
+                            % (verb, val, matname, sresamt)
                         )
                         return
                     tresamt = getattr(receiver, matname)
@@ -360,38 +356,37 @@ class CmdBank(ArxCommand):
                     tamt = tresamt + val
                     setattr(sender, matname, samt)
                     setattr(receiver, matname, tamt)
-                    matname += " resources"
+                    matname += _("资源")
                 source.save()
                 targ.save()
                 caller.msg(
-                    "You have transferred {:,} {} from {} to {}.".format(
-                        val, matname, sender, receiver
-                    )
+                    _("你已将 %s %s 从 %s 转移至 %s。")
+                    % (val, matname, sender, receiver)
                 )
                 if account.can_be_viewed_by(caller):
                     caller.msg(
-                        "Sender now has {:,}, receiver has {:,}.".format(samt, tamt)
+                        _("付款方现持有 %s，收款方现持有 %s。") % (samt, tamt)
                     )
                 else:
-                    caller.msg("Transaction successful.")
+                    caller.msg(_("交易成功。"))
                 self.inform_owner(account, verb, val, attr_type, matname)
             except OwnedMaterial.DoesNotExist:
                 caller.msg(
-                    "No match for that material. Valid materials: %s"
+                    _("未找到该材料。可用材料：%s")
                     % ", ".join(str(mat) for mat in sender.owned_materials.all())
                 )
                 return
             except (ValueError, IndexError):
-                caller.msg("Invalid usage.")
+                caller.msg(_("用法无效。"))
                 return
             return
         try:
             amount = int(self.lhs)
             if amount <= 0:
-                caller.msg("Amount must be positive.")
+                caller.msg(_("金额必须为正数。"))
                 return
         except ValueError:
-            caller.msg("Amount must be a number.")
+            caller.msg(_("金额必须为数字。"))
             return
         if not self.rhs:
             account = dompc.assets
@@ -402,13 +397,12 @@ class CmdBank(ArxCommand):
         if "deposit" in self.switches:
             cash = caller.item_data.currency
             if not cash:
-                caller.msg("You have no money to deposit.")
+                caller.msg(_("你身无分文，无法存入。"))
                 return
             if amount > cash:
                 caller.msg(
-                    "You tried to deposit {:,}, but only have {:,} on hand.".format(
-                        amount, cash
-                    )
+                    _("你尝试存入 %s，但仅有 %s。")
+                    % (amount, cash)
                 )
                 return
             account.vault += amount
@@ -416,32 +410,30 @@ class CmdBank(ArxCommand):
             account.save()
             if account.can_be_viewed_by(caller):
                 caller.msg(
-                    "You have deposited {:,}. The new balance is {:,}.".format(
-                        amount, account.vault
-                    )
+                    _("你已存入 %s，新余额为 %s。")
+                    % (amount, account.vault)
                 )
             else:
-                caller.msg("You have deposited {:,}.".format(amount))
+                caller.msg(_("你已存入 %s。") % amount)
             self.inform_owner(account, "deposited", amount)
             return
         if "withdraw" in self.switches:
             if not account.access(caller, "withdraw"):
-                caller.msg("You do not have permission to withdraw from that account.")
+                caller.msg(_("你没有权限从该账户取款。"))
                 return
             cash = caller.item_data.currency
             check = self.check_money(account, amount)
             if check < 0:
                 caller.msg(
-                    "You cannot withdraw more than the balance minus an account's debt obligations."
+                    _("取款金额不能超过账户余额扣除定期支付义务后的数额。")
                 )
                 caller.msg(
-                    "You want to withdraw {:,} but only {:,} is available after debt obligations.".format(
-                        amount, check + amount
-                    )
+                    _("你欲取款 %s，但扣除定期支付义务后仅余 %s 可用。")
+                    % (amount, check + amount)
                 )
                 if account.debts.all():
                     caller.msg(
-                        "Cancelling payments would increase the amount available."
+                        _("取消定期支付可增加可用金额。")
                     )
                     return
                 return
@@ -449,12 +441,11 @@ class CmdBank(ArxCommand):
             caller.item_data.currency = cash + amount
             account.save()
             caller.msg(
-                "You have withdrawn {:,}. New balance is {:,}.".format(
-                    amount, account.vault
-                )
+                _("你已取款 %s，新余额为 %s。")
+                % (amount, account.vault)
             )
             self.inform_owner(account, "withdrawn", amount)
             return
         else:
-            caller.msg("Unrecognized switch.")
+            caller.msg(_("无法识别的选项。"))
             return

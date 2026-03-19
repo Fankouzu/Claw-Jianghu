@@ -7,6 +7,7 @@ make sure to homogenize self.caller to always be the player object
 for easy handling.
 
 """
+from django.utils.translation import gettext as _
 from evennia.utils import create
 from server.utils import prettytable
 from server.utils.arx_utils import inform_staff
@@ -45,9 +46,9 @@ def list_bboards(caller, old=False):
     my_subs = [bb for bb in bb_list if bb.has_subscriber(caller)]
     # just display the subscribed bboards with no extra info
     if old:
-        caller.msg("{cDisplaying only archived posts.{n")
+        caller.msg("{c仅显示已归档帖子。{n")
     bbtable = prettytable.PrettyTable(
-        ["{wbb #", "{wName", "{wPosts{n", "{wSubscribed{n"]
+        ["{w版号", "{w名称", "{w帖子{n", "{w已订阅{n"]
     )
     for bboard in bb_list:
         bb_number = bb_list.index(bboard)
@@ -56,7 +57,7 @@ def list_bboards(caller, old=False):
         subbed = bboard in my_subs
         posts = bboard.archived_posts if old else bboard.posts
         if unread_num:
-            unread_str = " {w(%s new){n" % unread_num
+            unread_str = " {w(%s新){n" % unread_num
         else:
             unread_str = ""
         bbtable.add_row([bb_number, bb_name, "%s%s" % (len(posts), unread_str), subbed])
@@ -74,7 +75,7 @@ def access_bboard(caller, args, request="read"):
     if args.isdigit():
         bb_num = int(args)
         if (bb_num < 0) or (bb_num >= len(bboards)):
-            caller.msg("Invalid board number.")
+            caller.msg(_("无效版号。"))
             return
         board = bboards[bb_num]
     else:
@@ -82,17 +83,17 @@ def access_bboard(caller, args, request="read"):
         try:
             board = BBoard.objects.get(db_key__icontains=args, id__in=board_ids)
         except BBoard.DoesNotExist:
-            caller.msg("Could not find a unique board by name %s." % args)
+            caller.msg(_("寻不得名为%s的版块。") % args)
             return
         except BBoard.MultipleObjectsReturned:
             boards = BBoard.objects.filter(db_key__icontains=args, id__in=board_ids)
             caller.msg(
-                "Too many boards returned, please pick one: %s"
+                _("匹配多个版块，请选择：%s")
                 % ", ".join(str(ob) for ob in boards)
             )
             return
     if not board.access(caller, request):
-        caller.msg("You do not have the required privileges to do that.")
+        caller.msg(_("你没有权限执行此操作。"))
         return
     # passed all checks, so return board
     return board

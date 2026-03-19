@@ -11,11 +11,11 @@ from django.core.exceptions import ObjectDoesNotExist
 import random
 
 CAPITALS = [
-    (0, 1),  # Sanctum
-    (3, -5),  # Lenosia
-    (9, 2),  # Arx
-    (3, 7),  # Farhaven
-    (12, 2),  # Maelstrom
+    (0, 1),  # 峨眉山
+    (3, -5),  # 姑苏城
+    (9, 2),  # 天阙城
+    (3, 7),  # 雁门关
+    (12, 2),  # 泉州港
 ]
 
 org_lockstring = (
@@ -235,8 +235,8 @@ def setup_army(
     land_srank = srank
     navy_srank = srank
     # Determine if we should have different navy and land strengths
-    # If the Domain's land's region is the Mourning Isles, it's a naval power
-    if domain.land.region.name == "Mourning Isles":
+    # If the Domain's land's region is 西南 (Southwest), it's a naval power
+    if domain.land.region.name == "西南":
         navy_srank -= 1
         land_srank += 1
     # If the Domain is landlocked, it can't have a navy

@@ -7,6 +7,7 @@ creation of other help topics such as RP help or game-world aides.
 """
 
 from collections import defaultdict
+from django.utils.translation import gettext as _
 from evennia.utils.utils import fill, dedent
 from evennia.commands.command import Command
 from evennia.help.models import HelpEntry
@@ -30,11 +31,11 @@ def format_help_entry(
     """
     string = SEP + "\n"
     if title:
-        string += "{C帮助主题：{w%s{n" % title
+        string += "{C" + _("帮助主题：") + "{w%s{n" % title
     if aliases:
-        string += " {C（别名：{w%s{n{C）{n" % (", ".join(aliases))
+        string += " {C" + _("（别名：") + "{w%s{n{C）{n" % (", ".join(aliases))
     if unavailable:
-        string += "\n{r此命令当前对您不可用。{n"
+        string += "\n{r" + _("此命令当前对你不可用。") + "{n"
     if help_text:
         string += "\n%s" % dedent(help_text.rstrip())
     if related_tags:
@@ -44,9 +45,9 @@ def format_help_entry(
             .distinct()
             .values_list("db_key", flat=True)
         )
-        string += "\n\n{C相关帮助条目：{w%s" % ", ".join(entries)
+        string += "\n\n{C" + _("相关帮助条目：") + "{w%s" % ", ".join(entries)
     if suggested:
-        string += "\n\n{C建议：{n "
+        string += "\n\n{C" + _("建议：") + "{n "
         string += "{w%s{n" % fill(", ".join(suggested))
     string.strip()
     string += "\n" + SEP
@@ -62,12 +63,12 @@ def format_help_list(hdict_cmds, hdict_db, brief=False):
     """
     string = ""
     if hdict_cmds and any(hdict_cmds.values()):
-        string += "\n" + SEP + "\n   {C命令帮助条目{n\n" + SEP
+        string += "\n" + SEP + "\n   {C" + _("命令帮助条目") + "{n\n" + SEP
         for category in sorted(hdict_cmds.keys()):
             string += "\n  {w%s{n:\n" % (str(category).title())
             string += "{G" + ", ".join(sorted(hdict_cmds[category])) + "\n"
     if hdict_db and any(hdict_db.values()):
-        string += "\n\n" + SEP + "\n\r  {C其他帮助分类{n\n" + SEP
+        string += "\n\n" + SEP + "\n\r  {C" + _("其他帮助分类") + "{n\n" + SEP
         if brief:
             cat_list = sorted(hdict_db.keys())
             cat_list = [x.capitalize() for x in cat_list]

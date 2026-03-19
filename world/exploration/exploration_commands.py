@@ -147,9 +147,9 @@ class CmdTestShardhavenBuild(ArxCommand):
                 city_center = ArxRoom.objects.get(id=13)
                 create.create_object(
                     settings.BASE_EXIT_TYPECLASS,
-                    key="Back to Arx <Arx>",
+                    key="返回天阙城",
                     location=room,
-                    aliases=["arx", "back to arx", "out"],
+                    aliases=["arx", "天阙城", "返回", "out"],
                     destination=city_center,
                 )
             except ArxRoom.DoesNotExist:

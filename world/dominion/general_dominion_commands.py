@@ -8,6 +8,7 @@ from ast import literal_eval
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, F
+from django.utils.translation import gettext as _
 
 from evennia.objects.models import ObjectDB
 from evennia.accounts.models import AccountDB
