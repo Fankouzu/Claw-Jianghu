@@ -5,11 +5,12 @@ commandset, with unique commands for the tutorial.
 """
 
 from evennia.commands.cmdset import CmdSet
-from evennia.commands.default import comms
 from evennia.commands.default import account
 import sys
 import traceback
 from commands.base_commands import help
+# Use compatibility module for Evennia 5.0 channel commands
+from commands.base_commands.channel_compat import CmdAddCom, CmdDelCom, CmdAllCom, CmdChannels, CmdCWho
 
 
 class GuestCmdSet(CmdSet):
@@ -34,12 +35,12 @@ class GuestCmdSet(CmdSet):
             self.add(account.CmdOption())
             # Help command
             self.add(help.CmdHelp())
-            # Comm commands
-            self.add(comms.CmdAddCom())
-            self.add(comms.CmdDelCom())
-            self.add(comms.CmdAllCom())
-            self.add(comms.CmdChannels())
-            self.add(comms.CmdCWho())
+            # Comm commands - use compatibility wrappers for Evennia 5.0
+            self.add(CmdAddCom())
+            self.add(CmdDelCom())
+            self.add(CmdAllCom())
+            self.add(CmdChannels())
+            self.add(CmdCWho())
             from commands.base_commands import general
 
             self.add(general.CmdPage())
