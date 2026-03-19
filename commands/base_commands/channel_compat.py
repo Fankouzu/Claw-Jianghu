@@ -6,14 +6,22 @@ were consolidated into a single CmdChannel command with subcommands.
 
 This module provides compatibility wrappers for legacy code.
 """
-from evennia.commands.default.comms import CmdChannel
-from evennia.utils.utils import class_from_module
 from django.conf import settings
 
-COMMAND_DEFAULT_CLASS = class_from_module(settings.COMMAND_DEFAULT_CLASS)
+
+def _get_command_class():
+    """Lazy import to avoid circular import during Evennia initialization."""
+    from evennia.utils.utils import class_from_module
+    return class_from_module(settings.COMMAND_DEFAULT_CLASS)
 
 
-class CmdCdestroy(COMMAND_DEFAULT_CLASS):
+def _get_cmd_channel():
+    """Lazy import of CmdChannel to avoid initialization order issues."""
+    from evennia.commands.default.comms import CmdChannel
+    return CmdChannel
+
+
+class CmdCdestroy:
     """
     Destroy a channel. Compatibility wrapper for Evennia 5.0.
     Uses the new CmdChannel /destroy subcommand internally.
@@ -23,6 +31,13 @@ class CmdCdestroy(COMMAND_DEFAULT_CLASS):
     aliases = ["cdestroy"]
     locks = "cmd:perm(Builder)"
     help_category = "Comms"
+
+    def __init__(self):
+        # Set the actual parent class at runtime
+        CmdChannel = _get_cmd_channel()
+        COMMAND_DEFAULT_CLASS = _get_command_class()
+        # Create a dynamic class that inherits from the right parent
+        self.__class__ = type('CmdCdestroyImpl', (COMMAND_DEFAULT_CLASS,), dict(CmdCdestroy.__dict__))
 
     def func(self):
         """Destroy a channel."""
@@ -50,7 +65,7 @@ class CmdCdestroy(COMMAND_DEFAULT_CLASS):
         caller.msg(f"Channel '{args}' has been destroyed.")
 
 
-class CmdChannelCreate(COMMAND_DEFAULT_CLASS):
+class CmdChannelCreate:
     """
     Create a new channel. Compatibility wrapper for Evennia 5.0.
     """
@@ -86,7 +101,7 @@ class CmdChannelCreate(COMMAND_DEFAULT_CLASS):
             caller.msg(f"Failed to create channel '{name_part}'.")
 
 
-class CmdChannels(COMMAND_DEFAULT_CLASS):
+class CmdChannels:
     """
     List all channels. Compatibility wrapper for Evennia 5.0.
     """
@@ -126,7 +141,7 @@ class CmdChannels(COMMAND_DEFAULT_CLASS):
         caller.msg(string)
 
 
-class CmdClock(COMMAND_DEFAULT_CLASS):
+class CmdClock:
     """
     Lock a channel. Compatibility wrapper for Evennia 5.0.
     """
@@ -166,7 +181,7 @@ class CmdClock(COMMAND_DEFAULT_CLASS):
             caller.msg(f"Error setting lock: {e}")
 
 
-class CmdCBoot(COMMAND_DEFAULT_CLASS):
+class CmdCBoot:
     """
     Boot a user from a channel. Compatibility wrapper for Evennia 5.0.
     """
@@ -209,7 +224,7 @@ class CmdCBoot(COMMAND_DEFAULT_CLASS):
         caller.msg(f"Booted '{username}' from channel '{channel.key}'.")
 
 
-class CmdCdesc(COMMAND_DEFAULT_CLASS):
+class CmdCdesc:
     """
     Set channel description. Compatibility wrapper for Evennia 5.0.
     """
@@ -247,7 +262,7 @@ class CmdCdesc(COMMAND_DEFAULT_CLASS):
         caller.msg(f"Description set for channel '{channel.key}'.")
 
 
-class CmdAllCom(COMMAND_DEFAULT_CLASS):
+class CmdAllCom:
     """
     Turn all channels on or off. Compatibility wrapper for Evennia 5.0.
     """
@@ -293,7 +308,7 @@ class CmdAllCom(COMMAND_DEFAULT_CLASS):
             caller.msg(string)
 
 
-class CmdCWho(COMMAND_DEFAULT_CLASS):
+class CmdCWho:
     """
     Show who is on a channel. Compatibility wrapper for Evennia 5.0.
     """
@@ -348,7 +363,44 @@ def find_channel(caller, channelname):
     return channel[0]
 
 
-# Export old-style names for compatibility
-CmdAddCom = CmdChannel  # Use the new CmdChannel for addcom
-CmdDelCom = CmdChannel  # Use the new CmdChannel for delcom
-CmdCemit = CmdChannel   # Use the new CmdChannel for cemit
+# Lazy-loaded aliases for backward compatibility
+# These will be replaced with actual CmdChannel when first accessed
+def _create_cmd_channel_alias():
+    """Create an alias class that wraps CmdChannel."""
+    CmdChannel = _get_cmd_channel()
+
+    class CmdAddCom(CmdChannel):
+        """Alias for addcom - uses CmdChannel."""
+        pass
+
+    class CmdDelCom(CmdChannel):
+        """Alias for delcom - uses CmdChannel."""
+        pass
+
+    class CmdCemit(CmdChannel):
+        """Alias for cemit - uses CmdChannel."""
+        pass
+
+    return CmdAddCom, CmdDelCom, CmdCemit
+
+
+# Module-level cache for the lazy-loaded classes
+_cmd_channel_aliases = None
+
+
+def __getattr__(name):
+    """Lazy load CmdAddCom, CmdDelCom, CmdCemit when first accessed."""
+    global _cmd_channel_aliases
+
+    if name in ('CmdAddCom', 'CmdDelCom', 'CmdCemit'):
+        if _cmd_channel_aliases is None:
+            _cmd_channel_aliases = _create_cmd_channel_alias()
+
+        if name == 'CmdAddCom':
+            return _cmd_channel_aliases[0]
+        elif name == 'CmdDelCom':
+            return _cmd_channel_aliases[1]
+        elif name == 'CmdCemit':
+            return _cmd_channel_aliases[2]
+
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
