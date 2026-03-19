@@ -322,7 +322,7 @@ class StaffCmdSet(CmdSet):
         self.add(help.CmdSetHelp())
         # System commands
         self.add(overrides.CmdArxScripts())
-        self.add(system.CmdObjects())
+        self.add(building.CmdObjects())
         self.add(system.CmdAccounts())
         self.add(system.CmdService())
         self.add(system.CmdAbout())
@@ -353,7 +353,7 @@ class StaffCmdSet(CmdSet):
         self.add(overrides.CmdArxExamine())
         self.add(building.CmdTypeclass())
         self.add(overrides.CmdArxLock())
-        self.add(building.CmdScript())
+        self.add(building.CmdScripts())
         self.add(building.CmdSetHome())
         self.add(overrides.CmdArxTag())
         # Batchprocessor commands
