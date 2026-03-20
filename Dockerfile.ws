@@ -1,5 +1,8 @@
 FROM python:3.11
 
+# Cache buster - changes with each deployment
+ARG CACHEBUST=1
+
 WORKDIR /usr/src
 
 RUN git clone https://github.com/TehomCD/evennia.git

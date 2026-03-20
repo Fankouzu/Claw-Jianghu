@@ -50,7 +50,7 @@ def _get_cmdset_class():
 # Define command sets as factory functions to avoid module-level import errors
 # These are loaded lazily when Evennia is properly initialized
 
-def CharacterCmdSet():
+def CharacterCmdSet(cmdsetobj=None):
     """
     The `CharacterCmdSet` contains general in-game commands like `look`,
     `get`, etc available on in-game Character objects. It is merged with
@@ -103,7 +103,7 @@ def CharacterCmdSet():
     return _CharacterCmdSet()
 
 
-def AccountCmdSet():
+def AccountCmdSet(cmdsetobj=None):
     """
     This is the cmdset available to the Player at all times. It is
     combined with the `CharacterCmdSet` when the Player puppets a
@@ -346,7 +346,7 @@ def AccountCmdSet():
     return _AccountCmdSet()
 
 
-def UnloggedinCmdSet():
+def UnloggedinCmdSet(cmdsetobj=None):
     """
     Command set available to the Session before being logged in.  This
     holds commands like creating a new account, logging in, etc.
@@ -381,7 +381,7 @@ def UnloggedinCmdSet():
     return _UnloggedinCmdSet()
 
 
-def SessionCmdSet():
+def SessionCmdSet(cmdsetobj=None):
     """
     This cmdset is made available on Session level once logged in. It
     is empty by default.
