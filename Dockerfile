@@ -32,8 +32,12 @@ RUN echo '#!/bin/bash\n\
 set -e\n\
 export PORT=${PORT:-8080}\n\
 envsubst "\\$PORT" < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf\n\
+echo "Generated nginx.conf:"\n\
+cat /etc/nginx/nginx.conf\n\
 echo "Starting Nginx on port $PORT..."\n\
-nginx\n\
+nginx -g "daemon off;" &\n\
+sleep 2\n\
+echo "Nginx status: $(pgrep nginx > /dev/null && echo running || echo failed)"\n\
 echo "Starting Evennia..."\n\
 exec start\n\
 ' > /entrypoint.sh && chmod +x /entrypoint.sh
