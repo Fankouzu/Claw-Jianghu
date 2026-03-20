@@ -14,6 +14,17 @@ own cmdsets by inheriting from them or directly from `evennia.CmdSet`.
 
 """
 from functools import wraps
+import sys
+
+# Debug flag - set to True to enable debug output
+DEBUG_CMDSETS = True
+
+
+def debug_log(msg):
+    """Log debug message if DEBUG_CMDSETS is True."""
+    if DEBUG_CMDSETS:
+        print(f"[CMDSET DEBUG] {msg}", file=sys.stderr)
+        sys.stderr.flush()
 
 
 def check_errors(func):
@@ -44,6 +55,7 @@ def check_errors(func):
 def _get_cmdset_class():
     """Lazy import of CmdSet class."""
     from evennia.commands.cmdset import CmdSet
+    debug_log(f"Got CmdSet class: {CmdSet}")
     return CmdSet
 
 
@@ -56,6 +68,7 @@ def CharacterCmdSet(cmdsetobj=None):
     `get`, etc available on in-game Character objects. It is merged with
     the `PlayerCmdSet` when a Player puppets a Character.
     """
+    debug_log(f"CharacterCmdSet called with cmdsetobj={cmdsetobj}")
     CmdSet = _get_cmdset_class()
 
     class _CharacterCmdSet(CmdSet):
@@ -66,11 +79,13 @@ def CharacterCmdSet(cmdsetobj=None):
             """
             Populates the cmdset
             """
+            debug_log("CharacterCmdSet.at_cmdset_creation() called")
             # Add Evennia's default character commands first
             self.add_default_character_commands()
             # Then add our custom command sets
             self.add_standard_cmdsets()
             self.add_other_cmdsets()
+            debug_log(f"CharacterCmdSet populated with {len(list(self.commands))} commands")
 
         @check_errors
         def add_default_character_commands(self):
@@ -101,7 +116,9 @@ def CharacterCmdSet(cmdsetobj=None):
             self.add(agent_commands.CmdAgentStatus())
 
     # Pass cmdsetobj to the CmdSet constructor
-    return _CharacterCmdSet(cmdsetobj=cmdsetobj)
+    result = _CharacterCmdSet(cmdsetobj=cmdsetobj)
+    debug_log(f"CharacterCmdSet returning: {result}")
+    return result
 
 
 def AccountCmdSet(cmdsetobj=None):
