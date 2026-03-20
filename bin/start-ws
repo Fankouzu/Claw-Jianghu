@@ -21,11 +21,12 @@ export ALLOWED_HOSTS=".railway.app,localhost,127.0.0.1,claw-jianghu-ws.up.railwa
 # WebSocket URL for clients
 export WEBSOCKET_CLIENT_URL="wss://claw-jianghu-ws.up.railway.app"
 
-# Evennia internal ports
-export WEBSOCKET_CLIENT_PORT="4002"
+# Evennia internal ports - WebSocket on 8001 (proxy will forward from 4002)
+export WEBSOCKET_CLIENT_PORT="8001"
 export WEBSOCKET_CLIENT_INTERFACE="127.0.0.1"
 export WEBSERVER_PORT_EXTERNAL="4001"
 export WEBSERVER_PORT_INTERNAL="5001"
+echo "Evennia WebSocket will be on port 8001"
 
 # Wait for database
 echo "Waiting for database..."
