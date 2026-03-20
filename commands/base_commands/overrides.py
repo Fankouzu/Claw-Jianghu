@@ -2293,20 +2293,26 @@ class SystemNoMatch(ArxCommand):
         """
         from evennia.utils.utils import string_suggestions, list_to_string
 
-        # Debug: Print caller info
+        # Debug: Print caller info to both stderr and send as message
         caller = self.caller
-        debug_info = f"[DEBUG] caller type: {type(caller).__name__}, has permissions: {hasattr(caller, 'permissions')}"
+        debug_info = f"[DEBUG] caller type: {type(caller).__name__}"
         if hasattr(caller, 'permissions'):
             try:
                 perms = caller.permissions.all()
                 debug_info += f", permissions: {perms}"
             except Exception as e:
                 debug_info += f", permissions error: {e}"
+        else:
+            debug_info += ", NO permissions attribute"
         if hasattr(caller, 'account'):
-            debug_info += f", has account: {caller.account is not None}"
+            debug_info += f", account: {caller.account}"
         if hasattr(caller, 'puppet'):
-            debug_info += f", has puppet: {caller.puppet is not None}"
-        print(debug_info, file=__import__('sys').stderr)
+            debug_info += f", puppet: {caller.puppet}"
+        if hasattr(caller, 'session'):
+            debug_info += f", session: {caller.session}"
+
+        # Send debug as message to see it in client
+        self.msg(f"||w{debug_info}||n")
 
         msg = "Command '%s' is not available." % self.raw
         cmdset = self.cmdset
@@ -2317,9 +2323,9 @@ class SystemNoMatch(ArxCommand):
         for cmd in cmdset:
             if cmd.auto_help:
                 access_result = cmd.access(self.caller)
-                if not access_result:
-                    # Debug: Print why access failed
-                    print(f"[DEBUG] {cmd.key} access failed, locks: {getattr(cmd, 'locks', 'N/A')}, lock_storage: {getattr(cmd, 'lock_storage', 'N/A')}", file=__import__('sys').stderr)
+                if not access_result and cmd.key in ('help', 'inventory', 'look'):
+                    # Send debug for key commands
+                    self.msg(f"||r[DEBUG] {cmd.key} access failed||n")
                 else:
                     all_cmds.append(cmd)
 
