@@ -30,13 +30,37 @@ rm -f /usr/src/arx/server/portal.pid /usr/src/arx/server/server.pid
 echo "Waiting for database..."
 sleep 3
 
-# Start Evennia in background
-echo "Starting Evennia server..."
-evennia start &
+# Initialize database tables before migrations
+echo "Checking database tables..."
+python /usr/src/arx/init_db.py 2>/dev/null || true
 
-# Wait for Evennia to start
+# Run migrations
+echo "Running migrations..."
+for i in 1 2 3; do
+    if evennia migrate --noinput 2>&1; then
+        echo "Migrations completed"
+        break
+    else
+        echo "Migration attempt $i failed, retrying..."
+        sleep 5
+    fi
+done
+
+# Start Evennia in background, redirecting output to console
+echo "Starting Evennia server..."
+evennia start 2>&1 &
+EVENNIA_PID=$!
+
+# Wait for Evennia to start and capture initial output
 echo "Waiting for Evennia to initialize..."
-sleep 20
+sleep 15
+
+# Check if Evennia is running
+if kill -0 $EVENNIA_PID 2>/dev/null; then
+    echo "Evennia is running (PID: $EVENNIA_PID)"
+else
+    echo "WARNING: Evennia may not have started correctly"
+fi
 
 # Start the unified proxy (this keeps the container running)
 echo "=== Starting HTTP+WebSocket Proxy ==="
