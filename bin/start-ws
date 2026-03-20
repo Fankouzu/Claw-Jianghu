@@ -53,13 +53,30 @@ EVENNIA_PID=$!
 
 # Wait for Evennia to start and capture initial output
 echo "Waiting for Evennia to initialize..."
-sleep 15
+sleep 20
 
-# Check if Evennia is running
+# Check if Evennia is running and show any errors
 if kill -0 $EVENNIA_PID 2>/dev/null; then
     echo "Evennia is running (PID: $EVENNIA_PID)"
+
+    # Check for server logs
+    if [ -f "/usr/src/arx/server/logs/server.log" ]; then
+        echo "=== Server Log (last 50 lines) ==="
+        tail -50 /usr/src/arx/server/logs/server.log 2>/dev/null || echo "Could not read server log"
+    fi
+
+    if [ -f "/usr/src/arx/server/logs/portal.log" ]; then
+        echo "=== Portal Log (last 20 lines) ==="
+        tail -20 /usr/src/arx/server/logs/portal.log 2>/dev/null || echo "Could not read portal log"
+    fi
 else
     echo "WARNING: Evennia may not have started correctly"
+
+    # Try to show any crash logs
+    if [ -f "/usr/src/arx/server/logs/server.log" ]; then
+        echo "=== Server Log ==="
+        cat /usr/src/arx/server/logs/server.log 2>/dev/null || true
+    fi
 fi
 
 # Start the unified proxy (this keeps the container running)
