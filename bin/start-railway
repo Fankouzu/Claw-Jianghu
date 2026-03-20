@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Universal start script for Railway
+# Detects service type based on DJANGO_SETTINGS_MODULE
+
+if [ "$DJANGO_SETTINGS_MODULE" = "server.conf.railway_ws_settings" ]; then
+    echo "Starting WebSocket service..."
+    exec /usr/src/arx/bin/start-ws
+else
+    echo "Starting HTTP service..."
+    exec /usr/src/arx/bin/start-http
+fi

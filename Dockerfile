@@ -21,5 +21,5 @@ ENV PYTHONPATH="/usr/src/arx:${PYTHONPATH}"
 
 RUN chmod +x -R /usr/src/arx/bin
 
-# HTTP service (default)
-CMD ["start-http"]
+# Universal start script - detects service type from DJANGO_SETTINGS_MODULE
+CMD ["start-railway"]
