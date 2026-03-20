@@ -28,8 +28,6 @@ AMP_INTERFACE = "127.0.0.1"
 RAILWAY_PORT = int(os.environ.get("PORT", "4002"))
 WEBSOCKET_CLIENT_PORT = RAILWAY_PORT
 WEBSOCKET_CLIENT_INTERFACE = "0.0.0.0"
-# Debug: print the port being used
-print(f"[DEBUG] WS Settings - WEBSOCKET_CLIENT_PORT: {WEBSOCKET_CLIENT_PORT}, PORT env: {os.environ.get('PORT')}")
 # URL for webclient to connect - this service's public URL
 WEBSOCKET_CLIENT_URL = config(
     "WEBSOCKET_CLIENT_URL",

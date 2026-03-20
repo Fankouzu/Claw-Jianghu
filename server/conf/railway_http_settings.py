@@ -38,8 +38,6 @@ WEBSOCKET_CLIENT_URL = config(
 RAILWAY_PORT = int(os.environ.get("PORT", "4001"))
 WEBSERVER_PORTS = [(RAILWAY_PORT, 5001)]
 WEBSERVER_INTERFACES = ["0.0.0.0"]
-# Debug: print the port being used
-print(f"[DEBUG] HTTP Settings - WEBSERVER_PORTS: {WEBSERVER_PORTS}, PORT env: {os.environ.get('PORT')}")
 
 # =============================================================================
 # Security Settings
