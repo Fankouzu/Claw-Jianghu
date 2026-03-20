@@ -1,5 +1,7 @@
 FROM python:3.11
 
+# Build v2026.03.20.2 - Force rebuild for command fix
+
 WORKDIR /usr/src
 
 RUN git clone https://github.com/TehomCD/evennia.git
