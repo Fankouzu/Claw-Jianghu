@@ -98,6 +98,19 @@ def _init_lazy_command_attrs(cmd_instance):
     if not hasattr(cmd_instance, 'retain_instance'):
         cmd_instance.retain_instance = False
 
+    # CRITICAL: Set lock_storage before lockhandler is accessed
+    # LockHandler reads lock_storage to parse lock strings
+    # Without this, access() checks will always fail
+    if not hasattr(cmd_instance, 'lock_storage'):
+        locks = getattr(cmd_instance, 'locks', '')
+        if callable(locks):
+            # locks might be a property, try to get its value
+            try:
+                locks = locks()
+            except:
+                locks = ''
+        cmd_instance.lock_storage = str(locks)
+
 
 def args_are_currency(args):
     """
