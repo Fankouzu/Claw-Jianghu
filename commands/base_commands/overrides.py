@@ -2293,10 +2293,36 @@ class SystemNoMatch(ArxCommand):
         """
         from evennia.utils.utils import string_suggestions, list_to_string
 
+        # Debug: Print caller info
+        caller = self.caller
+        debug_info = f"[DEBUG] caller type: {type(caller).__name__}, has permissions: {hasattr(caller, 'permissions')}"
+        if hasattr(caller, 'permissions'):
+            try:
+                perms = caller.permissions.all()
+                debug_info += f", permissions: {perms}"
+            except Exception as e:
+                debug_info += f", permissions error: {e}"
+        if hasattr(caller, 'account'):
+            debug_info += f", has account: {caller.account is not None}"
+        if hasattr(caller, 'puppet'):
+            debug_info += f", has puppet: {caller.puppet is not None}"
+        print(debug_info, file=__import__('sys').stderr)
+
         msg = "Command '%s' is not available." % self.raw
         cmdset = self.cmdset
         cmdset.make_unique(self.caller)
-        all_cmds = [cmd for cmd in cmdset if cmd.auto_help and cmd.access(self.caller)]
+
+        # Debug: Check each command's access
+        all_cmds = []
+        for cmd in cmdset:
+            if cmd.auto_help:
+                access_result = cmd.access(self.caller)
+                if not access_result:
+                    # Debug: Print why access failed
+                    print(f"[DEBUG] {cmd.key} access failed, locks: {getattr(cmd, 'locks', 'N/A')}, lock_storage: {getattr(cmd, 'lock_storage', 'N/A')}", file=__import__('sys').stderr)
+                else:
+                    all_cmds.append(cmd)
+
         names = []
         for cmd in all_cmds:
             # noinspection PyProtectedMember
