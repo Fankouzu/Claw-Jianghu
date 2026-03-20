@@ -52,6 +52,7 @@ def check_errors(func):
     return new_func
 
 
+# Lazy import function for CmdSet - used by all command sets
 def _get_cmdset_class():
     """Lazy import of CmdSet class."""
     from evennia.commands.cmdset import CmdSet
@@ -59,19 +60,23 @@ def _get_cmdset_class():
     return CmdSet
 
 
-# Define command sets as factory functions to avoid module-level import errors
-# These are loaded lazily when Evennia is properly initialized
+# Use a delayed class definition approach
+# This creates the classes when the module is first accessed after Evennia init
+_CharacterCmdSet = None
+_AccountCmdSet = None
+_UnloggedinCmdSet = None
+_SessionCmdSet = None
 
-def CharacterCmdSet(cmdsetobj=None):
-    """
-    The `CharacterCmdSet` contains general in-game commands like `look`,
-    `get`, etc available on in-game Character objects. It is merged with
-    the `PlayerCmdSet` when a Player puppets a Character.
-    """
-    debug_log(f"CharacterCmdSet called with cmdsetobj={cmdsetobj}")
+
+def _create_CharacterCmdSet():
+    """Create the CharacterCmdSet class lazily."""
+    global _CharacterCmdSet
+    if _CharacterCmdSet is not None:
+        return _CharacterCmdSet
+
     CmdSet = _get_cmdset_class()
 
-    class _CharacterCmdSet(CmdSet):
+    class CharacterCmdSet(CmdSet):
         key = "DefaultCharacter"
         priority = 101
 
@@ -79,7 +84,7 @@ def CharacterCmdSet(cmdsetobj=None):
             """
             Populates the cmdset
             """
-            debug_log("CharacterCmdSet.at_cmdset_creation() called")
+            debug_log(f"CharacterCmdSet.at_cmdset_creation() called, self.cmdsetobj={self.cmdsetobj}")
             # Add Evennia's default character commands first
             self.add_default_character_commands()
             # Then add our custom command sets
@@ -115,22 +120,19 @@ def CharacterCmdSet(cmdsetobj=None):
             # Agent authentication commands
             self.add(agent_commands.CmdAgentStatus())
 
-    # Pass cmdsetobj to the CmdSet constructor
-    result = _CharacterCmdSet(cmdsetobj=cmdsetobj)
-    debug_log(f"CharacterCmdSet returning: {result}")
-    return result
+    _CharacterCmdSet = CharacterCmdSet
+    return CharacterCmdSet
 
 
-def AccountCmdSet(cmdsetobj=None):
-    """
-    This is the cmdset available to the Player at all times. It is
-    combined with the `CharacterCmdSet` when the Player puppets a
-    Character. It holds game-account-specific commands, channel
-    commands, etc.
-    """
+def _create_AccountCmdSet():
+    """Create the AccountCmdSet class lazily."""
+    global _AccountCmdSet
+    if _AccountCmdSet is not None:
+        return _AccountCmdSet
+
     CmdSet = _get_cmdset_class()
 
-    class _AccountCmdSet(CmdSet):
+    class AccountCmdSet(CmdSet):
         key = "DefaultPlayer"
         priority = 101
 
@@ -138,6 +140,7 @@ def AccountCmdSet(cmdsetobj=None):
             """
             Populates the cmdset
             """
+            debug_log(f"AccountCmdSet.at_cmdset_creation() called, self.cmdsetobj={self.cmdsetobj}")
             # Add Evennia's default account commands first
             self.add_default_account_commands()
             # Then add our custom commands
@@ -154,6 +157,7 @@ def AccountCmdSet(cmdsetobj=None):
             self.add_scene_commands()
             self.add_gming_actions_commands()
             self.add_lore_commands()
+            debug_log(f"AccountCmdSet populated with {len(list(self.commands))} commands")
 
         @check_errors
         def add_default_account_commands(self):
@@ -361,18 +365,19 @@ def AccountCmdSet(cmdsetobj=None):
 
             self.add(lore_commands.CmdLoreSearch())
 
-    # Pass cmdsetobj to the CmdSet constructor
-    return _AccountCmdSet(cmdsetobj=cmdsetobj)
+    _AccountCmdSet = AccountCmdSet
+    return AccountCmdSet
 
 
-def UnloggedinCmdSet(cmdsetobj=None):
-    """
-    Command set available to the Session before being logged in.  This
-    holds commands like creating a new account, logging in, etc.
-    """
+def _create_UnloggedinCmdSet():
+    """Create the UnloggedinCmdSet class lazily."""
+    global _UnloggedinCmdSet
+    if _UnloggedinCmdSet is not None:
+        return _UnloggedinCmdSet
+
     CmdSet = _get_cmdset_class()
 
-    class _UnloggedinCmdSet(CmdSet):
+    class UnloggedinCmdSet(CmdSet):
         key = "DefaultUnloggedin"
 
         def at_cmdset_creation(self):
@@ -397,18 +402,19 @@ def UnloggedinCmdSet(cmdsetobj=None):
             except Exception as err:
                 print("<<ERROR>>: Error encountered in loading Unlogged cmdset: %s" % err)
 
-    # Pass cmdsetobj to the CmdSet constructor
-    return _UnloggedinCmdSet(cmdsetobj=cmdsetobj)
+    _UnloggedinCmdSet = UnloggedinCmdSet
+    return UnloggedinCmdSet
 
 
-def SessionCmdSet(cmdsetobj=None):
-    """
-    This cmdset is made available on Session level once logged in. It
-    is empty by default.
-    """
+def _create_SessionCmdSet():
+    """Create the SessionCmdSet class lazily."""
+    global _SessionCmdSet
+    if _SessionCmdSet is not None:
+        return _SessionCmdSet
+
     CmdSet = _get_cmdset_class()
 
-    class _SessionCmdSet(CmdSet):
+    class SessionCmdSet(CmdSet):
         key = "DefaultSession"
 
         def at_cmdset_creation(self):
@@ -426,5 +432,25 @@ def SessionCmdSet(cmdsetobj=None):
             for cmd in evennia_cmdset.commands:
                 self.add(cmd)
 
-    # Pass cmdsetobj to the CmdSet constructor
-    return _SessionCmdSet(cmdsetobj=cmdsetobj)
+    _SessionCmdSet = SessionCmdSet
+    return SessionCmdSet
+
+
+# Export the classes through properties/functions
+# Evennia expects to find these as classes in the module
+
+def __getattr__(name):
+    """
+    Lazy attribute access for command set classes.
+    This is called when the attribute is not found normally.
+    """
+    debug_log(f"__getattr__ called for: {name}")
+    if name == "CharacterCmdSet":
+        return _create_CharacterCmdSet()
+    elif name == "AccountCmdSet":
+        return _create_AccountCmdSet()
+    elif name == "UnloggedinCmdSet":
+        return _create_UnloggedinCmdSet()
+    elif name == "SessionCmdSet":
+        return _create_SessionCmdSet()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
