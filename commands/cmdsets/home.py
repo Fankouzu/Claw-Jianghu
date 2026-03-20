@@ -284,6 +284,8 @@ class CmdBuildRoom:
         for attr in dir(self._base_class):
             if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'locks', 'help_category', 'help_entry_tags'):
                 setattr(self, attr, getattr(self._base_class, attr))
+        # Set _keyaliases like Evennia's Command metaclass does
+        self._keyaliases = tuple(sorted([self.key] + list(getattr(self, 'aliases', [])), key=len, reverse=True))
 
     # noinspection PyAttributeOutsideInit
     def func(self):
