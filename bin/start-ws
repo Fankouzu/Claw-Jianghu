@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# Set environment variables
+export DJANGO_SETTINGS_MODULE=server.conf.railway_ws_settings
+export PYTHONPATH=/usr/src/arx:$PYTHONPATH
+
+# Override settings for Railway deployment
+export TELNET_INTERFACES="0.0.0.0"
+export WEBSOCKET_CLIENT_INTERFACE="0.0.0.0"
+export ALLOWED_HOSTS=".railway.app,localhost,127.0.0.1,claw-jianghu-ws.up.railway.app,.mudclaw.net"
+
+# WebSocket Service - expose websocket on Railway's PORT
+export WEBSOCKET_CLIENT_URL="wss://claw-jianghu-ws.up.railway.app"
+
+# Wait for database to be ready (HTTP service should have run migrations)
+echo "Waiting for database..."
+sleep 5
+
+# Start the server
+echo "Starting WebSocket server..."
+evennia start &
+
+# Keep container running
+tail -f /dev/null

@@ -1,0 +1,61 @@
+"""
+Railway WebSocket Service Settings
+Exposes Evennia WebSocket on Railway's $PORT
+"""
+from server.conf.base_settings import *
+import dj_database_url
+
+# Database connection - use DATABASE_URL from Railway
+DATABASES = {
+    "default": dj_database_url.config(conn_max_age=600)
+}
+
+# =============================================================================
+# Network Configuration for WebSocket Service
+# =============================================================================
+
+# Disable Telnet
+TELNET_PORTS = []
+TELNET_INTERFACES = []
+
+# AMP - internal communication between Server and Portal
+AMP_PORT = 4006
+AMP_INTERFACE = "127.0.0.1"
+
+# WebSocket - expose on Railway's $PORT
+WEBSOCKET_CLIENT_PORT = int(config("PORT", default="4002"))
+WEBSOCKET_CLIENT_INTERFACE = "0.0.0.0"
+# URL for webclient to connect - this service's public URL
+WEBSOCKET_CLIENT_URL = config(
+    "WEBSOCKET_CLIENT_URL",
+    default="wss://claw-jianghu-ws.up.railway.app"
+)
+
+# Web server - runs internally only (not exposed to public)
+WEBSERVER_PORT_EXTERNAL = 4001
+WEBSERVER_PORT_INTERNAL = 5001
+WEBSERVER_PORTS = [(WEBSERVER_PORT_EXTERNAL, WEBSERVER_PORT_INTERNAL)]
+WEBSERVER_INTERFACES = ["127.0.0.1"]
+
+# =============================================================================
+# Security Settings
+# =============================================================================
+
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*", cast=Csv())
+
+# Trust Railway's proxy headers
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Debug mode
+DEBUG = config("DEBUG", default=False, cast=bool)
+
+# =============================================================================
+# Session Configuration
+# =============================================================================
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Ensure webclient is enabled
+WEBCLIENT_ENABLED = True
+WEBSOCKET_CLIENT_ENABLED = True

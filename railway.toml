@@ -1,0 +1,20 @@
+# Railway Multi-Service Configuration
+# Two services: HTTP and WebSocket, sharing the same database
+
+[[services]]
+name = "claw-jianghu-http"
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile.http"
+
+[services.variables]
+DJANGO_SETTINGS_MODULE = "server.conf.railway_http_settings"
+PORT = "4001"
+
+[[services]]
+name = "claw-jianghu-ws"
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile.ws"
+
+[services.variables]
+DJANGO_SETTINGS_MODULE = "server.conf.railway_ws_settings"
+PORT = "4002"

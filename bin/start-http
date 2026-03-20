@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+# Set environment variables
+export DJANGO_SETTINGS_MODULE=server.conf.railway_http_settings
+export PYTHONPATH=/usr/src/arx:$PYTHONPATH
+
+# Override settings for Railway deployment
+export TELNET_INTERFACES="0.0.0.0"
+export WEBSOCKET_CLIENT_INTERFACE="0.0.0.0"
+export ALLOWED_HOSTS=".railway.app,localhost,127.0.0.1,jianghu.mudclaw.net,.mudclaw.net"
+
+# HTTP Service - expose webserver on Railway's PORT
+# WebSocket will be on a separate service
+export WEBSOCKET_CLIENT_URL="wss://claw-jianghu-ws.up.railway.app"
+
+# Initialize database tables before migrations
+echo "Checking database tables..."
+python /usr/src/arx/init_db.py 2>/dev/null || true
+
+# Run migrations before starting (with retry)
+echo "Running migrations..."
+for i in 1 2 3 4 5; do
+    if evennia migrate --noinput 2>/dev/null; then
+        echo "Migrations completed successfully"
+        break
+    else
+        echo "Migration attempt $i failed, retrying in 10 seconds..."
+        sleep 10
+    fi
+done
+
+# Create superuser if it doesn't exist
+echo "Checking superuser..."
+python -c "
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'server.conf.railway_http_settings'
+import django
+django.setup()
+from evennia.accounts.models import AccountDB
+if not AccountDB.objects.filter(id=1).exists():
+    account = AccountDB.objects.create(
+        id=1,
+        username='admin',
+        email='admin@localhost',
+        is_superuser=True,
+        is_staff=True,
+    )
+    account.set_password('admin123')
+    account.save()
+    print('Superuser created: admin / admin123')
+else:
+    print('Superuser already exists')
+"
+
+# Start the server - HTTP only mode
+echo "Starting HTTP server on port $WEBSERVER_PORT_EXTERNAL..."
+evennia start &
+
+# Keep container running
+tail -f /dev/null
