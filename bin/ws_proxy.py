@@ -41,6 +41,9 @@ async def handle_client(reader, writer):
                 key, value = line.split(':', 1)
                 headers[key.strip().lower()] = value.strip()
 
+        # Log all headers for debugging
+        logger.info(f"Headers: {headers}")
+
         is_websocket = headers.get('upgrade', '').lower() == 'websocket'
         logger.info(f"WebSocket upgrade: {is_websocket}")
 
