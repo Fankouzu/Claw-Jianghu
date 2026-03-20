@@ -100,7 +100,8 @@ def CharacterCmdSet(cmdsetobj=None):
             # Agent authentication commands
             self.add(agent_commands.CmdAgentStatus())
 
-    return _CharacterCmdSet()
+    # Pass cmdsetobj to the CmdSet constructor
+    return _CharacterCmdSet(cmdsetobj=cmdsetobj)
 
 
 def AccountCmdSet(cmdsetobj=None):
@@ -343,7 +344,8 @@ def AccountCmdSet(cmdsetobj=None):
 
             self.add(lore_commands.CmdLoreSearch())
 
-    return _AccountCmdSet()
+    # Pass cmdsetobj to the CmdSet constructor
+    return _AccountCmdSet(cmdsetobj=cmdsetobj)
 
 
 def UnloggedinCmdSet(cmdsetobj=None):
@@ -378,7 +380,8 @@ def UnloggedinCmdSet(cmdsetobj=None):
             except Exception as err:
                 print("<<ERROR>>: Error encountered in loading Unlogged cmdset: %s" % err)
 
-    return _UnloggedinCmdSet()
+    # Pass cmdsetobj to the CmdSet constructor
+    return _UnloggedinCmdSet(cmdsetobj=cmdsetobj)
 
 
 def SessionCmdSet(cmdsetobj=None):
@@ -406,4 +409,5 @@ def SessionCmdSet(cmdsetobj=None):
             for cmd in evennia_cmdset.commands:
                 self.add(cmd)
 
-    return _SessionCmdSet()
+    # Pass cmdsetobj to the CmdSet constructor
+    return _SessionCmdSet(cmdsetobj=cmdsetobj)
