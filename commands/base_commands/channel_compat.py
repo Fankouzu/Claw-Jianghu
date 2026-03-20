@@ -21,7 +21,40 @@ def _get_cmd_channel():
     return CmdChannel
 
 
-class CmdCdestroy:
+# Base class that will be set at runtime
+_CommandBase = None
+
+def _get_base_class():
+    """Get or create the base class for compatibility commands."""
+    global _CommandBase
+    if _CommandBase is None:
+        _CommandBase = _get_command_class()
+    return _CommandBase
+
+
+class _CompatCommandMixin:
+    """
+    Mixin that ensures compatibility command attributes are properly set.
+    This is needed because our compatibility classes don't inherit from
+    the standard Command class at definition time.
+    """
+
+    # These are the attributes that Evennia's Command metaclass sets
+    auto_help = True
+    arg_regex = None  # Will be compiled by Evennia if string
+    auto_help_display_key = None
+    is_exit = False
+    retain_instance = False
+
+    def __init_subclass__(cls, **kwargs):
+        """Called when a subclass is created."""
+        super().__init_subclass__(**kwargs)
+        # Ensure auto_help is set on the subclass
+        if not hasattr(cls, 'auto_help'):
+            cls.auto_help = True
+
+
+class CmdCdestroy(_CompatCommandMixin):
     """
     Destroy a channel. Compatibility wrapper for Evennia 5.0.
     Uses the new CmdChannel /destroy subcommand internally.
@@ -65,7 +98,7 @@ class CmdCdestroy:
         caller.msg(f"Channel '{args}' has been destroyed.")
 
 
-class CmdChannelCreate:
+class CmdChannelCreate(_CompatCommandMixin):
     """
     Create a new channel. Compatibility wrapper for Evennia 5.0.
     """
@@ -101,7 +134,7 @@ class CmdChannelCreate:
             caller.msg(f"Failed to create channel '{name_part}'.")
 
 
-class CmdChannels:
+class CmdChannels(_CompatCommandMixin):
     """
     List all channels. Compatibility wrapper for Evennia 5.0.
     """
@@ -141,7 +174,7 @@ class CmdChannels:
         caller.msg(string)
 
 
-class CmdClock:
+class CmdClock(_CompatCommandMixin):
     """
     Lock a channel. Compatibility wrapper for Evennia 5.0.
     """
@@ -181,7 +214,7 @@ class CmdClock:
             caller.msg(f"Error setting lock: {e}")
 
 
-class CmdCBoot:
+class CmdCBoot(_CompatCommandMixin):
     """
     Boot a user from a channel. Compatibility wrapper for Evennia 5.0.
     """
@@ -224,7 +257,7 @@ class CmdCBoot:
         caller.msg(f"Booted '{username}' from channel '{channel.key}'.")
 
 
-class CmdCdesc:
+class CmdCdesc(_CompatCommandMixin):
     """
     Set channel description. Compatibility wrapper for Evennia 5.0.
     """
@@ -262,7 +295,7 @@ class CmdCdesc:
         caller.msg(f"Description set for channel '{channel.key}'.")
 
 
-class CmdAllCom:
+class CmdAllCom(_CompatCommandMixin):
     """
     Turn all channels on or off. Compatibility wrapper for Evennia 5.0.
     """
@@ -308,7 +341,7 @@ class CmdAllCom:
             caller.msg(string)
 
 
-class CmdCWho:
+class CmdCWho(_CompatCommandMixin):
     """
     Show who is on a channel. Compatibility wrapper for Evennia 5.0.
     """

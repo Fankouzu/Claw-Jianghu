@@ -14,16 +14,21 @@ async def test():
     print(f"Connecting to {WEBSOCKET_URL}...")
 
     try:
-        async with websockets.connect(WEBSOCKET_URL) as ws:
+        async with websockets.connect(
+            WEBSOCKET_URL,
+            ping_interval=30,
+            ping_timeout=60,
+            compression=None  # Disable compression to avoid extension issues
+        ) as ws:
             print("Connected!")
 
             # Receive welcome message
             msg = await ws.recv()
             print(f"Welcome: {msg[:100]}...")
 
-            # Send login command
-            login_msg = json.dumps(["text", ["connect admin admin123"]])
-            print(f"Sending login...")
+            # Send login command - Evennia expects [inputfunc_name, [args], {kwargs}]
+            login_msg = json.dumps(["text", ["connect admin admin123"], {}])
+            print(f"Sending login: {login_msg}")
             await ws.send(login_msg)
 
             # Collect responses
@@ -43,8 +48,8 @@ async def test():
                     if "logged_in" in str(data):
                         print("Login successful!")
 
-                        # Send help command
-                        help_msg = json.dumps(["text", ["help"]])
+                        # Send help command - Evennia expects [inputfunc_name, [args], {kwargs}]
+                        help_msg = json.dumps(["text", ["help"], {}])
                         await ws.send(help_msg)
                         print("Sent help command...")
 

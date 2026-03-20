@@ -89,6 +89,10 @@ print(f'CMDSET_ACCOUNT: {settings.CMDSET_ACCOUNT}')
 echo "=== Testing Connect Command ==="
 python /usr/src/arx/scripts/test_connect.py 2>&1 || echo "Connect test failed!"
 
+# Test WebSocket login flow in detail
+echo "=== Testing WebSocket Login Flow ==="
+python /usr/src/arx/scripts/test_ws_login_debug.py 2>&1 || echo "WebSocket login debug test failed!"
+
 # Start Evennia in foreground mode to see all output
 echo "Starting Evennia server in foreground mode..."
 evennia start --log-to-console &

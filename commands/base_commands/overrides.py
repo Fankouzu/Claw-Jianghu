@@ -1464,6 +1464,7 @@ class CmdArxCdestroy(CmdCdestroy):
 
     __doc__ = CmdCdestroy.__doc__
     locks = newlock
+    auto_help = True  # Ensure auto_help is set for Evennia's help system
 
 
 class CmdArxChannelCreate(CmdChannelCreate):
@@ -1471,6 +1472,7 @@ class CmdArxChannelCreate(CmdChannelCreate):
 
     __doc__ = CmdChannelCreate.__doc__
     locks = newlock
+    auto_help = True  # Ensure auto_help is set for Evennia's help system
 
 
 class CmdArxClock(CmdClock):
@@ -1478,6 +1480,7 @@ class CmdArxClock(CmdClock):
 
     __doc__ = CmdClock.__doc__
     locks = newlock
+    auto_help = True  # Ensure auto_help is set for Evennia's help system
 
 
 class CmdArxCBoot(CmdCBoot):
@@ -1485,6 +1488,7 @@ class CmdArxCBoot(CmdCBoot):
 
     __doc__ = CmdCBoot.__doc__
     locks = newlock
+    auto_help = True  # Ensure auto_help is set for Evennia's help system
 
 
 class CmdArxCdesc(CmdCdesc):
@@ -1492,12 +1496,14 @@ class CmdArxCdesc(CmdCdesc):
 
     __doc__ = CmdCdesc.__doc__
     locks = newlock
+    auto_help = True  # Ensure auto_help is set for Evennia's help system
 
 
 class CmdArxAllCom(CmdAllCom):
     """Override of Evennia's allcom command"""
 
     __doc__ = CmdAllCom.__doc__
+    auto_help = True  # Ensure auto_help is set for Evennia's help system
 
     def func(self):
         """
@@ -1556,6 +1562,7 @@ class CmdArxChannels(CmdChannels):
     ]
     help_category = "Comms"
     locks = "cmd: not pperm(channel_banned)"
+    auto_help = True  # Ensure auto_help is set for Evennia's help system
 
     # this is used by the COMMAND_DEFAULT_CLASS parent
     player_caller = True
@@ -1663,6 +1670,7 @@ class CmdArxCWho(CmdCWho):
     """Override of Evennia's channel who command to reflect hiding some names based on permissions."""
 
     __doc__ = CmdCWho.__doc__
+    auto_help = True  # Ensure auto_help is set for Evennia's help system
 
     def func(self):
         """implement function"""
