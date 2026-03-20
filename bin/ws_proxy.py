@@ -7,7 +7,7 @@ import asyncio
 import os
 import logging
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 LISTEN_PORT = int(os.environ.get("PORT", 4002))
@@ -81,14 +81,16 @@ async def handle_client(reader, writer):
                 while True:
                     data = await src.read(8192)
                     if not data:
+                        logger.info(f"Forward {direction}: no more data, closing")
                         break
+                    logger.debug(f"Forward {direction}: {len(data)} bytes")
+                    logger.debug(f"  Data: {data[:200]}")
                     dst.write(data)
                     await dst.drain()
-                    logger.debug(f"Forwarded {len(data)} bytes {direction}")
             except asyncio.TimeoutError:
-                logger.debug(f"Forward {direction} timeout")
+                logger.warning(f"Forward {direction} timeout")
             except Exception as e:
-                logger.debug(f"Forward {direction} ended: {e}")
+                logger.error(f"Forward {direction} ended: {e}")
             finally:
                 try:
                     dst.close()
