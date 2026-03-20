@@ -31,12 +31,15 @@ RUN chmod +x -R /usr/src/arx/bin
 RUN echo '#!/bin/bash\n\
 set -e\n\
 export PORT=${PORT:-8080}\n\
+echo "=== Railway assigned PORT: $PORT ==="\n\
 envsubst "\\$PORT" < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf\n\
+echo "Nginx config:"\n\
+grep "listen" /etc/nginx/nginx.conf\n\
 echo "Starting Nginx on port $PORT..."\n\
 nginx\n\
-echo "Nginx started, checking..."\n\
 sleep 1\n\
-curl -s http://127.0.0.1:$PORT/health || echo "Health check failed"\n\
+echo "Testing health endpoint..."\n\
+curl -v http://127.0.0.1:$PORT/health 2>&1 | head -20\n\
 echo "Starting Evennia..."\n\
 exec start\n\
 ' > /entrypoint.sh && chmod +x /entrypoint.sh
