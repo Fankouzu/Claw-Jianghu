@@ -76,6 +76,29 @@ _DEFAULT_WIDTH = settings.CLIENT_DEFAULT_WIDTH
 from world.traits.models import Trait
 
 
+def _init_lazy_command_attrs(cmd_instance):
+    """
+    Initialize attributes that Evennia's Command metaclass normally sets.
+    This is needed for lazy-loaded command wrapper classes.
+    """
+    # Set _keyaliases like Evennia's Command metaclass does
+    key = getattr(cmd_instance, 'key', '')
+    aliases = getattr(cmd_instance, 'aliases', [])
+    if aliases and not isinstance(aliases, (list, tuple)):
+        aliases = list(aliases)
+    cmd_instance._keyaliases = tuple(sorted([key] + list(aliases), key=len, reverse=True))
+
+    # Set other attributes that Evennia's Command metaclass sets
+    if not hasattr(cmd_instance, 'auto_help'):
+        cmd_instance.auto_help = True
+    if not hasattr(cmd_instance, 'auto_help_display_key'):
+        cmd_instance.auto_help_display_key = None
+    if not hasattr(cmd_instance, 'is_exit'):
+        cmd_instance.is_exit = False
+    if not hasattr(cmd_instance, 'retain_instance'):
+        cmd_instance.retain_instance = False
+
+
 def args_are_currency(args):
     """
     Check if args to a given command match the expression of coins. Must be a number
@@ -753,6 +776,7 @@ class CmdArxSay:
                 setattr(self, attr, getattr(CmdSay, attr))
         # Store the access method for proper binding
         self._access_method = CmdSay.access
+        _init_lazy_command_attrs(self)
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -1067,6 +1091,7 @@ class CmdArxSetAttribute:
                 setattr(self, attr, getattr(CmdSetAttribute, attr))
         # Store the access method for proper binding
         self._access_method = CmdSetAttribute.access
+        _init_lazy_command_attrs(self)
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -1190,6 +1215,7 @@ class CmdDig:
                 setattr(self, attr, getattr(ObjManipCommand, attr))
         # Store the access method for proper binding
         self._access_method = ObjManipCommand.access
+        _init_lazy_command_attrs(self)
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -1721,6 +1747,7 @@ class CmdArxLock:
                 setattr(self, attr, getattr(CmdLock, attr))
         # Store the access method for proper binding
         self._access_method = CmdLock.access
+        _init_lazy_command_attrs(self)
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -1752,6 +1779,7 @@ class CmdArxTag:
                 setattr(self, attr, getattr(CmdTag, attr))
         # Store the access method for proper binding
         self._access_method = CmdTag.access
+        _init_lazy_command_attrs(self)
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -1822,6 +1850,7 @@ class CmdArxExamine:
                 setattr(self, attr, getattr(CmdExamine, attr))
         # Store the access method for proper binding
         self._access_method = CmdExamine.access
+        _init_lazy_command_attrs(self)
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -1966,6 +1995,7 @@ class CmdArxDestroy:
                 setattr(self, attr, getattr(CmdDestroy, attr))
         # Store the access method for proper binding
         self._access_method = CmdDestroy.access
+        _init_lazy_command_attrs(self)
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -2075,6 +2105,7 @@ class CmdArxReload:
                 setattr(self, attr, getattr(CmdReload, attr))
         # Store the access method for proper binding
         self._access_method = CmdReload.access
+        _init_lazy_command_attrs(self)
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -2118,12 +2149,15 @@ class CmdArxTime:
         from evennia.commands.default.system import CmdTime
         self._base_class = CmdTime
         self.__doc__ = CmdTime.__doc__
+        # Set _keyaliases like Evennia's Command metaclass does
+        self._keyaliases = tuple(sorted([self.key] + list(self.aliases), key=len, reverse=True))
         # Copy all attributes from base class
         for attr in dir(CmdTime):
             if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'access', 'lockhandler'):
                 setattr(self, attr, getattr(CmdTime, attr))
         # Store the access method for proper binding
         self._access_method = CmdTime.access
+        _init_lazy_command_attrs(self)
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -2158,6 +2192,7 @@ class CmdArxScripts:
                 setattr(self, attr, getattr(CmdScripts, attr))
         # Store the access method for proper binding
         self._access_method = CmdScripts.access
+        _init_lazy_command_attrs(self)
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
