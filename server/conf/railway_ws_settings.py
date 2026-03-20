@@ -2,6 +2,7 @@
 Railway WebSocket Service Settings
 Exposes Evennia WebSocket on Railway's $PORT
 """
+import os
 from server.conf.base_settings import *
 import dj_database_url
 
@@ -22,8 +23,10 @@ TELNET_INTERFACES = []
 AMP_PORT = 4006
 AMP_INTERFACE = "127.0.0.1"
 
-# WebSocket - expose on Railway's $PORT
-WEBSOCKET_CLIENT_PORT = int(config("PORT", default="4002"))
+# WebSocket - expose on Railway's PORT
+# Railway provides PORT environment variable
+RAILWAY_PORT = int(os.environ.get("PORT", "4002"))
+WEBSOCKET_CLIENT_PORT = RAILWAY_PORT
 WEBSOCKET_CLIENT_INTERFACE = "0.0.0.0"
 # URL for webclient to connect - this service's public URL
 WEBSOCKET_CLIENT_URL = config(
@@ -32,9 +35,7 @@ WEBSOCKET_CLIENT_URL = config(
 )
 
 # Web server - runs internally only (not exposed to public)
-WEBSERVER_PORT_EXTERNAL = 4001
-WEBSERVER_PORT_INTERNAL = 5001
-WEBSERVER_PORTS = [(WEBSERVER_PORT_EXTERNAL, WEBSERVER_PORT_INTERNAL)]
+WEBSERVER_PORTS = [(4001, 5001)]
 WEBSERVER_INTERFACES = ["127.0.0.1"]
 
 # =============================================================================

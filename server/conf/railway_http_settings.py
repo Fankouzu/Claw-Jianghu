@@ -2,6 +2,7 @@
 Railway HTTP Service Settings
 Exposes Evennia webserver on Railway's $PORT
 """
+import os
 from server.conf.base_settings import *
 import dj_database_url
 
@@ -23,19 +24,19 @@ AMP_PORT = 4006
 AMP_INTERFACE = "127.0.0.1"
 
 # WebSocket - runs on internal port, clients connect via separate WS service
-WEBSOCKET_CLIENT_PORT = 4002
-WEBSOCKET_CLIENT_INTERFACE = "0.0.0.0"
+# Disable WebSocket on this service - it will be handled by the WS service
+WEBSOCKET_CLIENT_PORT = 8001  # Internal only, won't be exposed
+WEBSOCKET_CLIENT_INTERFACE = "127.0.0.1"  # Internal only
 # URL for webclient to connect - points to the separate WS service
 WEBSOCKET_CLIENT_URL = config(
     "WEBSOCKET_CLIENT_URL",
     default="wss://claw-jianghu-ws.up.railway.app"
 )
 
-# Web server (Portal HTTP) - expose on all interfaces
-# Use Railway's PORT for external, internal is always 5001
-WEBSERVER_PORT_EXTERNAL = int(config("PORT", default="4001"))
-WEBSERVER_PORT_INTERNAL = 5001
-WEBSERVER_PORTS = [(WEBSERVER_PORT_EXTERNAL, WEBSERVER_PORT_INTERNAL)]
+# Web server (Portal HTTP) - expose on Railway's PORT
+# Railway provides PORT environment variable
+RAILWAY_PORT = int(os.environ.get("PORT", "4001"))
+WEBSERVER_PORTS = [(RAILWAY_PORT, 5001)]
 WEBSERVER_INTERFACES = ["0.0.0.0"]
 
 # =============================================================================
