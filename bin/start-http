@@ -64,6 +64,24 @@ else:
 
 # Start the server - HTTP only mode
 echo "Starting HTTP server on port $WEBSERVER_PORT_EXTERNAL..."
+
+# Debug: Test command imports before starting
+echo "=== Testing command imports ==="
+python -c "
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'server.conf.railway_http_settings'
+import django
+django.setup()
+print('Testing OOCCmdSet commands...')
+from commands.cmdsets.standard import OOCCmdSet
+cs = OOCCmdSet()
+cs.at_cmdset_creation()
+print(f'Commands loaded: {len(cs)}')
+for cmd in cs:
+    print(f'  - {cmd.key}: {type(cmd).__name__}')
+print('=== Import test complete ===')
+" 2>&1
+
 evennia start &
 
 # Keep container running
