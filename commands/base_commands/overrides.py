@@ -23,7 +23,9 @@ from commands.base_commands.channel_compat import (
 )
 from evennia.commands.default.general import CmdSay
 from evennia.comms.models import ChannelDB
-from evennia.commands.default.system import CmdReload, CmdTime
+# Lazy imports for Evennia commands that have initialization order issues
+# These will be imported inside the class definitions
+# from evennia.commands.default.system import CmdReload, CmdTime
 from evennia.commands.default.building import CmdScripts
 from evennia.commands.cmdhandler import get_and_merge_cmdsets
 
@@ -1853,19 +1855,33 @@ class CmdArxDestroy(CmdDestroy):
             caller.msg(string.strip())
 
 
-class CmdArxReload(CmdReload):
-    """Override of @reload to stop us if combat is active"""
+class CmdArxReload:
+    """
+    Override of @reload to stop us if combat is active.
+    This is a lazy-loaded wrapper around CmdReload.
+    """
+    key = "@reload"
+    aliases = ["reload"]
+    locks = "cmd:perm(reload) or perm(Immortals)"
 
-    __doc__ = (
-        CmdReload.__doc__
-        + "\n\nUse /override to force a reload when a combat is active."
-    )
+    def __init__(self):
+        # Lazy import and create the actual class at runtime
+        from evennia.commands.default.system import CmdReload
+        self._base_class = CmdReload
+        self.__doc__ = (
+            CmdReload.__doc__
+            + "\n\nUse /override to force a reload when a combat is active."
+        )
+        # Copy all attributes from base class
+        for attr in dir(CmdReload):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks'):
+                setattr(self, attr, getattr(CmdReload, attr))
 
     # noinspection PyBroadException
     def func(self):
         """Check if we're overriding/forcing it, otherwise reload is stopped if there's a combat."""
         if "override" in self.switches or "force" in self.switches:
-            super(CmdArxReload, self).func()
+            self._base_class.func(self)
             return
         from typeclasses.scripts.combat.combat_script import CombatManager
 
@@ -1875,11 +1891,32 @@ class CmdArxReload(CmdReload):
             )
             return
         try:
-            super(CmdArxReload, self).func()
+            self._base_class.func(self)
         except Exception:
             import traceback
 
             traceback.print_exc()
+
+
+class CmdArxTime:
+    """
+    Override of @time command.
+    This is a lazy-loaded wrapper around CmdTime.
+    """
+    key = "@time"
+    aliases = ["time"]
+
+    def __init__(self):
+        from evennia.commands.default.system import CmdTime
+        self._base_class = CmdTime
+        self.__doc__ = CmdTime.__doc__
+        # Copy all attributes from base class
+        for attr in dir(CmdTime):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases'):
+                setattr(self, attr, getattr(CmdTime, attr))
+
+    def func(self):
+        return self._base_class.func(self)
 
 
 class CmdArxScripts(CmdScripts):
@@ -1948,11 +1985,6 @@ class CmdArxScripts(CmdScripts):
             super(CmdArxScripts, self).func()
             return
         self.list_scripts()
-
-
-class CmdArxTime(CmdTime):
-    __doc__ = CmdTime.__doc__
-    key = "@time"
 
 
 class CmdArxOOC(CmdOOC):
