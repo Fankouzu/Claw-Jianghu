@@ -48,6 +48,10 @@ for i in 1 2 3; do
     fi
 done
 
+# Reset admin command sets to fix any corrupted data
+echo "=== Resetting Admin Command Sets ==="
+python /usr/src/arx/scripts/reset_admin_cmdsets.py 2>&1 || echo "Command set reset failed!"
+
 # Test command set import before starting Evennia
 echo "=== Testing command set import ==="
 python -c "
