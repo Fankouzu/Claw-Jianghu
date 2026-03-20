@@ -4,6 +4,11 @@
 export DJANGO_SETTINGS_MODULE=server.conf.railway_ws_settings
 export PYTHONPATH=/usr/src/arx:$PYTHONPATH
 
+# Railway provides PORT - use it for WebSocket
+# If PORT is not set, default to 4002
+export PORT="${PORT:-4002}"
+echo "Railway PORT: $PORT"
+
 # Override settings for Railway deployment
 export TELNET_INTERFACES="0.0.0.0"
 export WEBSOCKET_CLIENT_INTERFACE="0.0.0.0"
@@ -11,6 +16,12 @@ export ALLOWED_HOSTS=".railway.app,localhost,127.0.0.1,claw-jianghu-ws.up.railwa
 
 # WebSocket Service - expose websocket on Railway's PORT
 export WEBSOCKET_CLIENT_URL="wss://claw-jianghu-ws.up.railway.app"
+
+# Evennia uses these variables for port configuration
+export WEBSOCKET_CLIENT_PORT="$PORT"
+export WEBSERVER_PORT_EXTERNAL="4001"
+export WEBSERVER_PORT_INTERNAL="5001"
+echo "WebSocket will be on port $WEBSOCKET_CLIENT_PORT"
 
 # Wait for database to be ready (HTTP service should have run migrations)
 echo "Waiting for database..."
