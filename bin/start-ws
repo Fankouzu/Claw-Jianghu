@@ -4,10 +4,14 @@
 export DJANGO_SETTINGS_MODULE=server.conf.railway_ws_settings
 export PYTHONPATH=/usr/src/arx:$PYTHONPATH
 
-# Railway provides PORT - proxy will listen on this port
-export PORT="${PORT:-4002}"
+# Railway routes traffic to targetPort 4002, so we must listen there
+# Use PORT as fallback but prefer 4002 for consistency
+RAILWAY_PORT="${PORT:-4002}"
+# Override PORT to use 4002 (the targetPort configured in Railway)
+export PORT="4002"
+
 echo "=== Unified Service Starting ==="
-echo "Railway PORT: $PORT"
+echo "Proxy will listen on port: $PORT"
 echo "DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE"
 
 # Override settings for Railway deployment

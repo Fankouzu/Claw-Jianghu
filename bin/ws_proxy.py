@@ -11,11 +11,11 @@ import json
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-LISTEN_PORT = int(os.environ.get("PORT", 8080))
+LISTEN_PORT = int(os.environ.get("PORT", 4002))
 EVENNIA_HTTP_HOST = "127.0.0.1"
 EVENNIA_HTTP_PORT = 4001  # Evennia's internal HTTP port
 EVENNIA_WS_HOST = "127.0.0.1"
-EVENNIA_WS_PORT = 4002  # Evennia's WebSocket port
+EVENNIA_WS_PORT = 8001  # Evennia's WebSocket port (changed from 4002)
 
 
 async def proxy_websocket(reader, writer):
