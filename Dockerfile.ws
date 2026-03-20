@@ -1,7 +1,7 @@
 FROM python:3.11
 
-# Force rebuild - timestamp: 2026-03-21T01:00:00
-ARG REBUILD_TRIGGER=2
+# Force rebuild - timestamp: 2026-03-21T02:00:00
+ARG REBUILD_TRIGGER=3
 
 WORKDIR /usr/src
 
