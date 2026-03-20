@@ -6,7 +6,9 @@ export PYTHONPATH=/usr/src/arx:$PYTHONPATH
 
 # Railway provides PORT - WebSocket proxy will listen on this port
 export PORT="${PORT:-4002}"
+echo "=== WebSocket Service Starting ==="
 echo "Railway PORT: $PORT"
+echo "DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE"
 
 # Override settings for Railway deployment
 export TELNET_INTERFACES="0.0.0.0"
@@ -18,22 +20,30 @@ export WEBSOCKET_CLIENT_URL="wss://claw-jianghu-ws.up.railway.app"
 # Evennia internal WebSocket port (proxy forwards to this)
 export WEBSOCKET_CLIENT_PORT="4002"
 export WEBSOCKET_CLIENT_INTERFACE="127.0.0.1"
-echo "Evennia WebSocket on internal port 4002, proxy on port $PORT"
+echo "Evennia WebSocket will be on internal port 4002"
+echo "Proxy will listen on port $PORT"
 
 # Wait for database to be ready
 echo "Waiting for database..."
 sleep 5
 
-# Start Evennia
+# Start Evennia in background
 echo "Starting Evennia server..."
 evennia start &
+EVENNIA_PID=$!
+echo "Evennia started with PID $EVENNIA_PID"
 
-# Wait for Evennia to start
-sleep 10
+# Wait for Evennia to fully start
+echo "Waiting for Evennia to initialize..."
+sleep 15
 
-# Start WebSocket proxy
-echo "Starting WebSocket proxy on port $PORT..."
-python /usr/src/arx/bin/ws_proxy.py &
+# Check if Evennia is running
+if ps -p $EVENNIA_PID > /dev/null; then
+    echo "Evennia is running"
+else
+    echo "ERROR: Evennia failed to start"
+fi
 
-# Keep container running
-tail -f /dev/null
+# Start WebSocket proxy in foreground (this will keep the container running)
+echo "=== Starting WebSocket Proxy ==="
+exec python /usr/src/arx/bin/ws_proxy.py
