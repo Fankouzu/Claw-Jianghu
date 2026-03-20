@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #0f0; }
+        #log { height: 400px; overflow-y: scroll; border: 1px solid #0f0; padding: 10px; margin: 10px 0; background: #000; }
+        #input { width: 100%; padding: 10px; background: #000; color: #0f0; border: 1px solid #0f0; }
+        button { padding: 10px 20px; background: #0f0; color: #000; border: none; cursor: pointer; margin: 5px; }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+        .info { color: #0ff; }
+    </style>
+</head>
+<body>
+    <h1>Evennia WebSocket Test</h1>
+    <p>WebSocket URL: <span id="wsurl"></span></p>
+    <button onclick="connect()">Connect</button>
+    <button onclick="login()">Login (admin/admin123)</button>
+    <button onclick="testHelp()">Test Help</button>
+    <button onclick="testBbsub()">Test @bbsub</button>
+    <button onclick="disconnect()">Disconnect</button>
+    <div id="log"></div>
+    <input id="input" type="text" placeholder="Enter command..." onkeypress="if(event.key==='Enter')send()">
+    <button onclick="send()">Send</button>
+
+    <script>
+        const WS_URL = 'wss://claw-jianghu-ws.up.railway.app';
+        document.getElementById('wsurl').textContent = WS_URL;
+
+        let ws = null;
+        let loggedIn = false;
+
+        function log(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            document.getElementById('log').appendChild(div);
+            document.getElementById('log').scrollTop = document.getElementById('log').scrollHeight;
+        }
+
+        function connect() {
+            if (ws) {
+                log('Already connected', 'error');
+                return;
+            }
+            log('Connecting...');
+            ws = new WebSocket(WS_URL + '?testsession&testcuid&chrome');
+
+            ws.onopen = () => log('Connected!', 'success');
+            ws.onclose = (e) => { log('Disconnected', 'error'); ws = null; loggedIn = false; };
+            ws.onerror = (e) => log('Error: ' + e, 'error');
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data[0] === 'text') {
+                        let text = data[1];
+                        if (Array.isArray(text)) text = text.join('\n');
+                        log('Server: ' + text.substring(0, 200));
+                    } else if (data[0] === 'logged_in') {
+                        loggedIn = true;
+                        log('Logged in!', 'success');
+                    } else {
+                        log('Server: ' + JSON.stringify(data));
+                    }
+                } catch (e) {
+                    log('Parse error: ' + event.data.substring(0, 100), 'error');
+                }
+            };
+        }
+
+        function send() {
+            if (!ws) { log('Not connected', 'error'); return; }
+            const cmd = document.getElementById('input').value;
+            if (!cmd) return;
+            log('Sending: ' + cmd);
+            ws.send(JSON.stringify(['text', cmd, {}]));
+            document.getElementById('input').value = '';
+        }
+
+        function login() {
+            if (!ws) { log('Connect first', 'error'); return; }
+            log('Logging in...');
+            ws.send(JSON.stringify(['text', 'connect admin admin123', {}]));
+        }
+
+        function testHelp() {
+            if (!ws) { log('Connect first', 'error'); return; }
+            log('Testing help command...');
+            ws.send(JSON.stringify(['text', 'help', {}]));
+        }
+
+        function testBbsub() {
+            if (!ws) { log('Connect first', 'error'); return; }
+            log('Testing @bbsub command...');
+            ws.send(JSON.stringify(['text', '@bbsub/quiet story updates', {}]));
+        }
+
+        function disconnect() {
+            if (ws) { ws.close(); ws = null; }
+            loggedIn = false;
+        }
+
+        // Auto-connect on load
+        // connect();
+    </script>
+</body>
+</html>

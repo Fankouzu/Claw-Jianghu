@@ -21,7 +21,7 @@ class OOCCmdSet(CmdSet):
         its creation. It should populate the set with command instances.
         """
         # Lazy imports to avoid Evennia initialization order issues
-        from commands.base_commands import overrides, rolling, general, social, xp, roster, bboards
+        from commands.base_commands import overrides, rolling, general, social, xp, roster, bboards, help as cmd_help
         from world.stat_checks import check_commands
         from world.exploration import exploration_commands
         from world.weather import weather_commands
@@ -31,6 +31,8 @@ class OOCCmdSet(CmdSet):
         self.add(overrides.CmdInventory())
         self.add(default_general.CmdNick())
         self.add(default_general.CmdAccess())
+        # Help command - must be available for all characters
+        self.add(cmd_help.CmdHelp())
         self.add(rolling.CmdDiceString())
         self.add(rolling.CmdDiceCheckVersionOne())
         self.add(rolling.CmdOldSpoofCheck())
