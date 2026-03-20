@@ -10,6 +10,8 @@ export PORT="4002"
 echo "=== WebSocket Service Starting ==="
 echo "Proxy will listen on port: $PORT"
 echo "DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE"
+echo "Current time: $(date)"
+echo "Git commit: $(git rev-parse HEAD 2>/dev/null || echo 'not a git repo')"
 
 # Evennia internal ports - WebSocket on 8001 (proxy forwards from 4002)
 export WEBSOCKET_CLIENT_PORT="8001"
@@ -45,6 +47,26 @@ for i in 1 2 3; do
         sleep 5
     fi
 done
+
+# Test command set import before starting Evennia
+echo "=== Testing command set import ==="
+python -c "
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.conf.railway_ws_settings')
+import django
+django.setup()
+
+# Initialize Evennia
+import evennia
+evennia._init()
+
+print('Testing command set imports...')
+from commands.default_cmdsets import CharacterCmdSet
+cs = CharacterCmdSet()
+cs.at_cmdset_creation()
+print(f'Commands in CharacterCmdSet: {len(list(cs.commands))}')
+print('Command set import successful!')
+" 2>&1 || echo "Command set import test failed!"
 
 # Start Evennia in background, redirecting output to console
 echo "Starting Evennia server..."
