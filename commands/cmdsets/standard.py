@@ -21,7 +21,7 @@ class OOCCmdSet(CmdSet):
         its creation. It should populate the set with command instances.
         """
         # Lazy imports to avoid Evennia initialization order issues
-        from commands.base_commands import overrides, rolling, general, social, xp, roster
+        from commands.base_commands import overrides, rolling, general, social, xp, roster, bboards
         from world.stat_checks import check_commands
         from world.exploration import exploration_commands
         from world.weather import weather_commands
@@ -51,6 +51,11 @@ class OOCCmdSet(CmdSet):
         self.add(weather_commands.CmdAdminWeather())
         self.add(roster.CmdPropriety())
         self.add(exploration_commands.CmdExplorationCmdSet())
+        # BBoard commands
+        self.add(bboards.CmdBBSub())
+        self.add(bboards.CmdBBUnsub())
+        self.add(bboards.CmdBBReadOrPost())
+        self.add(bboards.CmdBBNew())
 
 
 class StateIndependentCmdSet(CmdSet):
@@ -177,7 +182,7 @@ class StaffCmdSet(CmdSet):
     def at_cmdset_creation(self):
         # Lazy imports to avoid Evennia initialization order issues
         from evennia.commands.default import help, admin, system, building, batchprocess
-        from commands.base_commands import overrides, staff_commands, xp, maps
+        from commands.base_commands import overrides, staff_commands, xp, maps, bboards
         from typeclasses import rooms as extended_room
         from world.dominion import general_dominion_commands as domcommands
         from world.dominion.plots import plot_commands
@@ -264,3 +269,5 @@ class StaffCmdSet(CmdSet):
         self.add(home.CmdManageRoom())
         self.add(CmdRoot())
         self.add(CmdTemplateForm())
+        # Staff bboard commands
+        self.add(bboards.CmdBBCreate())
