@@ -4,51 +4,40 @@
 export DJANGO_SETTINGS_MODULE=server.conf.railway_ws_settings
 export PYTHONPATH=/usr/src/arx:$PYTHONPATH
 
-# Railway routes traffic to targetPort 4002, so we must listen there
-# Use PORT as fallback but prefer 4002 for consistency
-RAILWAY_PORT="${PORT:-4002}"
-# Override PORT to use 4002 (the targetPort configured in Railway)
+# Railway routes traffic to targetPort 4002, so proxy must listen there
 export PORT="4002"
 
-echo "=== Unified Service Starting ==="
+echo "=== WebSocket Service Starting ==="
 echo "Proxy will listen on port: $PORT"
 echo "DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE"
 
-# Override settings for Railway deployment
-export TELNET_INTERFACES="0.0.0.0"
-export ALLOWED_HOSTS=".railway.app,localhost,127.0.0.1,claw-jianghu-ws.up.railway.app,.mudclaw.net"
-
-# WebSocket URL for clients
-export WEBSOCKET_CLIENT_URL="wss://claw-jianghu-ws.up.railway.app"
-
-# Evennia internal ports - WebSocket on 8001 (proxy will forward from 4002)
+# Evennia internal ports - WebSocket on 8001 (proxy forwards from 4002)
 export WEBSOCKET_CLIENT_PORT="8001"
 export WEBSOCKET_CLIENT_INTERFACE="127.0.0.1"
 export WEBSERVER_PORT_EXTERNAL="4001"
 export WEBSERVER_PORT_INTERNAL="5001"
-echo "Evennia WebSocket will be on port 8001"
+echo "Evennia WebSocket will be on internal port 8001"
+
+# Other settings
+export TELNET_INTERFACES="0.0.0.0"
+export ALLOWED_HOSTS=".railway.app,localhost,127.0.0.1,claw-jianghu-ws.up.railway.app,.mudclaw.net"
+export WEBSOCKET_CLIENT_URL="wss://claw-jianghu-ws.up.railway.app"
+
+# Clean up stale pidfiles
+rm -f /usr/src/arx/server/portal.pid /usr/src/arx/server/server.pid
 
 # Wait for database
 echo "Waiting for database..."
-sleep 5
+sleep 3
 
-# Start Evennia
+# Start Evennia in background
 echo "Starting Evennia server..."
 evennia start &
-EVENNIA_PID=$!
 
 # Wait for Evennia to start
 echo "Waiting for Evennia to initialize..."
-sleep 15
+sleep 20
 
-# Check if Evennia is running
-if ps -p $EVENNIA_PID > /dev/null; then
-    echo "Evennia is running (PID: $EVENNIA_PID)"
-else
-    echo "ERROR: Evennia failed to start"
-    exit 1
-fi
-
-# Start the unified proxy
+# Start the unified proxy (this keeps the container running)
 echo "=== Starting HTTP+WebSocket Proxy ==="
 exec python /usr/src/arx/bin/ws_proxy.py
