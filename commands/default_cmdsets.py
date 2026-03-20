@@ -43,10 +43,12 @@ def check_errors(func):
         """Wrapper around function with exception handling"""
         try:
             return func(*args, **kwargs)
-        except Exception:
+        except Exception as err:
             import traceback
-
-            traceback.print_exc()
+            import sys
+            print(f"<<ERROR>>: Error in {func.__name__}: {err}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
+            sys.stderr.flush()
 
     return new_func
 
