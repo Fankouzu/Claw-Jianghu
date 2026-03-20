@@ -21,4 +21,5 @@ ENV PYTHONPATH="/usr/src/arx:${PYTHONPATH}"
 
 RUN chmod +x -R /usr/src/arx/bin
 
-CMD ["start"]
+# HTTP service (default)
+CMD ["start-http"]
