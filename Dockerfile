@@ -16,6 +16,12 @@ COPY . .
 RUN mkdir -p server/logs
 RUN mkdir -p /var/logs
 
+# Install nginx for WebSocket proxy (used by WS service)
+RUN apt-get update && apt-get install -y nginx gettext-base && rm -rf /var/lib/apt/lists/*
+
+# Copy nginx configs
+COPY docker/nginx-ws.conf /etc/nginx/nginx-ws.conf.template
+
 ENV PATH="/usr/src/arx/bin:${PATH}"
 ENV PYTHONPATH="/usr/src/arx:${PYTHONPATH}"
 

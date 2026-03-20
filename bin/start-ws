@@ -28,7 +28,7 @@ sleep 5
 # Start nginx - replace PORT in config
 echo "Starting nginx..."
 export PORT
-envsubst '${PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
+envsubst '${PORT}' < /etc/nginx/nginx-ws.conf.template > /etc/nginx/nginx.conf
 nginx
 
 # Start Evennia
