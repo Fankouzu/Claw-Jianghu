@@ -5,21 +5,22 @@ export DJANGO_SETTINGS_MODULE=server.conf.settings
 export PYTHONPATH=/usr/src/arx:$PYTHONPATH
 
 # Override settings for Railway deployment
-# Railway only exposes one port ($PORT), we use Nginx to proxy both HTTP and WebSocket
 export TELNET_INTERFACES="0.0.0.0"
 export WEBSOCKET_CLIENT_INTERFACE="0.0.0.0"
 export ALLOWED_HOSTS=".railway.app,localhost,127.0.0.1,jianghu.mudclaw.net,.mudclaw.net"
-# WebSocket URL - this is the URL clients connect to (via Nginx /ws path)
-export WEBSOCKET_CLIENT_URL="wss://jianghu.mudclaw.net/ws"
-# Evennia internal ports (Nginx will proxy to these)
-export WEBSERVER_PORT_EXTERNAL="4001"
+
+# Use Railway's PORT for the HTTP webserver
+# WebSocket will be on a separate service/domain
+export WEBSERVER_PORT_EXTERNAL="${PORT:-4001}"
 export WEBSERVER_PORT_INTERNAL="5001"
-# WebSocket port (Nginx proxies /ws to this)
-export WEBSOCKET_CLIENT_PORT="8001"
+export WEBSOCKET_CLIENT_PORT="4002"
+
+# WebSocket URL - point to the WebSocket service
+export WEBSOCKET_CLIENT_URL="wss://claw-jianghu-ws.up.railway.app"
 
 # Initialize database tables before migrations
 echo "Checking database tables..."
-python /usr/src/arx/init_db.py
+python /usr/src/arx/init_db.py 2>/dev/null || true
 
 # Run migrations before starting (with retry)
 echo "Running migrations..."
@@ -53,11 +54,11 @@ if not AccountDB.objects.filter(id=1).exists():
     account.save()
     print('Superuser created: admin / admin123')
 else:
-    print('Superuser already exists')
+    print('Superuser already exists'
 "
 
 # Start the server
-echo "Starting server..."
+echo "Starting server on HTTP port $WEBSERVER_PORT_EXTERNAL, WebSocket port $WEBSOCKET_CLIENT_PORT..."
 evennia start &
 
 #Needed to keep container running
