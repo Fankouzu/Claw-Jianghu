@@ -11,7 +11,8 @@ from evennia.objects.models import ObjectDB
 from world.crafting.models import CraftingRecipe
 from world.dominion.models import AssetOwner, Organization
 from commands.base_commands.crafting import CmdCraft
-from commands.base_commands.overrides import CmdDig
+# Lazy import for CmdDig to avoid initialization order issues
+# from commands.base_commands.overrides import CmdDig
 from server.utils.prettytable import PrettyTable
 from server.utils.arx_utils import inform_staff, raw
 from evennia.utils import utils
@@ -248,7 +249,7 @@ class CmdAllowBuilding(ArxCommand):
         return
 
 
-class CmdBuildRoom(CmdDig):
+class CmdBuildRoom:
     """
     +buildroom - build and connect new rooms to the current one
 
@@ -267,12 +268,22 @@ class CmdBuildRoom(CmdDig):
     current room and the new one. You can add as many aliases as you
     like to the name of the room and the exits in question; an example
     would be 'north;no;n'.
+
+    NOTE: This is a lazy-loaded wrapper to avoid initialization order issues.
     """
 
     key = "+buildroom"
     locks = "cmd:all()"
     help_category = "Home"
     help_entry_tags = ["housing"]
+
+    def __init__(self):
+        from commands.base_commands.overrides import CmdDig
+        self._base_class = CmdDig()
+        # Copy all attributes from base class
+        for attr in dir(self._base_class):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'locks', 'help_category', 'help_entry_tags'):
+                setattr(self, attr, getattr(self._base_class, attr))
 
     # noinspection PyAttributeOutsideInit
     def func(self):
@@ -375,7 +386,7 @@ class CmdBuildRoom(CmdDig):
         ):
             caller.msg("Invalid characters entered for names or exits.")
             return
-        new_room = CmdDig.func(self)
+        new_room = self._base_class.func(self)
         if not new_room:
             return
         assets.economic -= cost

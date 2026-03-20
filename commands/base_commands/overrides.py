@@ -21,24 +21,38 @@ from commands.base_commands.channel_compat import (
     CmdAllCom,
     CmdCWho,
 )
-from evennia.commands.default.general import CmdSay
+# CmdSay is lazy-loaded in CmdArxSay to avoid initialization order issues
+# from evennia.commands.default.general import CmdSay
 from evennia.comms.models import ChannelDB
 # Lazy imports for Evennia commands that have initialization order issues
 # These will be imported inside the class definitions
 # from evennia.commands.default.system import CmdReload, CmdTime
-from evennia.commands.default.building import CmdScripts
+# from evennia.commands.default.building import CmdScripts  # Lazy loaded in CmdArxScripts
 from evennia.commands.cmdhandler import get_and_merge_cmdsets
 
-# noinspection PyProtectedMember
-from evennia.commands.default.building import (
-    CmdExamine,
-    CmdLock,
-    CmdDestroy,
-    ObjManipCommand,
-    CmdTag,
-    CmdSetAttribute,
-    _convert_from_string,
-)
+# NOTE: The following imports from evennia.commands.default.building are moved to lazy imports
+# within the class definitions to avoid "NoneType takes no arguments" errors during Evennia initialization.
+# This happens because Evennia's Command class is None until the framework fully initializes.
+# Classes that need these base classes now use wrapper patterns with __init__ methods that
+# lazily import and set up the base class at runtime.
+
+# Lazy imports for building commands - imported inside class __init__ methods
+# from evennia.commands.default.building import (
+#     CmdExamine,
+#     CmdLock,
+#     CmdDestroy,
+#     ObjManipCommand,
+#     CmdTag,
+#     CmdSetAttribute,
+#     _convert_from_string,
+# )
+
+# Helper function for lazy attribute access
+def _lazy_convert_from_string(cmd_instance, value):
+    """Lazy wrapper for _convert_from_string"""
+    from evennia.commands.default.building import _convert_from_string
+    return _convert_from_string(cmd_instance, value)
+
 from evennia.commands.default.syscommands import CMD_NOMATCH
 from evennia.utils import utils, evtable, create
 from evennia.utils.utils import (
@@ -711,16 +725,30 @@ class CmdPose(ArxCommand):
             self.caller.posecount += 1
 
 
-class CmdArxSay(CmdSay):
-    """Override of CmdSay"""
+class CmdArxSay:
+    """
+    Override of CmdSay.
+    This is a lazy-loaded wrapper to avoid initialization order issues.
+    """
 
-    __doc__ = CmdSay.__doc__
+    key = "say"
+    aliases = ['"', "'"]
+    locks = "cmd:all()"
     arg_regex = None
+
+    def __init__(self):
+        from evennia.commands.default.general import CmdSay
+        self._base_class = CmdSay
+        self.__doc__ = CmdSay.__doc__
+        # Copy all attributes from base class
+        for attr in dir(CmdSay):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'arg_regex', 'parse', 'func'):
+                setattr(self, attr, getattr(CmdSay, attr))
 
     # noinspection PyAttributeOutsideInit
     def parse(self):
         """Make sure cmdstring 'say' has a space, other aliases don't"""
-        super(CmdArxSay, self).parse()
+        self._base_class.parse(self)
         if self.cmdstring == "say":
             self.args = " %s" % self.args.lstrip()
 
@@ -1001,10 +1029,24 @@ class CmdWho(ArxPlayerCommand):
         self.msg(string)
 
 
-class CmdArxSetAttribute(CmdSetAttribute):
-    """Override of cmdSetAttribute"""
+class CmdArxSetAttribute:
+    """
+    Override of cmdSetAttribute.
+    This is a lazy-loaded wrapper to avoid initialization order issues.
+    """
 
-    __doc__ = CmdSetAttribute.__doc__
+    key = "@set"
+    aliases = ["@attribute", "@attr"]
+    locks = "cmd:perm(set) or perm(Builders)"
+
+    def __init__(self):
+        from evennia.commands.default.building import CmdSetAttribute
+        self._base_class = CmdSetAttribute
+        self.__doc__ = CmdSetAttribute.__doc__
+        # Copy all attributes from base class
+        for attr in dir(CmdSetAttribute):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'set_attr'):
+                setattr(self, attr, getattr(CmdSetAttribute, attr))
 
     def func(self):
         """Implement the set attribute - a limited form of @py."""
@@ -1060,7 +1102,7 @@ class CmdArxSetAttribute(CmdSetAttribute):
                 for attr in attrs:
                     if not self.check_attr(obj, attr):
                         continue
-                    value = _convert_from_string(self, value)
+                    value = _lazy_convert_from_string(self, value)
                     result.append(self.set_attr(obj, attr, value))
             # send feedback
             msg = "".join(result).strip("\n")
@@ -1078,11 +1120,11 @@ class CmdArxSetAttribute(CmdSetAttribute):
         if hasattr(obj.item_data, attr):
             setattr(obj.item_data, attr, value)
             return f"Set item data {obj.name}/{attr} = {value}"
-        # normal case
-        return super().set_attr(obj, attr, value)
+        # normal case - use base class method
+        return self._base_class.set_attr(self, obj, attr, value)
 
 
-class CmdDig(ObjManipCommand):
+class CmdDig:
     """
     build new rooms and connect them to the current location
     Usage:
@@ -1100,11 +1142,23 @@ class CmdDig(ObjManipCommand):
     current room and the new one. You can add as many aliases as you
     like to the name of the room and the exits in question; an example
     would be 'north;no;n'.
+
+    NOTE: This is a lazy-loaded wrapper to avoid initialization order issues.
     """
 
     key = "@dig"
     locks = "cmd:perm(dig) or perm(Builders)"
     help_category = "Building"
+
+    def __init__(self):
+        from evennia.commands.default.building import ObjManipCommand
+        self._base_class = ObjManipCommand
+        # Copy docstring
+        self.__doc__ = self.__class__.__doc__
+        # Copy all attributes from base class
+        for attr in dir(ObjManipCommand):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'locks', 'help_category'):
+                setattr(self, attr, getattr(ObjManipCommand, attr))
 
     def func(self):
         """Do the digging. Inherits variables from ObjManipCommand.parse()"""
@@ -1599,18 +1653,44 @@ class CmdArxCWho(CmdCWho):
         self.msg(string.strip())
 
 
-class CmdArxLock(CmdLock):
-    """Override of Evennia's lock command. Different default lock."""
+class CmdArxLock:
+    """
+    Override of Evennia's lock command. Different default lock.
+    This is a lazy-loaded wrapper to avoid initialization order issues.
+    """
 
-    __doc__ = CmdLock.__doc__
     key = "@lock"
     aliases = ["@locks"]
+    locks = "cmd:perm(lock) or perm(Builders)"
+
+    def __init__(self):
+        from evennia.commands.default.building import CmdLock
+        self._base_class = CmdLock
+        self.__doc__ = CmdLock.__doc__
+        # Copy all attributes from base class
+        for attr in dir(CmdLock):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks'):
+                setattr(self, attr, getattr(CmdLock, attr))
 
 
-class CmdArxTag(CmdTag):
-    """Arx's version of the @tag command"""
+class CmdArxTag:
+    """
+    Arx's version of the @tag command.
+    This is a lazy-loaded wrapper to avoid initialization order issues.
+    """
 
-    __doc__ = CmdTag.__doc__
+    key = "@tag"
+    aliases = ["tag"]
+    locks = "cmd:perm(tag) or perm(Builders)"
+
+    def __init__(self):
+        from evennia.commands.default.building import CmdTag
+        self._base_class = CmdTag
+        self.__doc__ = CmdTag.__doc__
+        # Copy all attributes from base class
+        for attr in dir(CmdTag):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'display_tags'):
+                setattr(self, attr, getattr(CmdTag, attr))
 
     def display_tags(self):
         """Display of tags with some excluded. Staff wants to see only notable ones."""
@@ -1632,11 +1712,11 @@ class CmdArxTag(CmdTag):
         """Override of CmdTags to have different display"""
         if not self.args:
             return self.display_tags()
-        super(CmdArxTag, self).func()
+        self._base_class.func(self)
 
 
 # noinspection PyAttributeOutsideInit
-class CmdArxExamine(CmdExamine):
+class CmdArxExamine:
     """
     get detailed information about an object
 
@@ -1655,7 +1735,21 @@ class CmdArxExamine(CmdExamine):
 
     Append a * before the search string to examine a player.
 
+    NOTE: This is a lazy-loaded wrapper to avoid initialization order issues.
     """
+
+    key = "examine"
+    aliases = ["ex", "exam"]
+    locks = "cmd:perm(examine) or perm(Builders)"
+
+    def __init__(self):
+        from evennia.commands.default.building import CmdExamine
+        self._base_class = CmdExamine
+        self.__doc__ = self.__class__.__doc__
+        # Copy all attributes from base class
+        for attr in dir(CmdExamine):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'format_attributes'):
+                setattr(self, attr, getattr(CmdExamine, attr))
 
     def func(self):
         """Process command"""
@@ -1744,7 +1838,7 @@ class CmdArxExamine(CmdExamine):
 
     def format_attributes(self, obj, attrname=None, crop=True):
         if not attrname:
-            return super().format_attributes(obj, attrname, crop)
+            return self._base_class.format_attributes(self, obj, attrname, crop)
         trait = Trait.get_instance_by_name(attrname)
         if trait:
             value = obj.traits.get_value_by_trait(trait)
@@ -1753,10 +1847,10 @@ class CmdArxExamine(CmdExamine):
         if hasattr(obj.item_data, attrname):
             value = getattr(obj.item_data, attrname)
             return {"Item Data": f"\n {attrname} = {value}"}
-        return super().format_attributes(obj, attrname, crop)
+        return self._base_class.format_attributes(self, obj, attrname, crop)
 
 
-class CmdArxDestroy(CmdDestroy):
+class CmdArxDestroy:
     """
     permanently delete objects
 
@@ -1772,12 +1866,23 @@ class CmdArxDestroy(CmdDestroy):
 
     Destroys one or many objects. If dbrefs are used, a range to delete can be
     given, e.g. 4-10. Also the end points will be deleted.
+
+    NOTE: This is a lazy-loaded wrapper to avoid initialization order issues.
     """
 
     key = "@destroy"
     aliases = ["@delete", "@del"]
     locks = "cmd:perm(destroy) or perm(Builders)"
     help_category = "Building"
+
+    def __init__(self):
+        from evennia.commands.default.building import CmdDestroy
+        self._base_class = CmdDestroy
+        self.__doc__ = self.__class__.__doc__
+        # Copy all attributes from base class
+        for attr in dir(CmdDestroy):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'help_category', 'func'):
+                setattr(self, attr, getattr(CmdDestroy, attr))
 
     def func(self):
         """Implements the command."""
@@ -1919,10 +2024,24 @@ class CmdArxTime:
         return self._base_class.func(self)
 
 
-class CmdArxScripts(CmdScripts):
-    """Override of Scripts"""
+class CmdArxScripts:
+    """
+    Override of Scripts.
+    This is a lazy-loaded wrapper around CmdScripts to avoid initialization order issues.
+    """
+    key = "@scripts"
+    aliases = ["scripts"]
+    locks = "cmd:perm(scripts) or perm(Builders)"
 
-    __doc__ = CmdScripts.__doc__
+    def __init__(self):
+        # Lazy import and create the actual class at runtime
+        from evennia.commands.default.building import CmdScripts
+        self._base_class = CmdScripts
+        self.__doc__ = CmdScripts.__doc__
+        # Copy all attributes from base class
+        for attr in dir(CmdScripts):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks'):
+                setattr(self, attr, getattr(CmdScripts, attr))
 
     # noinspection PyProtectedMember
     def list_scripts(self):
@@ -1982,7 +2101,7 @@ class CmdArxScripts(CmdScripts):
     def func(self):
         """Override of CmdScripts"""
         if self.switches:
-            super(CmdArxScripts, self).func()
+            self._base_class.func(self)
             return
         self.list_scripts()
 
