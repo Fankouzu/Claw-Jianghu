@@ -85,6 +85,10 @@ print(f'CMDSET_CHARACTER: {settings.CMDSET_CHARACTER}')
 print(f'CMDSET_ACCOUNT: {settings.CMDSET_ACCOUNT}')
 " 2>&1
 
+# Test connect command
+echo "=== Testing Connect Command ==="
+python /usr/src/arx/scripts/test_connect.py 2>&1 || echo "Connect test failed!"
+
 # Start Evennia in foreground mode to see all output
 echo "Starting Evennia server in foreground mode..."
 evennia start --log-to-console &
