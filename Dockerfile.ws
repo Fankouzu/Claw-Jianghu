@@ -16,10 +16,16 @@ COPY . .
 RUN mkdir -p server/logs
 RUN mkdir -p /var/logs
 
+# Install nginx for WebSocket proxy
+RUN apt-get update && apt-get install -y nginx gettext-base && rm -rf /var/lib/apt/lists/*
+
 ENV PATH="/usr/src/arx/bin:${PATH}"
 ENV PYTHONPATH="/usr/src/arx:${PYTHONPATH}"
 
 RUN chmod +x -R /usr/src/arx/bin
+
+# Copy nginx config for WebSocket
+COPY docker/nginx-ws.conf /etc/nginx/nginx.conf.template
 
 # WebSocket service
 CMD ["start-ws"]

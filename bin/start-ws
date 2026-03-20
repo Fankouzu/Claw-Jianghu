@@ -4,30 +4,34 @@
 export DJANGO_SETTINGS_MODULE=server.conf.railway_ws_settings
 export PYTHONPATH=/usr/src/arx:$PYTHONPATH
 
-# Railway provides PORT - use it for WebSocket
-# If PORT is not set, default to 4002
+# Railway provides PORT - nginx will listen on this port
 export PORT="${PORT:-4002}"
 echo "Railway PORT: $PORT"
 
 # Override settings for Railway deployment
 export TELNET_INTERFACES="0.0.0.0"
-export WEBSOCKET_CLIENT_INTERFACE="0.0.0.0"
 export ALLOWED_HOSTS=".railway.app,localhost,127.0.0.1,claw-jianghu-ws.up.railway.app,.mudclaw.net"
 
-# WebSocket Service - expose websocket on Railway's PORT
+# WebSocket Service - nginx proxies to Evennia WebSocket
 export WEBSOCKET_CLIENT_URL="wss://claw-jianghu-ws.up.railway.app"
 
-# Evennia uses these variables for port configuration
-export WEBSOCKET_CLIENT_PORT="$PORT"
-export WEBSERVER_PORT_EXTERNAL="4001"
-export WEBSERVER_PORT_INTERNAL="5001"
-echo "WebSocket will be on port $WEBSOCKET_CLIENT_PORT"
+# Evennia internal WebSocket port (nginx proxies to this)
+# We use a fixed internal port for Evennia, nginx handles the Railway PORT
+export WEBSOCKET_CLIENT_PORT="4002"
+export WEBSOCKET_CLIENT_INTERFACE="127.0.0.1"
+echo "Evennia WebSocket will be on internal port 4002, nginx on port $PORT"
 
-# Wait for database to be ready (HTTP service should have run migrations)
+# Wait for database to be ready
 echo "Waiting for database..."
 sleep 5
 
-# Start the server
+# Start nginx - replace PORT in config
+echo "Starting nginx..."
+export PORT
+envsubst '${PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
+nginx
+
+# Start Evennia
 echo "Starting WebSocket server..."
 evennia start &
 

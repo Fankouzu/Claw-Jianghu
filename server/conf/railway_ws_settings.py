@@ -1,6 +1,6 @@
 """
 Railway WebSocket Service Settings
-Exposes Evennia WebSocket on Railway's $PORT
+Exposes Evennia WebSocket on Railway's $PORT via Nginx proxy
 """
 import os
 from server.conf.base_settings import *
@@ -23,11 +23,9 @@ TELNET_INTERFACES = []
 AMP_PORT = 4006
 AMP_INTERFACE = "127.0.0.1"
 
-# WebSocket - expose on Railway's PORT
-# Railway provides PORT environment variable
-RAILWAY_PORT = int(os.environ.get("PORT", "4002"))
-WEBSOCKET_CLIENT_PORT = RAILWAY_PORT
-WEBSOCKET_CLIENT_INTERFACE = "0.0.0.0"
+# WebSocket - Evennia listens internally on 4002, Nginx proxies to Railway's PORT
+WEBSOCKET_CLIENT_PORT = 4002
+WEBSOCKET_CLIENT_INTERFACE = "127.0.0.1"  # Internal only - Nginx handles external
 # URL for webclient to connect - this service's public URL
 WEBSOCKET_CLIENT_URL = config(
     "WEBSOCKET_CLIENT_URL",
