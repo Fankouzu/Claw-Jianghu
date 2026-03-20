@@ -62,7 +62,9 @@ from evennia.utils.utils import (
     variable_from_module,
     inherits_from,
     list_to_string,
+    lazy_property,
 )
+from evennia.locks.lockhandler import LockHandler
 
 from server.utils import arx_utils, prettytable
 from server.utils.exceptions import CommandError
@@ -736,20 +738,25 @@ class CmdArxSay:
     locks = "cmd:all()"
     arg_regex = None
 
+    @lazy_property
+    def lockhandler(self):
+        """Create lockhandler on demand, like Evennia's Command class."""
+        return LockHandler(self)
+
     def __init__(self):
         from evennia.commands.default.general import CmdSay
         self._base_class = CmdSay
         self.__doc__ = CmdSay.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdSay):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'arg_regex', 'parse', 'func', 'access'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'arg_regex', 'parse', 'func', 'access', 'lockhandler'):
                 setattr(self, attr, getattr(CmdSay, attr))
         # Store the access method for proper binding
         self._access_method = CmdSay.access
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
-        return self._access_method(srcobj, access_type, default)
+        return self._access_method(self, srcobj, access_type, default)
 
     # noinspection PyAttributeOutsideInit
     def parse(self):
@@ -1045,20 +1052,25 @@ class CmdArxSetAttribute:
     aliases = ["@attribute", "@attr"]
     locks = "cmd:perm(set) or perm(Builders)"
 
+    @lazy_property
+    def lockhandler(self):
+        """Create lockhandler on demand, like Evennia's Command class."""
+        return LockHandler(self)
+
     def __init__(self):
         from evennia.commands.default.building import CmdSetAttribute
         self._base_class = CmdSetAttribute
         self.__doc__ = CmdSetAttribute.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdSetAttribute):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'set_attr', 'access'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'set_attr', 'access', 'lockhandler'):
                 setattr(self, attr, getattr(CmdSetAttribute, attr))
         # Store the access method for proper binding
         self._access_method = CmdSetAttribute.access
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
-        return self._access_method(srcobj, access_type, default)
+        return self._access_method(self, srcobj, access_type, default)
 
     def func(self):
         """Implement the set attribute - a limited form of @py."""
@@ -1162,6 +1174,11 @@ class CmdDig:
     locks = "cmd:perm(dig) or perm(Builders)"
     help_category = "Building"
 
+    @lazy_property
+    def lockhandler(self):
+        """Create lockhandler on demand, like Evennia's Command class."""
+        return LockHandler(self)
+
     def __init__(self):
         from evennia.commands.default.building import ObjManipCommand
         self._base_class = ObjManipCommand
@@ -1169,14 +1186,14 @@ class CmdDig:
         self.__doc__ = self.__class__.__doc__
         # Copy all attributes from base class
         for attr in dir(ObjManipCommand):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'locks', 'help_category', 'access'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'locks', 'help_category', 'access', 'lockhandler'):
                 setattr(self, attr, getattr(ObjManipCommand, attr))
         # Store the access method for proper binding
         self._access_method = ObjManipCommand.access
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
-        return self._access_method(srcobj, access_type, default)
+        return self._access_method(self, srcobj, access_type, default)
 
     def func(self):
         """Do the digging. Inherits variables from ObjManipCommand.parse()"""
@@ -1681,20 +1698,25 @@ class CmdArxLock:
     aliases = ["@locks"]
     locks = "cmd:perm(lock) or perm(Builders)"
 
+    @lazy_property
+    def lockhandler(self):
+        """Create lockhandler on demand, like Evennia's Command class."""
+        return LockHandler(self)
+
     def __init__(self):
         from evennia.commands.default.building import CmdLock
         self._base_class = CmdLock
         self.__doc__ = CmdLock.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdLock):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'access'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler'):
                 setattr(self, attr, getattr(CmdLock, attr))
         # Store the access method for proper binding
         self._access_method = CmdLock.access
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
-        return self._access_method(srcobj, access_type, default)
+        return self._access_method(self, srcobj, access_type, default)
 
 
 class CmdArxTag:
@@ -1707,20 +1729,25 @@ class CmdArxTag:
     aliases = ["tag"]
     locks = "cmd:perm(tag) or perm(Builders)"
 
+    @lazy_property
+    def lockhandler(self):
+        """Create lockhandler on demand, like Evennia's Command class."""
+        return LockHandler(self)
+
     def __init__(self):
         from evennia.commands.default.building import CmdTag
         self._base_class = CmdTag
         self.__doc__ = CmdTag.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdTag):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'display_tags', 'access'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'display_tags', 'access', 'lockhandler'):
                 setattr(self, attr, getattr(CmdTag, attr))
         # Store the access method for proper binding
         self._access_method = CmdTag.access
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
-        return self._access_method(srcobj, access_type, default)
+        return self._access_method(self, srcobj, access_type, default)
 
     def display_tags(self):
         """Display of tags with some excluded. Staff wants to see only notable ones."""
@@ -1772,20 +1799,25 @@ class CmdArxExamine:
     aliases = ["ex", "exam"]
     locks = "cmd:perm(examine) or perm(Builders)"
 
+    @lazy_property
+    def lockhandler(self):
+        """Create lockhandler on demand, like Evennia's Command class."""
+        return LockHandler(self)
+
     def __init__(self):
         from evennia.commands.default.building import CmdExamine
         self._base_class = CmdExamine
         self.__doc__ = self.__class__.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdExamine):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'format_attributes', 'access'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'format_attributes', 'access', 'lockhandler'):
                 setattr(self, attr, getattr(CmdExamine, attr))
         # Store the access method for proper binding
         self._access_method = CmdExamine.access
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
-        return self._access_method(srcobj, access_type, default)
+        return self._access_method(self, srcobj, access_type, default)
 
     def func(self):
         """Process command"""
@@ -1911,20 +1943,25 @@ class CmdArxDestroy:
     locks = "cmd:perm(destroy) or perm(Builders)"
     help_category = "Building"
 
+    @lazy_property
+    def lockhandler(self):
+        """Create lockhandler on demand, like Evennia's Command class."""
+        return LockHandler(self)
+
     def __init__(self):
         from evennia.commands.default.building import CmdDestroy
         self._base_class = CmdDestroy
         self.__doc__ = self.__class__.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdDestroy):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'help_category', 'func', 'access'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'help_category', 'func', 'access', 'lockhandler'):
                 setattr(self, attr, getattr(CmdDestroy, attr))
         # Store the access method for proper binding
         self._access_method = CmdDestroy.access
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
-        return self._access_method(srcobj, access_type, default)
+        return self._access_method(self, srcobj, access_type, default)
 
     def func(self):
         """Implements the command."""
@@ -2011,6 +2048,11 @@ class CmdArxReload:
     aliases = ["reload"]
     locks = "cmd:perm(reload) or perm(Immortals)"
 
+    @lazy_property
+    def lockhandler(self):
+        """Create lockhandler on demand, like Evennia's Command class."""
+        return LockHandler(self)
+
     def __init__(self):
         # Lazy import and create the actual class at runtime
         from evennia.commands.default.system import CmdReload
@@ -2021,14 +2063,14 @@ class CmdArxReload:
         )
         # Copy all attributes from base class
         for attr in dir(CmdReload):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler'):
                 setattr(self, attr, getattr(CmdReload, attr))
         # Store the access method for proper binding
         self._access_method = CmdReload.access
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
-        return self._access_method(srcobj, access_type, default)
+        return self._access_method(self, srcobj, access_type, default)
 
     # noinspection PyBroadException
     def func(self):
@@ -2059,20 +2101,25 @@ class CmdArxTime:
     key = "@time"
     aliases = ["time"]
 
+    @lazy_property
+    def lockhandler(self):
+        """Create lockhandler on demand, like Evennia's Command class."""
+        return LockHandler(self)
+
     def __init__(self):
         from evennia.commands.default.system import CmdTime
         self._base_class = CmdTime
         self.__doc__ = CmdTime.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdTime):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'access'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'access', 'lockhandler'):
                 setattr(self, attr, getattr(CmdTime, attr))
         # Store the access method for proper binding
         self._access_method = CmdTime.access
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
-        return self._access_method(srcobj, access_type, default)
+        return self._access_method(self, srcobj, access_type, default)
 
     def func(self):
         return self._base_class.func(self)
@@ -2087,6 +2134,11 @@ class CmdArxScripts:
     aliases = ["scripts"]
     locks = "cmd:perm(scripts) or perm(Builders)"
 
+    @lazy_property
+    def lockhandler(self):
+        """Create lockhandler on demand, like Evennia's Command class."""
+        return LockHandler(self)
+
     def __init__(self):
         # Lazy import and create the actual class at runtime
         from evennia.commands.default.building import CmdScripts
@@ -2094,14 +2146,14 @@ class CmdArxScripts:
         self.__doc__ = CmdScripts.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdScripts):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler'):
                 setattr(self, attr, getattr(CmdScripts, attr))
         # Store the access method for proper binding
         self._access_method = CmdScripts.access
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
-        return self._access_method(srcobj, access_type, default)
+        return self._access_method(self, srcobj, access_type, default)
 
     # noinspection PyProtectedMember
     def list_scripts(self):
