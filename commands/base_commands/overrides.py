@@ -2297,16 +2297,13 @@ class SystemNoMatch(ArxCommand):
         cmdset = self.cmdset
         cmdset.make_unique(self.caller)
 
-        # Debug: Print total commands in cmdset and check for key commands
-        total_cmds = len(list(cmdset))
-        key_cmds_info = []
-        for cmd in cmdset:
-            if cmd.key in ('help', 'inventory', 'look', 'say', '@time', 'who'):
-                access_result = cmd.access(self.caller)
-                keyaliases = getattr(cmd, '_keyaliases', 'N/A')
-                key_cmds_info.append(f"{cmd.key}(access={access_result}, aliases={keyaliases})")
-
-        self.msg(f"||y[DEBUG] Total: {total_cmds}, Key cmds: {key_cmds_info}||n")
+        # Debug: Check for duplicate help commands
+        help_cmds = [cmd for cmd in cmdset if cmd.key == 'help']
+        self.msg(f"||y[DEBUG] Found {len(help_cmds)} 'help' commands||n")
+        for i, cmd in enumerate(help_cmds):
+            auto_help = getattr(cmd, 'auto_help', 'N/A')
+            access_result = cmd.access(self.caller)
+            self.msg(f"  [{i}] auto_help={auto_help}, access={access_result}")
 
         # Check each command's access and collect names
         all_cmds = []
@@ -2319,12 +2316,6 @@ class SystemNoMatch(ArxCommand):
                     # noinspection PyProtectedMember
                     aliases = getattr(cmd, '_keyaliases', [cmd.key])
                     all_names.extend(aliases)
-
-        # Debug: Show if 'help' is in all_names
-        if 'help' in all_names:
-            self.msg("||g[DEBUG] 'help' found in available names||n")
-        else:
-            self.msg("||r[DEBUG] 'help' NOT in available names||n")
 
         suggestions = string_suggestions(self.raw, set(all_names), cutoff=0.7)
         if suggestions:
