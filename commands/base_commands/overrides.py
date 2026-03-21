@@ -2297,22 +2297,33 @@ class SystemNoMatch(ArxCommand):
         cmdset = self.cmdset
         cmdset.make_unique(self.caller)
 
-        # Debug: Check available command names after make_unique
-        all_names = cmdset.get_all_cmd_keys_and_aliases(self.caller)
-        self.msg(f"||y[DEBUG] Available names count: {len(all_names)}||n")
-        if 'help' in all_names:
-            self.msg("||g[DEBUG] 'help' in available names after make_unique||n")
-        else:
-            self.msg("||r[DEBUG] 'help' NOT in available names after make_unique||n")
+        # Debug: Check cmdset info
+        self.msg(f"||y[DEBUG] cmdset key: {cmdset.key}, path: {getattr(cmdset, 'path', 'N/A')}||n")
 
-        # Debug: Check if 'help' command's aliases are correct
-        help_cmds = [cmd for cmd in cmdset if cmd.key == 'help']
-        self.msg(f"||y[DEBUG] Found {len(help_cmds)} 'help' commands||n")
-        for cmd in help_cmds:
-            aliases = getattr(cmd, '_keyaliases', 'N/A')
-            auto_help = getattr(cmd, 'auto_help', 'N/A')
-            access_result = cmd.access(self.caller)
-            self.msg(f"  aliases={aliases}, auto_help={auto_help}, access={access_result}")
+        # Debug: Check available command names
+        all_names = cmdset.get_all_cmd_keys_and_aliases(self.caller)
+        if 'help' in all_names:
+            self.msg("||g[DEBUG] 'help' in available names||n")
+        else:
+            self.msg("||r[DEBUG] 'help' NOT in available names||n")
+
+        # Debug: Try to manually match 'help' command
+        raw_cmd = 'help'
+        matched_cmd = None
+        for cmd in cmdset:
+            for alias in getattr(cmd, '_keyaliases', [cmd.key]):
+                if raw_cmd == alias:
+                    matched_cmd = cmd
+                    break
+            if matched_cmd:
+                break
+
+        if matched_cmd:
+            access_result = matched_cmd.access(self.caller)
+            arg_regex = getattr(matched_cmd, 'arg_regex', None)
+            self.msg(f"||g[DEBUG] Manually matched 'help': access={access_result}, arg_regex={arg_regex}||n")
+        else:
+            self.msg("||r[DEBUG] Could not manually match 'help'||n")
 
         suggestions = string_suggestions(self.raw, set(all_names), cutoff=0.7)
         if suggestions:
