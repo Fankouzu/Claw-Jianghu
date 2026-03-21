@@ -831,13 +831,29 @@ class CmdArxSay:
         from evennia.commands.default.general import CmdSay
         self._base_class = CmdSay
         self.__doc__ = CmdSay.__doc__
-        # Copy all attributes from base class
+        # Copy only non-callable attributes from base class
+        # Methods will be inherited or delegated via __getattr__
         for attr in dir(CmdSay):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'arg_regex', 'parse', 'func', 'access', 'lockhandler', 'match', 'get_extra_info'):
-                setattr(self, attr, getattr(CmdSay, attr))
+            if not attr.startswith('_'):
+                val = getattr(CmdSay, attr)
+                if not callable(val):
+                    setattr(self, attr, val)
         # Store the access method for proper binding
         self._access_method = CmdSay.access
         _init_lazy_command_attrs(self)
+
+    def __getattr__(self, name):
+        """Delegate undefined attributes/methods to base class."""
+        if name.startswith('_'):
+            raise AttributeError(name)
+        base_class = object.__getattribute__(self, '_base_class')
+        if hasattr(base_class, name):
+            attr = getattr(base_class, name)
+            if callable(attr):
+                # Return a bound method
+                return lambda *args, **kwargs: attr(self, *args, **kwargs)
+            return attr
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def match(self, cmdname, include_prefixes=True):
         """Match command name against command's keys and aliases."""
@@ -1174,13 +1190,27 @@ class CmdArxSetAttribute:
         from evennia.commands.default.building import CmdSetAttribute
         self._base_class = CmdSetAttribute
         self.__doc__ = CmdSetAttribute.__doc__
-        # Copy all attributes from base class
+        # Copy only non-callable attributes from base class
         for attr in dir(CmdSetAttribute):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'set_attr', 'access', 'lockhandler', 'match', 'get_extra_info'):
-                setattr(self, attr, getattr(CmdSetAttribute, attr))
+            if not attr.startswith('_'):
+                val = getattr(CmdSetAttribute, attr)
+                if not callable(val):
+                    setattr(self, attr, val)
         # Store the access method for proper binding
         self._access_method = CmdSetAttribute.access
         _init_lazy_command_attrs(self)
+
+    def __getattr__(self, name):
+        """Delegate undefined attributes/methods to base class."""
+        if name.startswith('_'):
+            raise AttributeError(name)
+        base_class = object.__getattribute__(self, '_base_class')
+        if hasattr(base_class, name):
+            attr = getattr(base_class, name)
+            if callable(attr):
+                return lambda *args, **kwargs: attr(self, *args, **kwargs)
+            return attr
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def match(self, cmdname, include_prefixes=True):
         """Match command name against command's keys and aliases."""
@@ -1326,13 +1356,27 @@ class CmdDig:
         self._base_class = ObjManipCommand
         # Copy docstring
         self.__doc__ = self.__class__.__doc__
-        # Copy all attributes from base class
+        # Copy only non-callable attributes from base class
         for attr in dir(ObjManipCommand):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'locks', 'help_category', 'access', 'lockhandler', 'match', 'get_extra_info'):
-                setattr(self, attr, getattr(ObjManipCommand, attr))
+            if not attr.startswith('_'):
+                val = getattr(ObjManipCommand, attr)
+                if not callable(val):
+                    setattr(self, attr, val)
         # Store the access method for proper binding
         self._access_method = ObjManipCommand.access
         _init_lazy_command_attrs(self)
+
+    def __getattr__(self, name):
+        """Delegate undefined attributes/methods to base class."""
+        if name.startswith('_'):
+            raise AttributeError(name)
+        base_class = object.__getattribute__(self, '_base_class')
+        if hasattr(base_class, name):
+            attr = getattr(base_class, name)
+            if callable(attr):
+                return lambda *args, **kwargs: attr(self, *args, **kwargs)
+            return attr
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def match(self, cmdname, include_prefixes=True):
         """Match command name against command's keys and aliases."""
@@ -1886,13 +1930,27 @@ class CmdArxLock:
         from evennia.commands.default.building import CmdLock
         self._base_class = CmdLock
         self.__doc__ = CmdLock.__doc__
-        # Copy all attributes from base class
+        # Copy only non-callable attributes from base class
         for attr in dir(CmdLock):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match', 'get_extra_info'):
-                setattr(self, attr, getattr(CmdLock, attr))
+            if not attr.startswith('_'):
+                val = getattr(CmdLock, attr)
+                if not callable(val):
+                    setattr(self, attr, val)
         # Store the access method for proper binding
         self._access_method = CmdLock.access
         _init_lazy_command_attrs(self)
+
+    def __getattr__(self, name):
+        """Delegate undefined attributes/methods to base class."""
+        if name.startswith('_'):
+            raise AttributeError(name)
+        base_class = object.__getattribute__(self, '_base_class')
+        if hasattr(base_class, name):
+            attr = getattr(base_class, name)
+            if callable(attr):
+                return lambda *args, **kwargs: attr(self, *args, **kwargs)
+            return attr
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def match(self, cmdname, include_prefixes=True):
         """Match command name against command's keys and aliases."""
@@ -1946,13 +2004,27 @@ class CmdArxTag:
         from evennia.commands.default.building import CmdTag
         self._base_class = CmdTag
         self.__doc__ = CmdTag.__doc__
-        # Copy all attributes from base class
+        # Copy only non-callable attributes from base class
         for attr in dir(CmdTag):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'display_tags', 'access', 'lockhandler', 'match', 'get_extra_info'):
-                setattr(self, attr, getattr(CmdTag, attr))
+            if not attr.startswith('_'):
+                val = getattr(CmdTag, attr)
+                if not callable(val):
+                    setattr(self, attr, val)
         # Store the access method for proper binding
         self._access_method = CmdTag.access
         _init_lazy_command_attrs(self)
+
+    def __getattr__(self, name):
+        """Delegate undefined attributes/methods to base class."""
+        if name.startswith('_'):
+            raise AttributeError(name)
+        base_class = object.__getattribute__(self, '_base_class')
+        if hasattr(base_class, name):
+            attr = getattr(base_class, name)
+            if callable(attr):
+                return lambda *args, **kwargs: attr(self, *args, **kwargs)
+            return attr
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def match(self, cmdname, include_prefixes=True):
         """Match command name against command's keys and aliases."""
@@ -2045,13 +2117,27 @@ class CmdArxExamine:
         from evennia.commands.default.building import CmdExamine
         self._base_class = CmdExamine
         self.__doc__ = self.__class__.__doc__
-        # Copy all attributes from base class
+        # Copy only non-callable attributes from base class
         for attr in dir(CmdExamine):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'format_attributes', 'access', 'lockhandler', 'match', 'get_extra_info'):
-                setattr(self, attr, getattr(CmdExamine, attr))
+            if not attr.startswith('_'):
+                val = getattr(CmdExamine, attr)
+                if not callable(val):
+                    setattr(self, attr, val)
         # Store the access method for proper binding
         self._access_method = CmdExamine.access
         _init_lazy_command_attrs(self)
+
+    def __getattr__(self, name):
+        """Delegate undefined attributes/methods to base class."""
+        if name.startswith('_'):
+            raise AttributeError(name)
+        base_class = object.__getattribute__(self, '_base_class')
+        if hasattr(base_class, name):
+            attr = getattr(base_class, name)
+            if callable(attr):
+                return lambda *args, **kwargs: attr(self, *args, **kwargs)
+            return attr
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def match(self, cmdname, include_prefixes=True):
         """Match command name against command's keys and aliases."""
@@ -2218,13 +2304,27 @@ class CmdArxDestroy:
         from evennia.commands.default.building import CmdDestroy
         self._base_class = CmdDestroy
         self.__doc__ = self.__class__.__doc__
-        # Copy all attributes from base class
+        # Copy only non-callable attributes from base class
         for attr in dir(CmdDestroy):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'help_category', 'func', 'access', 'lockhandler', 'match', 'get_extra_info'):
-                setattr(self, attr, getattr(CmdDestroy, attr))
+            if not attr.startswith('_'):
+                val = getattr(CmdDestroy, attr)
+                if not callable(val):
+                    setattr(self, attr, val)
         # Store the access method for proper binding
         self._access_method = CmdDestroy.access
         _init_lazy_command_attrs(self)
+
+    def __getattr__(self, name):
+        """Delegate undefined attributes/methods to base class."""
+        if name.startswith('_'):
+            raise AttributeError(name)
+        base_class = object.__getattribute__(self, '_base_class')
+        if hasattr(base_class, name):
+            attr = getattr(base_class, name)
+            if callable(attr):
+                return lambda *args, **kwargs: attr(self, *args, **kwargs)
+            return attr
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def match(self, cmdname, include_prefixes=True):
         """Match command name against command's keys and aliases."""
@@ -2356,13 +2456,27 @@ class CmdArxReload:
             CmdReload.__doc__
             + "\n\nUse /override to force a reload when a combat is active."
         )
-        # Copy all attributes from base class
+        # Copy only non-callable attributes from base class
         for attr in dir(CmdReload):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match', 'get_extra_info'):
-                setattr(self, attr, getattr(CmdReload, attr))
+            if not attr.startswith('_'):
+                val = getattr(CmdReload, attr)
+                if not callable(val):
+                    setattr(self, attr, val)
         # Store the access method for proper binding
         self._access_method = CmdReload.access
         _init_lazy_command_attrs(self)
+
+    def __getattr__(self, name):
+        """Delegate undefined attributes/methods to base class."""
+        if name.startswith('_'):
+            raise AttributeError(name)
+        base_class = object.__getattribute__(self, '_base_class')
+        if hasattr(base_class, name):
+            attr = getattr(base_class, name)
+            if callable(attr):
+                return lambda *args, **kwargs: attr(self, *args, **kwargs)
+            return attr
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def match(self, cmdname, include_prefixes=True):
         """Match command name against command's keys and aliases."""
@@ -2436,13 +2550,27 @@ class CmdArxTime:
         self.__doc__ = CmdTime.__doc__
         # Set _keyaliases like Evennia's Command metaclass does
         self._keyaliases = tuple(sorted([self.key] + list(self.aliases), key=len, reverse=True))
-        # Copy all attributes from base class
+        # Copy only non-callable attributes from base class
         for attr in dir(CmdTime):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'access', 'lockhandler', 'match'):
-                setattr(self, attr, getattr(CmdTime, attr))
+            if not attr.startswith('_'):
+                val = getattr(CmdTime, attr)
+                if not callable(val):
+                    setattr(self, attr, val)
         # Store the access method for proper binding
         self._access_method = CmdTime.access
         _init_lazy_command_attrs(self)
+
+    def __getattr__(self, name):
+        """Delegate undefined attributes/methods to base class."""
+        if name.startswith('_'):
+            raise AttributeError(name)
+        base_class = object.__getattribute__(self, '_base_class')
+        if hasattr(base_class, name):
+            attr = getattr(base_class, name)
+            if callable(attr):
+                return lambda *args, **kwargs: attr(self, *args, **kwargs)
+            return attr
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def match(self, cmdname, include_prefixes=True):
         """Match command name against command's keys and aliases."""
@@ -2499,13 +2627,27 @@ class CmdArxScripts:
         from evennia.commands.default.building import CmdScripts
         self._base_class = CmdScripts
         self.__doc__ = CmdScripts.__doc__
-        # Copy all attributes from base class
+        # Copy only non-callable attributes from base class
         for attr in dir(CmdScripts):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match', 'get_extra_info'):
-                setattr(self, attr, getattr(CmdScripts, attr))
+            if not attr.startswith('_'):
+                val = getattr(CmdScripts, attr)
+                if not callable(val):
+                    setattr(self, attr, val)
         # Store the access method for proper binding
         self._access_method = CmdScripts.access
         _init_lazy_command_attrs(self)
+
+    def __getattr__(self, name):
+        """Delegate undefined attributes/methods to base class."""
+        if name.startswith('_'):
+            raise AttributeError(name)
+        base_class = object.__getattribute__(self, '_base_class')
+        if hasattr(base_class, name):
+            attr = getattr(base_class, name)
+            if callable(attr):
+                return lambda *args, **kwargs: attr(self, *args, **kwargs)
+            return attr
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def match(self, cmdname, include_prefixes=True):
         """Match command name against command's keys and aliases."""
