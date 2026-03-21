@@ -111,6 +111,60 @@ def _init_lazy_command_attrs(cmd_instance):
                 locks = ''
         cmd_instance.lock_storage = str(locks)
 
+    # Set up _noprefix_aliases for match() method
+    from django.conf import settings
+    cmd_ignore_prefixes = getattr(settings, 'CMD_IGNORE_PREFIXES', '@&/+')
+    cmd_instance._noprefix_aliases = {x.lstrip(cmd_ignore_prefixes): x for x in cmd_instance._keyaliases}
+
+    # Add match method if not present
+    if not hasattr(cmd_instance, 'match') or not callable(getattr(cmd_instance, 'match', None)):
+        import types
+        arg_regex = getattr(cmd_instance, 'arg_regex', None)
+        _keyaliases = cmd_instance._keyaliases
+        _noprefix_aliases = cmd_instance._noprefix_aliases
+
+        def match(self, cmdname, include_prefixes=True):
+            """Match command name against command's keys and aliases."""
+            if include_prefixes:
+                for cmd_key in _keyaliases:
+                    if cmdname.startswith(cmd_key) and (
+                        not arg_regex or arg_regex.match(cmdname[len(cmd_key):])
+                    ):
+                        return cmd_key, cmd_key
+            else:
+                for k, v in _noprefix_aliases.items():
+                    if cmdname.startswith(k) and (
+                        not arg_regex or arg_regex.match(cmdname[len(k):])
+                    ):
+                        return k, v
+            return None, None
+
+        cmd_instance.match = types.MethodType(match, cmd_instance)
+
+
+def _create_match_method(cmd_instance):
+    """
+    Create a match method for lazy-loaded command wrapper classes.
+    This implements the same logic as Evennia's Command.match().
+    """
+    def match(cmdname, include_prefixes=True):
+        """Match command name against command's keys and aliases."""
+        arg_regex = getattr(cmd_instance, 'arg_regex', None)
+        if include_prefixes:
+            for cmd_key in cmd_instance._keyaliases:
+                if cmdname.startswith(cmd_key) and (
+                    not arg_regex or arg_regex.match(cmdname[len(cmd_key):])
+                ):
+                    return cmd_key, cmd_key
+        else:
+            for k, v in cmd_instance._noprefix_aliases.items():
+                if cmdname.startswith(k) and (
+                    not arg_regex or arg_regex.match(cmdname[len(k):])
+                ):
+                    return k, v
+        return None, None
+    return match
+
 
 def args_are_currency(args):
     """
