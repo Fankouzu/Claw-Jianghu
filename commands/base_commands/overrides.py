@@ -2296,43 +2296,24 @@ class SystemNoMatch(ArxCommand):
         msg = "Command '%s' is not available." % self.raw
         cmdset = self.cmdset
 
-        # Debug: Check cmdset size
-        cmd_list = list(cmdset)
-        self.msg(f"||y[DEBUG] cmdset size: {len(cmd_list)}||n")
-
-        # Debug: Check if 'help' command exists and try to match it
+        # Debug: Try to manually call build_matches and catch exceptions
         raw_string = self.raw
         search_string = raw_string.lower()
-        self.msg(f"||y[DEBUG] search_string: '{search_string}'||n")
+        import evennia.commands.cmdparser as cmdparser
 
-        help_cmd = None
-        for cmd in cmd_list:
-            if cmd.key == 'help':
-                help_cmd = cmd
-                break
+        matches = []
+        try:
+            for cmd in cmdset:
+                try:
+                    cmdname, raw_cmdname = cmd.match(search_string, include_prefixes=True)
+                    if cmdname:
+                        matches.append(cmdparser.create_match(cmdname, raw_string, cmd, raw_cmdname))
+                except Exception as e:
+                    self.msg(f"||r[DEBUG] Error matching {cmd.key}: {e}||n")
+        except Exception as e:
+            self.msg(f"||r[DEBUG] Error in build_matches: {e}||n")
 
-        if help_cmd:
-            match_result = help_cmd.match(search_string, include_prefixes=True)
-            self.msg(f"||y[DEBUG] help.match('{search_string}'): {match_result}||n")
-
-            # Check _keyaliases
-            aliases = getattr(help_cmd, '_keyaliases', 'N/A')
-            self.msg(f"||y[DEBUG] help._keyaliases: {aliases}||n")
-
-            # Check arg_regex
-            arg_regex = getattr(help_cmd, 'arg_regex', None)
-            self.msg(f"||y[DEBUG] help.arg_regex: {arg_regex}||n")
-
-            # Test match manually
-            for alias in aliases:
-                if search_string.startswith(alias):
-                    remainder = search_string[len(alias):]
-                    self.msg(f"||y[DEBUG] startswith('{alias}'): True, remainder: '{remainder}'||n")
-                    if arg_regex:
-                        match = arg_regex.match(remainder)
-                        self.msg(f"||y[DEBUG] arg_regex.match('{remainder}'): {match}||n")
-        else:
-            self.msg("||r[DEBUG] No 'help' command in cmdset!||n")
+        self.msg(f"||y[DEBUG] Manual build_matches found {len(matches)} matches||n")
 
         cmdset.make_unique(self.caller)
         all_names = cmdset.get_all_cmd_keys_and_aliases(self.caller)
