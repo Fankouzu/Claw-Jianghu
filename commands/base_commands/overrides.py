@@ -2318,15 +2318,23 @@ class SystemNoMatch(ArxCommand):
         cmdset = self.cmdset
         cmdset.make_unique(self.caller)
 
-        # Debug: Check each command's access
+        # Debug: Check if help/inventory/look commands are in cmdset and their access
+        debug_cmds = []
+        for cmd in cmdset:
+            if cmd.key in ('help', 'inventory', 'look', 'say', '@time'):
+                access_result = cmd.access(self.caller)
+                locks_info = getattr(cmd, 'locks', 'N/A')
+                lock_storage_info = getattr(cmd, 'lock_storage', 'N/A')
+                debug_cmds.append(f"{cmd.key}: access={access_result}, locks={locks_info[:50]}")
+        if debug_cmds:
+            self.msg(f"||y[DEBUG] Key commands: {debug_cmds}||n")
+
+        # Check each command's access
         all_cmds = []
         for cmd in cmdset:
             if cmd.auto_help:
                 access_result = cmd.access(self.caller)
-                if not access_result and cmd.key in ('help', 'inventory', 'look'):
-                    # Send debug for key commands
-                    self.msg(f"||r[DEBUG] {cmd.key} access failed||n")
-                else:
+                if access_result:
                     all_cmds.append(cmd)
 
         names = []
