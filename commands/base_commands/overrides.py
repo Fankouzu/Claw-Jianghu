@@ -839,6 +839,30 @@ class CmdArxSay:
         self._access_method = CmdSay.access
         _init_lazy_command_attrs(self)
 
+    def match(self, cmdname, include_prefixes=True):
+        """Match command name against command's keys and aliases."""
+        arg_regex = getattr(self, 'arg_regex', None)
+        _keyaliases = getattr(self, '_keyaliases', [])
+        _noprefix_aliases = getattr(self, '_noprefix_aliases', {})
+
+        if include_prefixes:
+            for cmd_key in _keyaliases:
+                if cmdname.startswith(cmd_key):
+                    if not arg_regex:
+                        return cmd_key, cmd_key
+                    remainder = cmdname[len(cmd_key):]
+                    if arg_regex.match(remainder):
+                        return cmd_key, cmd_key
+        else:
+            for k, v in _noprefix_aliases.items():
+                if cmdname.startswith(k):
+                    if not arg_regex:
+                        return k, v
+                    remainder = cmdname[len(k):]
+                    if arg_regex.match(remainder):
+                        return k, v
+        return None, None
+
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
@@ -1154,6 +1178,30 @@ class CmdArxSetAttribute:
         self._access_method = CmdSetAttribute.access
         _init_lazy_command_attrs(self)
 
+    def match(self, cmdname, include_prefixes=True):
+        """Match command name against command's keys and aliases."""
+        arg_regex = getattr(self, 'arg_regex', None)
+        _keyaliases = getattr(self, '_keyaliases', [])
+        _noprefix_aliases = getattr(self, '_noprefix_aliases', {})
+
+        if include_prefixes:
+            for cmd_key in _keyaliases:
+                if cmdname.startswith(cmd_key):
+                    if not arg_regex:
+                        return cmd_key, cmd_key
+                    remainder = cmdname[len(cmd_key):]
+                    if arg_regex.match(remainder):
+                        return cmd_key, cmd_key
+        else:
+            for k, v in _noprefix_aliases.items():
+                if cmdname.startswith(k):
+                    if not arg_regex:
+                        return k, v
+                    remainder = cmdname[len(k):]
+                    if arg_regex.match(remainder):
+                        return k, v
+        return None, None
+
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
@@ -1277,6 +1325,30 @@ class CmdDig:
         # Store the access method for proper binding
         self._access_method = ObjManipCommand.access
         _init_lazy_command_attrs(self)
+
+    def match(self, cmdname, include_prefixes=True):
+        """Match command name against command's keys and aliases."""
+        arg_regex = getattr(self, 'arg_regex', None)
+        _keyaliases = getattr(self, '_keyaliases', [])
+        _noprefix_aliases = getattr(self, '_noprefix_aliases', {})
+
+        if include_prefixes:
+            for cmd_key in _keyaliases:
+                if cmdname.startswith(cmd_key):
+                    if not arg_regex:
+                        return cmd_key, cmd_key
+                    remainder = cmdname[len(cmd_key):]
+                    if arg_regex.match(remainder):
+                        return cmd_key, cmd_key
+        else:
+            for k, v in _noprefix_aliases.items():
+                if cmdname.startswith(k):
+                    if not arg_regex:
+                        return k, v
+                    remainder = cmdname[len(k):]
+                    if arg_regex.match(remainder):
+                        return k, v
+        return None, None
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -1810,6 +1882,30 @@ class CmdArxLock:
         self._access_method = CmdLock.access
         _init_lazy_command_attrs(self)
 
+    def match(self, cmdname, include_prefixes=True):
+        """Match command name against command's keys and aliases."""
+        arg_regex = getattr(self, 'arg_regex', None)
+        _keyaliases = getattr(self, '_keyaliases', [])
+        _noprefix_aliases = getattr(self, '_noprefix_aliases', {})
+
+        if include_prefixes:
+            for cmd_key in _keyaliases:
+                if cmdname.startswith(cmd_key):
+                    if not arg_regex:
+                        return cmd_key, cmd_key
+                    remainder = cmdname[len(cmd_key):]
+                    if arg_regex.match(remainder):
+                        return cmd_key, cmd_key
+        else:
+            for k, v in _noprefix_aliases.items():
+                if cmdname.startswith(k):
+                    if not arg_regex:
+                        return k, v
+                    remainder = cmdname[len(k):]
+                    if arg_regex.match(remainder):
+                        return k, v
+        return None, None
+
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
@@ -1841,6 +1937,30 @@ class CmdArxTag:
         # Store the access method for proper binding
         self._access_method = CmdTag.access
         _init_lazy_command_attrs(self)
+
+    def match(self, cmdname, include_prefixes=True):
+        """Match command name against command's keys and aliases."""
+        arg_regex = getattr(self, 'arg_regex', None)
+        _keyaliases = getattr(self, '_keyaliases', [])
+        _noprefix_aliases = getattr(self, '_noprefix_aliases', {})
+
+        if include_prefixes:
+            for cmd_key in _keyaliases:
+                if cmdname.startswith(cmd_key):
+                    if not arg_regex:
+                        return cmd_key, cmd_key
+                    remainder = cmdname[len(cmd_key):]
+                    if arg_regex.match(remainder):
+                        return cmd_key, cmd_key
+        else:
+            for k, v in _noprefix_aliases.items():
+                if cmdname.startswith(k):
+                    if not arg_regex:
+                        return k, v
+                    remainder = cmdname[len(k):]
+                    if arg_regex.match(remainder):
+                        return k, v
+        return None, None
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -1912,6 +2032,30 @@ class CmdArxExamine:
         # Store the access method for proper binding
         self._access_method = CmdExamine.access
         _init_lazy_command_attrs(self)
+
+    def match(self, cmdname, include_prefixes=True):
+        """Match command name against command's keys and aliases."""
+        arg_regex = getattr(self, 'arg_regex', None)
+        _keyaliases = getattr(self, '_keyaliases', [])
+        _noprefix_aliases = getattr(self, '_noprefix_aliases', {})
+
+        if include_prefixes:
+            for cmd_key in _keyaliases:
+                if cmdname.startswith(cmd_key):
+                    if not arg_regex:
+                        return cmd_key, cmd_key
+                    remainder = cmdname[len(cmd_key):]
+                    if arg_regex.match(remainder):
+                        return cmd_key, cmd_key
+        else:
+            for k, v in _noprefix_aliases.items():
+                if cmdname.startswith(k):
+                    if not arg_regex:
+                        return k, v
+                    remainder = cmdname[len(k):]
+                    if arg_regex.match(remainder):
+                        return k, v
+        return None, None
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
@@ -2058,6 +2202,30 @@ class CmdArxDestroy:
         self._access_method = CmdDestroy.access
         _init_lazy_command_attrs(self)
 
+    def match(self, cmdname, include_prefixes=True):
+        """Match command name against command's keys and aliases."""
+        arg_regex = getattr(self, 'arg_regex', None)
+        _keyaliases = getattr(self, '_keyaliases', [])
+        _noprefix_aliases = getattr(self, '_noprefix_aliases', {})
+
+        if include_prefixes:
+            for cmd_key in _keyaliases:
+                if cmdname.startswith(cmd_key):
+                    if not arg_regex:
+                        return cmd_key, cmd_key
+                    remainder = cmdname[len(cmd_key):]
+                    if arg_regex.match(remainder):
+                        return cmd_key, cmd_key
+        else:
+            for k, v in _noprefix_aliases.items():
+                if cmdname.startswith(k):
+                    if not arg_regex:
+                        return k, v
+                    remainder = cmdname[len(k):]
+                    if arg_regex.match(remainder):
+                        return k, v
+        return None, None
+
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
@@ -2168,6 +2336,30 @@ class CmdArxReload:
         self._access_method = CmdReload.access
         _init_lazy_command_attrs(self)
 
+    def match(self, cmdname, include_prefixes=True):
+        """Match command name against command's keys and aliases."""
+        arg_regex = getattr(self, 'arg_regex', None)
+        _keyaliases = getattr(self, '_keyaliases', [])
+        _noprefix_aliases = getattr(self, '_noprefix_aliases', {})
+
+        if include_prefixes:
+            for cmd_key in _keyaliases:
+                if cmdname.startswith(cmd_key):
+                    if not arg_regex:
+                        return cmd_key, cmd_key
+                    remainder = cmdname[len(cmd_key):]
+                    if arg_regex.match(remainder):
+                        return cmd_key, cmd_key
+        else:
+            for k, v in _noprefix_aliases.items():
+                if cmdname.startswith(k):
+                    if not arg_regex:
+                        return k, v
+                    remainder = cmdname[len(k):]
+                    if arg_regex.match(remainder):
+                        return k, v
+        return None, None
+
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
@@ -2220,6 +2412,30 @@ class CmdArxTime:
         self._access_method = CmdTime.access
         _init_lazy_command_attrs(self)
 
+    def match(self, cmdname, include_prefixes=True):
+        """Match command name against command's keys and aliases."""
+        arg_regex = getattr(self, 'arg_regex', None)
+        _keyaliases = getattr(self, '_keyaliases', [])
+        _noprefix_aliases = getattr(self, '_noprefix_aliases', {})
+
+        if include_prefixes:
+            for cmd_key in _keyaliases:
+                if cmdname.startswith(cmd_key):
+                    if not arg_regex:
+                        return cmd_key, cmd_key
+                    remainder = cmdname[len(cmd_key):]
+                    if arg_regex.match(remainder):
+                        return cmd_key, cmd_key
+        else:
+            for k, v in _noprefix_aliases.items():
+                if cmdname.startswith(k):
+                    if not arg_regex:
+                        return k, v
+                    remainder = cmdname[len(k):]
+                    if arg_regex.match(remainder):
+                        return k, v
+        return None, None
+
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
@@ -2254,6 +2470,30 @@ class CmdArxScripts:
         # Store the access method for proper binding
         self._access_method = CmdScripts.access
         _init_lazy_command_attrs(self)
+
+    def match(self, cmdname, include_prefixes=True):
+        """Match command name against command's keys and aliases."""
+        arg_regex = getattr(self, 'arg_regex', None)
+        _keyaliases = getattr(self, '_keyaliases', [])
+        _noprefix_aliases = getattr(self, '_noprefix_aliases', {})
+
+        if include_prefixes:
+            for cmd_key in _keyaliases:
+                if cmdname.startswith(cmd_key):
+                    if not arg_regex:
+                        return cmd_key, cmd_key
+                    remainder = cmdname[len(cmd_key):]
+                    if arg_regex.match(remainder):
+                        return cmd_key, cmd_key
+        else:
+            for k, v in _noprefix_aliases.items():
+                if cmdname.startswith(k):
+                    if not arg_regex:
+                        return k, v
+                    remainder = cmdname[len(k):]
+                    if arg_regex.match(remainder):
+                        return k, v
+        return None, None
 
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
