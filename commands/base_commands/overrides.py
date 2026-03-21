@@ -2299,27 +2299,34 @@ class SystemNoMatch(ArxCommand):
 
         # Debug: Print total commands in cmdset and check for key commands
         total_cmds = len(list(cmdset))
-        key_cmds_found = []
+        key_cmds_info = []
         for cmd in cmdset:
             if cmd.key in ('help', 'inventory', 'look', 'say', '@time', 'who'):
                 access_result = cmd.access(self.caller)
-                key_cmds_found.append(f"{cmd.key}(access={access_result})")
+                keyaliases = getattr(cmd, '_keyaliases', 'N/A')
+                key_cmds_info.append(f"{cmd.key}(access={access_result}, aliases={keyaliases})")
 
-        self.msg(f"||y[DEBUG] Total cmds: {total_cmds}, Key cmds: {key_cmds_found}||n")
+        self.msg(f"||y[DEBUG] Total: {total_cmds}, Key cmds: {key_cmds_info}||n")
 
-        # Check each command's access
+        # Check each command's access and collect names
         all_cmds = []
+        all_names = []
         for cmd in cmdset:
             if cmd.auto_help:
                 access_result = cmd.access(self.caller)
                 if access_result:
                     all_cmds.append(cmd)
+                    # noinspection PyProtectedMember
+                    aliases = getattr(cmd, '_keyaliases', [cmd.key])
+                    all_names.extend(aliases)
 
-        names = []
-        for cmd in all_cmds:
-            # noinspection PyProtectedMember
-            names.extend(cmd._keyaliases)
-        suggestions = string_suggestions(self.raw, set(names), cutoff=0.7)
+        # Debug: Show if 'help' is in all_names
+        if 'help' in all_names:
+            self.msg("||g[DEBUG] 'help' found in available names||n")
+        else:
+            self.msg("||r[DEBUG] 'help' NOT in available names||n")
+
+        suggestions = string_suggestions(self.raw, set(all_names), cutoff=0.7)
         if suggestions:
             msg += " Maybe you meant %s?" % list_to_string(
                 suggestions, "or", addquote=True
