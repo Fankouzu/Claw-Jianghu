@@ -2590,16 +2590,31 @@ class SystemNoMatch(ArxCommand):
         import evennia.commands.cmdparser as cmdparser
 
         matches = []
+        error_cmds = []
         try:
             for cmd in cmdset:
                 try:
+                    # Check if cmd is a class or instance
+                    if isinstance(cmd, type):
+                        error_cmds.append(f"{cmd.__name__} is a class, not instance")
+                        continue
+
+                    # Check if match is bound method
+                    match_method = getattr(cmd, 'match', None)
+                    if match_method is None:
+                        error_cmds.append(f"{cmd.key}: no match method")
+                        continue
+
                     cmdname, raw_cmdname = cmd.match(search_string, include_prefixes=True)
                     if cmdname:
                         matches.append(cmdparser.create_match(cmdname, raw_string, cmd, raw_cmdname))
                 except Exception as e:
-                    self.msg(f"||r[DEBUG] Error matching {cmd.key}: {e}||n")
+                    error_cmds.append(f"{getattr(cmd, 'key', 'unknown')}: {e}")
         except Exception as e:
             self.msg(f"||r[DEBUG] Error in build_matches: {e}||n")
+
+        if error_cmds:
+            self.msg(f"||r[DEBUG] Errors: {error_cmds[:5]}||n")
 
         self.msg(f"||y[DEBUG] Manual build_matches found {len(matches)} matches||n")
 
