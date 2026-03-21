@@ -833,7 +833,7 @@ class CmdArxSay:
         self.__doc__ = CmdSay.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdSay):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'arg_regex', 'parse', 'func', 'access', 'lockhandler', 'match'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'arg_regex', 'parse', 'func', 'access', 'lockhandler', 'match', 'get_extra_info'):
                 setattr(self, attr, getattr(CmdSay, attr))
         # Store the access method for proper binding
         self._access_method = CmdSay.access
@@ -866,6 +866,10 @@ class CmdArxSay:
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
+
+    def get_extra_info(self, caller, **kwargs):
+        """Delegate to base class get_extra_info method."""
+        return self._base_class.get_extra_info(self, caller, **kwargs)
 
     # noinspection PyAttributeOutsideInit
     def parse(self):
@@ -1172,7 +1176,7 @@ class CmdArxSetAttribute:
         self.__doc__ = CmdSetAttribute.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdSetAttribute):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'set_attr', 'access', 'lockhandler', 'match'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'set_attr', 'access', 'lockhandler', 'match', 'get_extra_info'):
                 setattr(self, attr, getattr(CmdSetAttribute, attr))
         # Store the access method for proper binding
         self._access_method = CmdSetAttribute.access
@@ -1205,6 +1209,10 @@ class CmdArxSetAttribute:
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
+
+    def get_extra_info(self, caller, **kwargs):
+        """Delegate to base class get_extra_info method."""
+        return self._base_class.get_extra_info(self, caller, **kwargs)
 
     def func(self):
         """Implement the set attribute - a limited form of @py."""
@@ -1320,7 +1328,7 @@ class CmdDig:
         self.__doc__ = self.__class__.__doc__
         # Copy all attributes from base class
         for attr in dir(ObjManipCommand):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'locks', 'help_category', 'access', 'lockhandler', 'match'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'locks', 'help_category', 'access', 'lockhandler', 'match', 'get_extra_info'):
                 setattr(self, attr, getattr(ObjManipCommand, attr))
         # Store the access method for proper binding
         self._access_method = ObjManipCommand.access
@@ -1353,6 +1361,10 @@ class CmdDig:
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
+
+    def get_extra_info(self, caller, **kwargs):
+        """Delegate to base class get_extra_info method."""
+        return self._base_class.get_extra_info(self, caller, **kwargs)
 
     def func(self):
         """Do the digging. Inherits variables from ObjManipCommand.parse()"""
@@ -1876,7 +1888,7 @@ class CmdArxLock:
         self.__doc__ = CmdLock.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdLock):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match', 'get_extra_info'):
                 setattr(self, attr, getattr(CmdLock, attr))
         # Store the access method for proper binding
         self._access_method = CmdLock.access
@@ -1910,6 +1922,10 @@ class CmdArxLock:
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
 
+    def get_extra_info(self, caller, **kwargs):
+        """Delegate to base class get_extra_info method."""
+        return self._base_class.get_extra_info(self, caller, **kwargs)
+
 
 class CmdArxTag:
     """
@@ -1932,7 +1948,7 @@ class CmdArxTag:
         self.__doc__ = CmdTag.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdTag):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'display_tags', 'access', 'lockhandler', 'match'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'display_tags', 'access', 'lockhandler', 'match', 'get_extra_info'):
                 setattr(self, attr, getattr(CmdTag, attr))
         # Store the access method for proper binding
         self._access_method = CmdTag.access
@@ -1965,6 +1981,10 @@ class CmdArxTag:
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
+
+    def get_extra_info(self, caller, **kwargs):
+        """Delegate to base class get_extra_info method."""
+        return self._base_class.get_extra_info(self, caller, **kwargs)
 
     def display_tags(self):
         """Display of tags with some excluded. Staff wants to see only notable ones."""
@@ -2027,7 +2047,7 @@ class CmdArxExamine:
         self.__doc__ = self.__class__.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdExamine):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'format_attributes', 'access', 'lockhandler', 'match'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'format_attributes', 'access', 'lockhandler', 'match', 'get_extra_info'):
                 setattr(self, attr, getattr(CmdExamine, attr))
         # Store the access method for proper binding
         self._access_method = CmdExamine.access
@@ -2060,6 +2080,10 @@ class CmdArxExamine:
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
+
+    def get_extra_info(self, caller, **kwargs):
+        """Delegate to base class get_extra_info method."""
+        return self._base_class.get_extra_info(self, caller, **kwargs)
 
     def func(self):
         """Process command"""
@@ -2196,7 +2220,7 @@ class CmdArxDestroy:
         self.__doc__ = self.__class__.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdDestroy):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'help_category', 'func', 'access', 'lockhandler', 'match'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'help_category', 'func', 'access', 'lockhandler', 'match', 'get_extra_info'):
                 setattr(self, attr, getattr(CmdDestroy, attr))
         # Store the access method for proper binding
         self._access_method = CmdDestroy.access
@@ -2229,6 +2253,10 @@ class CmdArxDestroy:
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
+
+    def get_extra_info(self, caller, **kwargs):
+        """Delegate to base class get_extra_info method."""
+        return self._base_class.get_extra_info(self, caller, **kwargs)
 
     def func(self):
         """Implements the command."""
@@ -2330,7 +2358,7 @@ class CmdArxReload:
         )
         # Copy all attributes from base class
         for attr in dir(CmdReload):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match', 'get_extra_info'):
                 setattr(self, attr, getattr(CmdReload, attr))
         # Store the access method for proper binding
         self._access_method = CmdReload.access
@@ -2363,6 +2391,10 @@ class CmdArxReload:
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
+
+    def get_extra_info(self, caller, **kwargs):
+        """Delegate to base class get_extra_info method."""
+        return self._base_class.get_extra_info(self, caller, **kwargs)
 
     # noinspection PyBroadException
     def func(self):
@@ -2440,6 +2472,10 @@ class CmdArxTime:
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
 
+    def get_extra_info(self, caller, **kwargs):
+        """Delegate to base class get_extra_info method."""
+        return self._base_class.get_extra_info(self, caller, **kwargs)
+
     def func(self):
         return self._base_class.func(self)
 
@@ -2465,7 +2501,7 @@ class CmdArxScripts:
         self.__doc__ = CmdScripts.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdScripts):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match', 'get_extra_info'):
                 setattr(self, attr, getattr(CmdScripts, attr))
         # Store the access method for proper binding
         self._access_method = CmdScripts.access
@@ -2498,6 +2534,10 @@ class CmdArxScripts:
     def access(self, srcobj, access_type="cmd", default=False):
         """Properly delegate access check to base class method."""
         return self._access_method(self, srcobj, access_type, default)
+
+    def get_extra_info(self, caller, **kwargs):
+        """Delegate to base class get_extra_info method."""
+        return self._base_class.get_extra_info(self, caller, **kwargs)
 
     # noinspection PyProtectedMember
     def list_scripts(self):
