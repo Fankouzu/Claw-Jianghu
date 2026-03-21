@@ -833,7 +833,7 @@ class CmdArxSay:
         self.__doc__ = CmdSay.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdSay):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'arg_regex', 'parse', 'func', 'access', 'lockhandler'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'arg_regex', 'parse', 'func', 'access', 'lockhandler', 'match'):
                 setattr(self, attr, getattr(CmdSay, attr))
         # Store the access method for proper binding
         self._access_method = CmdSay.access
@@ -1172,7 +1172,7 @@ class CmdArxSetAttribute:
         self.__doc__ = CmdSetAttribute.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdSetAttribute):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'set_attr', 'access', 'lockhandler'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'set_attr', 'access', 'lockhandler', 'match'):
                 setattr(self, attr, getattr(CmdSetAttribute, attr))
         # Store the access method for proper binding
         self._access_method = CmdSetAttribute.access
@@ -1320,7 +1320,7 @@ class CmdDig:
         self.__doc__ = self.__class__.__doc__
         # Copy all attributes from base class
         for attr in dir(ObjManipCommand):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'locks', 'help_category', 'access', 'lockhandler'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'locks', 'help_category', 'access', 'lockhandler', 'match'):
                 setattr(self, attr, getattr(ObjManipCommand, attr))
         # Store the access method for proper binding
         self._access_method = ObjManipCommand.access
@@ -1876,7 +1876,7 @@ class CmdArxLock:
         self.__doc__ = CmdLock.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdLock):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match'):
                 setattr(self, attr, getattr(CmdLock, attr))
         # Store the access method for proper binding
         self._access_method = CmdLock.access
@@ -1932,7 +1932,7 @@ class CmdArxTag:
         self.__doc__ = CmdTag.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdTag):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'display_tags', 'access', 'lockhandler'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'display_tags', 'access', 'lockhandler', 'match'):
                 setattr(self, attr, getattr(CmdTag, attr))
         # Store the access method for proper binding
         self._access_method = CmdTag.access
@@ -2027,7 +2027,7 @@ class CmdArxExamine:
         self.__doc__ = self.__class__.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdExamine):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'format_attributes', 'access', 'lockhandler'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'func', 'format_attributes', 'access', 'lockhandler', 'match'):
                 setattr(self, attr, getattr(CmdExamine, attr))
         # Store the access method for proper binding
         self._access_method = CmdExamine.access
@@ -2196,7 +2196,7 @@ class CmdArxDestroy:
         self.__doc__ = self.__class__.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdDestroy):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'help_category', 'func', 'access', 'lockhandler'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'locks', 'help_category', 'func', 'access', 'lockhandler', 'match'):
                 setattr(self, attr, getattr(CmdDestroy, attr))
         # Store the access method for proper binding
         self._access_method = CmdDestroy.access
@@ -2330,7 +2330,7 @@ class CmdArxReload:
         )
         # Copy all attributes from base class
         for attr in dir(CmdReload):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match'):
                 setattr(self, attr, getattr(CmdReload, attr))
         # Store the access method for proper binding
         self._access_method = CmdReload.access
@@ -2406,7 +2406,7 @@ class CmdArxTime:
         self._keyaliases = tuple(sorted([self.key] + list(self.aliases), key=len, reverse=True))
         # Copy all attributes from base class
         for attr in dir(CmdTime):
-            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'access', 'lockhandler'):
+            if not attr.startswith('_') and attr not in ('__doc__', 'key', 'aliases', 'access', 'lockhandler', 'match'):
                 setattr(self, attr, getattr(CmdTime, attr))
         # Store the access method for proper binding
         self._access_method = CmdTime.access
@@ -2465,7 +2465,7 @@ class CmdArxScripts:
         self.__doc__ = CmdScripts.__doc__
         # Copy all attributes from base class
         for attr in dir(CmdScripts):
-            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler'):
+            if not attr.startswith('_') and attr not in ('func', '__doc__', 'key', 'aliases', 'locks', 'access', 'lockhandler', 'match'):
                 setattr(self, attr, getattr(CmdScripts, attr))
         # Store the access method for proper binding
         self._access_method = CmdScripts.access
